@@ -29,8 +29,9 @@ struct CardCatalog{
     void AppendOutputFile(); // Jake does this
 
     //Private / helpers
-    void ResetPosition(std::ifstream &readData); // helpers
-    void SetPositionToContents(std::ifstream &readData, int textPosition);
+    void PrintFirstAndLastName(std::ifstream &readData); //helper for AppendOutputFile
+    void ResetPosition(std::ifstream &readData); //helper for GetInfo
+    void SetPositionToContents(std::ifstream &readData, int textPosition); //helper for GetInfo
     void FindLetterFrequency(std::ifstream &readData);
 };
 

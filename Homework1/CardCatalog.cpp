@@ -58,7 +58,7 @@ void CardCatalog::ResetPosition(ifstream &readData) {
 
 void CardCatalog::SetPositionToContents(ifstream &readData, int textPosition) {
     readData.clear();
-    readData.seekg(textPosition, ios::beg);
+    readData.seekg(textPosition + 2, ios::beg);
 }
 
 void CardCatalog::FindLetterFrequency(ifstream &readData){

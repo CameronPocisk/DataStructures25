@@ -8,8 +8,7 @@ int main(){
 
     string fileName;
     cout << "Enter the file to be processed: " << endl;
-    // cin >> fileName;
-    fileName = "MobyDick.txt";
+    cin >> fileName;
 
     ifstream readData;
     
