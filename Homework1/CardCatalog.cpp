@@ -52,6 +52,10 @@ void CardCatalog::AppendOutputFile() {
     cout << lineCount << endl;
 }
 
+void CardCatalog::PrintFirstAndLastName(std::ifstream &readData) {
+    //Using the authorFullName, split it up for a first name and last name
+}
+
 void CardCatalog::ResetPosition(ifstream &readData) {
     readData.seekg(0, ios::beg);
 }
