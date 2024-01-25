@@ -5,47 +5,42 @@ using namespace std;
 
 void CardCatalog::GetInfo(ifstream &readData)
 {
-    string val;
-    int textPosition;
-
     getline(readData, title);
     getline(readData, authorFullName);
 
-    while(readData >> val){
-        if (val == "Contents:") {
-            textPosition = readData.tellg(); //Only loops a few times since it's at the beginning
-            break;
-        }
-    }
+    string word;
+    int numLetters;
+    SetPositionToContents(readData);
 
-    SetPositionToContents(readData, textPosition);
-
-    while(readData >> val){
-        for(int i = 0; i < val.length(); i++) {
-            if(val[i] >= 'a' && val[i] <= 'z'
-            || val[i] >= 'A' && val[i] <= 'Z')
-            {
-                letterFrequency[tolower(val[i]) - 'a'] += 1; // add if forb if it is a
-            } // Range of all caps and lower nums
-        }
+    while(readData >> word){
         wordCount++;
+        for(int i = 0; i < word.length(); i++) {
+            numLetters++;
+            if(word[i] >= 'a' && word[i] <= 'z'
+            || word[i] >= 'A' && word[i] <= 'Z') // Range of all caps and lower nums
+            {
+                letterFrequency[tolower(word[i]) - 'a'] += 1;
+            }
+        }
     }
-    
-    SetPositionToContents(readData, textPosition);
 
-    while(getline(readData, val)) {
+    for(int i = 0; i < NumberOfLettersInAlphabet; i++)
+        letterFrequency[i] = letterFrequency[i] /numLetters * 100;
+    
+    SetPositionToContents(readData);
+    while(getline(readData, word)) {
         lineCount++;
     }
+    lineCount--;
 }
 
 void CardCatalog::PrintLetterCount(){
-    // for(int i = 0; i < NumberOfLettersInAlphabet; i++){
-    //     cout << (char)(i + 'a') << ": " << letterFrequency[i] << "%" << endl;
-    //     // setprecision(4)
-    // }
-    cout << "bruh";
+    for(int i = 0; i < NumberOfLettersInAlphabet; i++){
+        cout << (char)(i + 'a') << ": " << fixed << setprecision(4) << letterFrequency[i] << "%" << endl;
+    }
 }
 
+<<<<<<< HEAD
 void CardCatalog::AppendOutputFile() {
 
     ofstream writeData;
@@ -81,30 +76,39 @@ void CardCatalog::PrintFirstAndLastName() {
 
     cout << "Author First Name: " << firstName << endl;
     cout << "Author Last Name: " << lastName << endl;
+}
 
+=======
+void CardCatalog::PrintIfno() {
+    PrintLetterCount();
+    cout << "Title: " << title << endl;
+    cout << "Author: " << authorFullName << endl;
+    cout << "Word count: " << wordCount << endl;
+    cout << "Line Count: " << lineCount << endl;
+}
+
+void CardCatalog::AppendOutputFile(){
+    // Jake please do this
+}
+
+void CardCatalog::PrintFirstAndLastName(std::ifstream &readData) {
+    // Jake do this 
+    //Needs firsrt name then new line and last name like instructions say
+>>>>>>> d638e74dfec01f8f238d4bd27d42c6e6a40e7bfa
 }
 
 void CardCatalog::ResetPosition(ifstream &readData) {
+    readData.clear();
     readData.seekg(0, ios::beg);
 }
 
-void CardCatalog::SetPositionToContents(ifstream &readData, int textPosition) {
-    readData.clear();
-    readData.seekg(textPosition + 2, ios::beg);
-}
+void CardCatalog::SetPositionToContents(ifstream &readData) {
+    ResetPosition(readData);
 
-void CardCatalog::FindLetterFrequency(ifstream &readData){
-    // Go through the file and get the frequence and put it into the array
-    
-    // fstream textData;
-    // textData.open(givenFileName, ios::in); // Should be safe to open given dev use
-
-    // Get to contents
-    
-    // string trashString;
-    // getline(textData, trashString);
-    // getline(textData, trashString);
-    // int totalLetterCount;
-    //Get the freq starting at contents
-    cout << "bruh";
+    string fileLine;
+    while(readData >> fileLine){
+        if(fileLine == "Contents:") {
+            break;
+        }
+    }
 }
