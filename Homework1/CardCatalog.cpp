@@ -1,6 +1,5 @@
 // Functionality of CardCatalogStruct
 #include "CardCatalog.h"
-#include <vector>
 using namespace std;
 
 void CardCatalog::GetInfo(ifstream &readData)
@@ -40,45 +39,6 @@ void CardCatalog::PrintLetterCount(){
     }
 }
 
-<<<<<<< HEAD
-void CardCatalog::AppendOutputFile() {
-
-    ofstream writeData;
-    writeData.open("CardCatalog.txt", ios::out);
-
-    writeData << "Title: " << title << endl;
-    writeData << "Author Full Name: " << authorFullName << endl;
-    PrintFirstAndLastName();
-    writeData << "Author First Name: " << firstName << endl;
-    writeData << "Author Last Name: " << lastName << endl;
-    writeData << "Word Count: " << wordCount << endl;
-    writeData << "Line Count: " << lineCount << endl;
-    writeData.close();
-}
-
-void CardCatalog::PrintFirstAndLastName() {
-    //Using the authorFullName, split it up for a first name and last name
-    int count = 0;
-    for(std::string::size_type i = 0; i < authorFullName.size(); i++){
-        if(authorFullName[i] != ' '){
-            firstName += authorFullName[i];
-            count ++;
-        }
-        else{
-            count++;
-            break;
-        }
-    }
-    int startLastName = count; //Starts on the character after the space
-    for(std::string::size_type i = startLastName; i < authorFullName.size(); i++){
-        lastName += authorFullName[i];
-    } 
-
-    cout << "Author First Name: " << firstName << endl;
-    cout << "Author Last Name: " << lastName << endl;
-}
-
-=======
 void CardCatalog::PrintIfno() {
     PrintLetterCount();
     cout << "Title: " << title << endl;
@@ -94,7 +54,6 @@ void CardCatalog::AppendOutputFile(){
 void CardCatalog::PrintFirstAndLastName(std::ifstream &readData) {
     // Jake do this 
     //Needs firsrt name then new line and last name like instructions say
->>>>>>> d638e74dfec01f8f238d4bd27d42c6e6a40e7bfa
 }
 
 void CardCatalog::ResetPosition(ifstream &readData) {
