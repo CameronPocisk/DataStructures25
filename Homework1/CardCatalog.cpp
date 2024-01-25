@@ -40,7 +40,7 @@ void CardCatalog::PrintLetterCount(){
     }
 }
 
-
+<<<<<<< HEAD
 void CardCatalog::AppendOutputFile() {
 
     ofstream writeData;
@@ -74,6 +74,27 @@ void CardCatalog::PrintFirstAndLastName() {
         lastName += authorFullName[i];
     } 
 
+    cout << "Author First Name: " << firstName << endl;
+    cout << "Author Last Name: " << lastName << endl;
+}
+
+=======
+void CardCatalog::PrintIfno() {
+    PrintLetterCount();
+    cout << "Title: " << title << endl;
+    cout << "Author: " << authorFullName << endl;
+    cout << "Word count: " << wordCount << endl;
+    cout << "Line Count: " << lineCount << endl;
+}
+
+void CardCatalog::AppendOutputFile(){
+    // Jake please do this
+}
+
+void CardCatalog::PrintFirstAndLastName(std::ifstream &readData) {
+    // Jake do this 
+    //Needs firsrt name then new line and last name like instructions say
+>>>>>>> d638e74dfec01f8f238d4bd27d42c6e6a40e7bfa
 }
 
 void CardCatalog::ResetPosition(ifstream &readData) {
