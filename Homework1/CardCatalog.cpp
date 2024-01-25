@@ -1,5 +1,6 @@
 // Functionality of CardCatalogStruct
 #include "CardCatalog.h"
+#include <vector>
 using namespace std;
 
 void CardCatalog::GetInfo(ifstream &readData)
@@ -46,14 +47,41 @@ void CardCatalog::PrintLetterCount(){
 }
 
 void CardCatalog::AppendOutputFile() {
-    cout << title << endl;
-    cout << authorFullName << endl;
-    cout << wordCount << endl;
-    cout << lineCount << endl;
+
+    ofstream writeData;
+    writeData.open("CardCatalog.txt", ios::out);
+
+    writeData << "Title: " << title << endl;
+    writeData << "Author Full Name: " << authorFullName << endl;
+    PrintFirstAndLastName();
+    writeData << "Author First Name: " << firstName << endl;
+    writeData << "Author Last Name: " << lastName << endl;
+    writeData << "Word Count: " << wordCount << endl;
+    writeData << "Line Count: " << lineCount << endl;
+    writeData.close();
 }
 
-void CardCatalog::PrintFirstAndLastName(std::ifstream &readData) {
+void CardCatalog::PrintFirstAndLastName() {
     //Using the authorFullName, split it up for a first name and last name
+    int count = 0;
+    for(std::string::size_type i = 0; i < authorFullName.size(); i++){
+        if(authorFullName[i] != ' '){
+            firstName += authorFullName[i];
+            count ++;
+        }
+        else{
+            count++;
+            break;
+        }
+    }
+    int startLastName = count; //Starts on the character after the space
+    for(std::string::size_type i = startLastName; i < authorFullName.size(); i++){
+        lastName += authorFullName[i];
+    } 
+
+    cout << "Author First Name: " << firstName << endl;
+    cout << "Author Last Name: " << lastName << endl;
+
 }
 
 void CardCatalog::ResetPosition(ifstream &readData) {
