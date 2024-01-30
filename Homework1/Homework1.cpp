@@ -1,7 +1,6 @@
 #include "CardCatalog.h"
 using namespace std;
 
-// g++ Homework1.cpp CardCatalog.cpp -o CardCatalog.app
 int main(){
 
     string repeat = "yes";
@@ -26,8 +25,17 @@ int main(){
         c.GetInfo(readData);
         c.AppendOutputFile();
 
+        string ShouldPrintLetterFreq;
+        cout << "Would you like to print the letter freq? " << endl;
+        cin >> ShouldPrintLetterFreq;
+        if(ShouldPrintLetterFreq == "yes"){
+            cout << "Printing Letter frequency: " << endl;
+            c.PrintLetterFreq();
+        }
+
         cout << "Do you want to process another book? ";
         cin >> repeat;
+
         while(repeat != "yes" & repeat != "no"){
             cout << "Please type yes or no: ";
             cin >> repeat;

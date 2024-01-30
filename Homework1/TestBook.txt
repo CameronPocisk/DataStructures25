@@ -1,5 +1,0 @@
-Title of Book
-Test Author
-Contents:
-This is a new test file I created so we can test another book.
-Goodbye.

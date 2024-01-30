@@ -4,6 +4,7 @@
 
 #include <iostream> // strings and such
 #include <fstream> // for member funtion
+#include <iomanip> // Print set percision
 
 enum
 {
@@ -27,14 +28,13 @@ struct CardCatalog{
 
     //public
     void GetInfo(std::ifstream &readData);
-    void PrintLetterCount();
+    void PrintLetterFreq();
     void AppendOutputFile(); 
 
     //Private / helpers
     void PrintFirstAndLastName(); //helper for AppendOutputFile
     void ResetPosition(std::ifstream &readData); //helper for GetInfo
-    void SetPositionToContents(std::ifstream &readData, int textPosition); //helper for GetInfo
-    void FindLetterFrequency(std::ifstream &readData);
+    void SetPositionToContents(std::ifstream &readData); //helper for GetInfo
 };
 
 #endif
