@@ -59,22 +59,25 @@ void CardCatalog::AppendOutputFile(){
 
 void CardCatalog::PrintFirstAndLastName(){
     //Using the authorFullName, split it up for a first name and last name
-    int count = 0;
-    for(std::string::size_type i = 0; i < authorFullName.size(); i++){
-        if(authorFullName[i] != ' '){
-            firstName += authorFullName[i];
-            count ++;
-        }
-        else{
-            count++;
-            break;
-        }
-    }
-    int startLastName = count; //Starts on the character after the space
-    for(std::string::size_type i = startLastName; i < authorFullName.size(); i++){
-        lastName += authorFullName[i];
-    }
+    int j = authorFullName.find(" ");
+    firstName = authorFullName.substr(0,j);
+    lastName = authorFullName.substr(j+1);
 
+    // int count = 0;
+    // for(std::string::size_type i = 0; i < authorFullName.size(); i++){
+    //     if(authorFullName[i] != ' '){
+    //         firstName += authorFullName[i];
+    //         count ++;
+    //     }
+    //     else{
+    //         count++;
+    //         break;
+    //     }
+    // }
+    // int startLastName = count; //Starts on the character after the space
+    // for(std::string::size_type i = startLastName; i < authorFullName.size(); i++){
+    //     lastName += authorFullName[i];
+    // }
 }
 
 void CardCatalog::ResetPosition(ifstream &readData) {
