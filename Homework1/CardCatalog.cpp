@@ -38,7 +38,7 @@ void CardCatalog::GetInfo(ifstream &readData)
 }
 
 void CardCatalog::PrintLetterFreq(){
-    // itterates through every letter and their index in the freq list. Prints formatted data
+    // Itterates through every letter and their index in the freq list. Prints formatted data
     for(int i = 0; i < NumberOfLettersInAlphabet; i++){
         cout << (char)('a' + i) << ": " << fixed << setprecision(4) << letterFrequency[i] << "%" << endl;
     }
@@ -65,7 +65,7 @@ void CardCatalog::AppendOutputFile(){
 }
 
 void CardCatalog::PrintFirstAndLastName(){
-    //Using the authorFullName, split it up for a first name and last name
+    // Using the authorFullName, split it up for a first name and last name
     // Finds where the space in the full name is, then splis it into the first and last name
     int spacePosition = authorFullName.find(" ");
     firstName = authorFullName.substr(0,spacePosition);
@@ -73,13 +73,13 @@ void CardCatalog::PrintFirstAndLastName(){
 }
 
 void CardCatalog::ResetPosition(ifstream &readData) {
-    //Resets the position to the beginning of the file
+    // Resets the position to the beginning of the file
     readData.clear();
     readData.seekg(0, ios::beg);
 }
 
 void CardCatalog::SetPositionToContents(ifstream &readData) {
-    //Sets the position to after the "Contents:" in the file to correctly get the word/letter count
+    // Sets the position to after the "Contents:" in the file to correctly get the word/letter count
     ResetPosition(readData);
 
     string fileWord;

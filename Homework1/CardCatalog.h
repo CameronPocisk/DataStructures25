@@ -23,9 +23,9 @@ struct CardCatalog
         float letterFrequency[NumberOfLettersInAlphabet];
 
 
-        void PrintFirstAndLastName(); //helper for AppendOutputFile
-        void ResetPosition(std::ifstream &readData); //helper for GetInfo
-        void SetPositionToContents(std::ifstream &readData); //helper for GetInfo
+        void PrintFirstAndLastName(); // helper for AppendOutputFile
+        void ResetPosition(std::ifstream &readData); // helper for GetInfo
+        void SetPositionToContents(std::ifstream &readData); // helper for GetInfo
 
     public:
         CardCatalog(){ // Contructor that 0s new instances

@@ -5,10 +5,10 @@ int main(){
 
     string repeat = "yes";
 
-    while(repeat == "yes"){   // repeats if the user says they want to process another book
+    while(repeat == "yes"){   // Repeats if the user says they want to process another book
         CardCatalog c;
 
-        // get file
+        // Get file
         string fileName;
         cout << "Enter the file to be processed: " << endl;
         cin >> fileName;
