@@ -5,15 +5,17 @@ int main(){
 
     string repeat = "yes";
 
-    while(repeat == "yes"){
+    while(repeat == "yes"){   // repeats if the user says they want to process another book
         CardCatalog c;
 
+        // get file
         string fileName;
         cout << "Enter the file to be processed: " << endl;
         cin >> fileName;
 
         ifstream readData;
         
+        // Ensure user enters accessable file
         readData.open(fileName, ios::in);
         while(readData.fail())
         {
@@ -22,6 +24,7 @@ int main(){
                 readData.open(fileName, ios::in);   
         }
         
+        // Calls our functions needed to print all the info into CardCatalog.txt
         c.GetInfo(readData);
         c.AppendOutputFile();
 
@@ -33,6 +36,7 @@ int main(){
             c.PrintLetterFreq();
         }
 
+        // Determines if another book should be processed
         cout << "Do you want to process another book? ";
         cin >> repeat;
 
