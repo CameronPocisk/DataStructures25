@@ -18,9 +18,13 @@ int main(){
     mainCharacter.SetMoney(money);
 
 
-    while(playAgain == "yes" && money > 0){
+    while(playAgain == "yes" && mainCharacter.GetMoney() > 0){
         
         mainCharacter.PlayGame();
+        if(mainCharacter.GetMoney() <= 0){
+            cout << "You are out of money, Ending game" << endl;
+            break;
+        }
         cout << "You have $" << mainCharacter.GetMoney() << endl;
         cout << "Would you like to play again? (Enter yes or no): ";
         cin >> playAgain;
@@ -29,8 +33,6 @@ int main(){
             cin >> playAgain;
         }
     }
-
-    if(money <= 0){cout << "You are out of money" << endl;}
 }
 
 // g++ -c Homework2.cpp Roulette.cpp

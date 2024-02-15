@@ -5,8 +5,7 @@
 #include <random>
 
 enum{
-    minValue = 1,
-    DefaultNumberOfValues = 20,
+    DefaultNumberOfValues = 10,
 };
 
 class Wheel {
@@ -14,7 +13,7 @@ class Wheel {
         int numberOfValues;
     public:
         virtual int Spin(){return rand() % numberOfValues + 1;}
-        Wheel(){numberOfValues = {};}
+        Wheel(){numberOfValues = DefaultNumberOfValues;}
 
         void SetNumberOfValues(int num){numberOfValues = num;}
         int GetNumberOfValues(){return numberOfValues;}

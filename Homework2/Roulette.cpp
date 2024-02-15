@@ -9,12 +9,14 @@ enum{
 
 void Player::DisplayResult(bool WinOrLoss, int houseSpin) {
     if(WinOrLoss){
+        cout << endl;
         cout << "The house spun a " << houseSpin << " which loses to your spin of " << playerSpin << endl;
-        cout << "You won $" << bet << " and you currently have $" << money << " left." << endl;
+        cout << "You won $" << bet << " and you currently have $" << money << " left." << endl << endl;
     }
     else{
-        cout << "The house spun a " << houseSpin << " which beats your spin of " << playerSpin << endl;
-        cout << "You lost $" << bet << " and now have $" << money << endl;
+        cout << endl;
+        cout << "The house spun a " << houseSpin << " which beats your spin of " << playerSpin << endl << endl;
+        cout << "You lost $" << bet << " and now have $" << money << endl << endl;
     }
 }
 
@@ -37,8 +39,8 @@ void Player::HandleDoubleBet(int spinValue1, int spinValue2){
         DisplayResult(false, spinValue1);
         return;
     }
-    cout << "The house spun " << spinValue2 << "which is less than your spin, " << spinValue1 << endl;
-    cout << "Spinning again!" << endl;
+    cout << endl << "The house spun " << spinValue1 << " which is less than your spin of " << playerSpin << endl;
+    cout << "Spinning again!" << endl << endl;
     if(spinValue2 >= playerSpin) {
         money -= bet;
         DisplayResult(false, spinValue2);
@@ -66,7 +68,7 @@ void Player::PlayGame(){
 
     int numberOfValuesHold = 0;
     while(numberOfValuesHold > 20 || numberOfValuesHold < 6){
-        cout << "Enter the number of spin values (6-20): " << endl;
+        cout << "Enter the number of spin values (6-20): ";
         cin >> numberOfValuesHold;
     }
     playerWheel.SetNumberOfValues(numberOfValuesHold);
@@ -90,8 +92,15 @@ void Player::PlayGame(){
     cout << "Would you like to change bet 1: None. 2: Double. 3: Halve?: ";
     cin >> playerBetChoice;
     while(playerBetChoice >= 4 || playerBetChoice <= 0) {
-        cout << "Would you like to change bet 1: None. 2: Double. 3: Halve?: " << endl;
+        cout << "Would you like to change bet 1: None. 2: Double. 3: Halve?: ";
         cin >> playerBetChoice;
+    }
+    if(playerBetChoice == 2 && money < 2 * bet) {
+        while(playerBetChoice <= 0 || playerBetChoice >= 4 || playerBetChoice == 2) {
+            cout << "You don't have enough money to double" << endl;
+            cout << "Enter bet change 1: None. 3: Halve.";
+            cin >> playerBetChoice;
+        }
     }
     int houseSpin = 0;
     int houseSpin2 = 0;
