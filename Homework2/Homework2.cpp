@@ -3,36 +3,9 @@
 using namespace std;
 
 int main(){
-    
     Player mainCharacter;
-    int money;
-    string playAgain = "yes";
     srand(time(NULL));
-
-    cout << "How much money would you like to start with? ";
-    cin >> money;
-    while(money <= 0){
-        cout << "Please enter a positive number: ";
-        cin >> money;
-    }
-    mainCharacter.SetMoney(money);
-
-
-    while(playAgain == "yes" && mainCharacter.GetMoney() > 0){
-        
-        mainCharacter.PlayGame();
-        if(mainCharacter.GetMoney() <= 0){
-            cout << "You are out of money, Ending game" << endl;
-            break;
-        }
-        cout << "You have $" << mainCharacter.GetMoney() << endl;
-        cout << "Would you like to play again? (Enter yes or no): ";
-        cin >> playAgain;
-        while(playAgain != "yes" && playAgain != "no"){
-            cout << "Please enter yes or no: ";
-            cin >> playAgain;
-        }
-    }
+    mainCharacter.PlayGame();
 }
 
 // g++ -c Homework2.cpp Roulette.cpp
