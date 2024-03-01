@@ -1,0 +1,60 @@
+Linked Lists
+
+Advantages:
+Easy and fast to insert or remove from LL
+Dynamic memory alloc and only nescessary size for any item
+
+
+Disadvantages:
+Slow time to find an item
+Need to store a pointer for every item in list as well
+
+
+The LL
+
+Class Node{
+    Node* head;
+    int data;
+    // Constructor
+}
+
+class LL{
+    Node* head;
+    int length;
+    // Sometimes has a variable for the length or head
+
+    LLNode(){
+        data = 0;
+        nextNode = null;
+    }
+
+    void Insert(int in){
+        Node* newNode(in);
+        if(head == null){
+            head = newNode;
+            return;
+        }
+        // Does the thing get inserted after the head or before
+
+        Node* temp = head;
+        while(temp->next != null){
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+    void InsertFront(int in){
+        node* atFront = New Node(in);
+        atFront->next = head;
+        head = atFront;
+    }
+
+    Remove(){
+        head->next = null;
+    }
+    Length()
+    MakeEmpty()
+
+    ~destructor(){
+
+    }
+};
