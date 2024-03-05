@@ -102,14 +102,12 @@ void Player::PlayGame(){
 
     Wheel *houseWheel; // Base version here
 
-
     string hardModeChoice = "IDK";
     while(hardModeChoice != "yes" && hardModeChoice != "no"){
         cout << "Would you like to play hardmode? ";
         cin >> hardModeChoice;
     }
     if(hardModeChoice == "yes"){
-        // New derivwed
         houseWheel = new HardmodeWheel; // Will change to derived becuase polymorphism
     }
     else{
