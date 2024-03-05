@@ -5,7 +5,7 @@ using namespace std;
 
 void SidePile::Push(int in){
     if(IsFull()) {
-        throw StackOverflow;
+        throw OverflowError();
     }
     data[index] = in;
     index++;
@@ -13,7 +13,7 @@ void SidePile::Push(int in){
 
 int SidePile::Pop(){
     if(IsEmpty()) {
-        throw StackUnderflow;
+        throw UnderflowError;
     }
 index--;
 return data[index];
