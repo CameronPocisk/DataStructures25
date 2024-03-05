@@ -6,35 +6,20 @@
 
 
 class DeckQueue{
-    LL data;
-    int index = 0;
+    private:
+        LL data;
+        int index;
+    public:
+        DeckQueue();
 
-    void Enqueue(int in) {
-    data.InsertEnd(in);
-    index++;
-    }
+        void Enqueue(int in);
 
-    int Dequeue() {
-        if(data.isEmpty()) {
-            throw UnderflowError();
-        }
-        int hold = data.RemoveFront();
-        for(int i = 0; i < index; i++){
-            data[i] = data[i+1];
-        }
-        index--;
-        return hold;
-    }
+        int Dequeue();
 
-    bool IsFull() {
-        return index >= size;
-    }
+        bool IsFull(return index >= size;);
 
-    int length() {
-        return index;
-    }
+        int length() {return index;}
 };
-
 
 
 #endif

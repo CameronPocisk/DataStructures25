@@ -9,21 +9,9 @@ class SidePile {
     LL data;
     int index = 0; //Where next we add goes
     
-    void Push(int in){
-        if(IsFull()) {
-            throw StackOverflow;
-        }
-    data[index] = in;
-    index++;
-    }
+    void Push(int in);
 
-    int Pop(){
-        if(IsEmpty()) {
-            throw StackUnderflow;
-        }
-    index--;
-    return data[index];
-    }
+    int Pop();
 
     bool IsFull() {return index >= size}
 

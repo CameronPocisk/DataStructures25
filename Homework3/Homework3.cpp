@@ -1,6 +1,8 @@
 // #include "DeckQueue.h"
 // #include "PileStack.h"
-#include"LinkedList.h"
+#include "LinkedList.h"
+#include "DeckQueue.h"
+#include "PileStack.h"
 
 #include<iostream>
 using namespace std;
