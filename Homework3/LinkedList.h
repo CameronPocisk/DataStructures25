@@ -2,6 +2,7 @@
 #define LINKEDLIST_H
 
 #include "Exceptions.h"
+#include <iostream>
 using namespace std;
 
 class Node{
@@ -11,6 +12,7 @@ class Node{
     // Constructor
     Node(int dataIn = 0){
         data = dataIn;
+        next = nullptr;
     }
 };
 
@@ -33,7 +35,7 @@ class LL{
             return;
         }
 
-        // Itterate to empty node
+        // Iterate to empty node
         Node* temp = head;
         while(temp->next != nullptr){
             temp = temp->next;
