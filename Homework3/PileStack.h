@@ -1,25 +1,25 @@
 #ifndef PILESTACK_H
 #define PILESTACK_H
 
-#include<iostream>
-#include<LinkedList.h>
+#include <iostream>
+#include "Exceptions.h"
 
-class SidePile {
-    const int size = 5;
-    LL data;
+class SidePile{
+    private:
+    const static int maxSize = 5;
+    int cards[maxSize];
     int index = 0; //Where next we add goes
-    
-    void Push(int in);
 
-    int Pop();
+    public:
+    void AddCard(int in); // Add card
 
-    bool IsFull() {return index >= size}
+    // No Peek (Not allowed)
+    int RemoveCard(); // Remove card
 
-    bool IsEmpty() {return index <= 0}
-
-    int Count() {
-        return index;
-    }
+    // Nice Inlines
+    bool IsEmpty() {return index <= 0;}
+    bool IsFull() {return index >= maxSize;}
+    int GetNumCards() {return index;} //This needs a way to tell the player how many cards they have left but not the other player.
 };
 
 #endif

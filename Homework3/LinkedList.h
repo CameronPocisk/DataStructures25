@@ -17,12 +17,12 @@ class Node{
 class LL{
     Node* head;
     int length;
+    public:
 
     LL(){
         length = 0;
         head = nullptr;
     }
-    public:
 
     void InsertEnd(int in){
         Node* newNode = new Node(in);
@@ -64,12 +64,14 @@ class LL{
         }
     }
     
-    void RemoveFront(int in){
+    int RemoveFront(){
         if(head->next == nullptr){
             throw UnderflowError();
         }
+        Node *temp = head;
         head = head->next;
         length--;
+        return temp->data;
     }
 
     int Length(){

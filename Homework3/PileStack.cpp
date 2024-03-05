@@ -3,18 +3,18 @@
 #include "PileStack.h"
 using namespace std;
 
-void SidePile::Push(int in){
+void SidePile::AddCard(int in){
     if(IsFull()) {
         throw OverflowError();
     }
-    data[index] = in;
+    cards[index] = in;
     index++;
 }
 
-int SidePile::Pop(){
+int SidePile::RemoveCard(){
     if(IsEmpty()) {
-        throw UnderflowError;
+        throw UnderflowError();
     }
-index--;
-return data[index];
+    index--;
+    return cards[index];
 }
