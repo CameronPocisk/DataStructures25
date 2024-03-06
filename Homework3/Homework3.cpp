@@ -38,7 +38,7 @@ void distributeCards(DeckQueue &p, DeckQueue &cpu){
     }
 }
 
-int GetCpuValue(int curCard, DeckQueue &cpuDeck, SidePile &cpuPile){
+int GetCpuValue(int curCard, DeckQueue &cpuDeck, SidePile &cpuPile, bool &twoCards){
     if(curCard >= 10){ // Cur card is enough
         cout << "Cpu is happy with card" << endl;
         return curCard;
@@ -52,6 +52,7 @@ int GetCpuValue(int curCard, DeckQueue &cpuDeck, SidePile &cpuPile){
     else{ // Get from side if possible
         if(!(cpuPile.IsEmpty())){
             cout << "Cpu pulled the top card from the side pile" << endl;
+            twoCards = true;
             return curCard + cpuPile.RemoveCard();
         }
         else{
@@ -61,44 +62,66 @@ int GetCpuValue(int curCard, DeckQueue &cpuDeck, SidePile &cpuPile){
     }        
 }
 
+void GetBothCardsIfTwo(DeckQueue &deckIn, bool shouldGetBoth, int secondCard){
+    if(shouldGetBoth){
+        deckIn.Enqueue(secondCard);
+    }
+}
+
 
 int main(){
     cout << "Running file" << endl;
     srand(time(0));
 
     // initilizations
-    DeckQueue pDeck;
-    DeckQueue cDeck;
-    SidePile pSide;
-    SidePile cSide;
+    DeckQueue pDeck, cDeck;
+    SidePile pSide, cSide;
     distributeCards(pDeck, cDeck);
 
     cout << "Welcome to War. The game will end when someone is out of cards." << endl;
     int userChoice;
     int pCurCard;
-    int cpuCurCard;
     int pSideCard;
+    int cpuCurCard;
     int cpuSideCard;
 
     while((pDeck.length() != 0 || pSide.GetNumCards() != 0) && (cDeck.length() != 0 || pSide.GetNumCards() != 0)){
-        if(pDeck.length() != 0){
+        // If user has 0 cards in deck, must use side card
+        try{
             pCurCard = pDeck.Dequeue();
         }
-        else{
+        catch(UnderflowError &e){
+            cerr << "No cards left in deck" << endl;
+            try{
             pCurCard = pSide.RemoveCard();
+            }
+            catch(UnderflowError &e){
+                cerr << e.what() << endl;
+                cout << "No cards left" << endl;
+            }
         }
-        int cpuFirstCard = cDeck.Dequeue();
-        cpuCurCard = GetCpuValue(cpuFirstCard, cDeck, cSide);
-        bool twoCards = false;
-        if(cpuCurCard - cpuFirstCard != 0){
-            twoCards = true;
+        
+        // Find CPU choice and use sum to check if they use 2 cards
+        int cpuFirstCard;
+        try{
+            cpuFirstCard = cDeck.Dequeue();
+            
+        } catch(UnderflowError &e){
+            cerr << e.what() << endl;
+            try{
+                int cpuFirstCard = cSide.RemoveCard();
+            } catch(UnderflowError &e){
+                cerr << e.what() << endl;
+                cout << "No cards left" << endl;
+            }
         }
+        bool twoCards = false; //Every loop it's changed to false, if the cpu draws two cards it's set to true
+        cpuCurCard = GetCpuValue(cpuFirstCard, cDeck, cSide, twoCards);
 
 
         cout << "The first card you pulled is a: " << pCurCard << endl << endl;
         cout << "Press 1 to play this card." << endl << "Press 2 to pull from the side pile." << endl << "Press 3 to push to the side pile." << endl;
         cin >> userChoice;
-        // Add exception
         while(userChoice != 1 && userChoice != 2 && userChoice != 3){
             cout << "Please type 1, 2, or 3: ";
             cin >> userChoice;
@@ -109,13 +132,15 @@ int main(){
                 if(pCurCard > cpuCurCard){
                     cout << "Your " << pCurCard << " is higher then the cpu card of " << cpuCurCard << endl << endl;
                     pDeck.Enqueue(pCurCard);
-                    pDeck.Enqueue(cpuCurCard);
-                    cout << endl;
+                    pDeck.Enqueue(cpuFirstCard);
+                    // Player gets both of the CPUs cards if they double up (Helper?)
+                    GetBothCardsIfTwo(pDeck, twoCards, cpuCurCard-cpuFirstCard);
                 } else {
                     cout << "The cpu pulled " << cpuCurCard << " which is higher or equal to " << pCurCard << endl << endl;
                     cDeck.Enqueue(pCurCard);
-                    cDeck.Enqueue(cpuCurCard);
-                    cout << endl;
+                    cDeck.Enqueue(cpuFirstCard);
+                    
+                    GetBothCardsIfTwo(cDeck, twoCards, cpuCurCard-cpuFirstCard);
                 }
                 
                 break;
@@ -126,19 +151,25 @@ int main(){
                 catch(UnderflowError &e){
                     cerr << e.what() << endl;
                     cout << "Cannot grab from empty pile comparing" << endl;
+                    pSideCard = 0;
                 }
+                
                 if(pCurCard + pSideCard > cpuCurCard) {
                     cout << "Your " << pCurCard << " + " << pSideCard << " is higher than the cpu's " << cpuCurCard << endl;
                     pDeck.Enqueue(pCurCard);
-                    pDeck.Enqueue(cpuCurCard);
-                    pDeck.Enqueue(pSideCard);
-                    cout << endl;
+                    pDeck.Enqueue(cpuFirstCard);
+                    if(pSideCard != 0){
+                        pDeck.Enqueue(pSideCard);
+                    }
+                    GetBothCardsIfTwo(pDeck, twoCards, cpuCurCard-cpuFirstCard);
                 } else {
                     cout << "The cpu pulled " << cpuCurCard << " which is higher or equal to " << pCurCard << " + " << pSideCard << endl;
                     cDeck.Enqueue(pCurCard);
-                    cDeck.Enqueue(cpuCurCard);
-                    cDeck.Enqueue(pSideCard);
-                    cout << endl;
+                    cDeck.Enqueue(cpuFirstCard);
+                    if(pSideCard != 0){
+                        cDeck.Enqueue(pSideCard);
+                    }
+                    GetBothCardsIfTwo(cDeck, twoCards, cpuCurCard-cpuFirstCard);
                 }
                 break;
             case 3:
@@ -154,11 +185,14 @@ int main(){
                 if(pCurCard > cpuCurCard){
                     cout << "Your " << pCurCard << " is higher then the cpu card of " << cpuCurCard << endl;
                     pDeck.Enqueue(pCurCard);
-                    pDeck.Enqueue(cpuCurCard);
+                    pDeck.Enqueue(cpuFirstCard);
+                    GetBothCardsIfTwo(pDeck, twoCards, cpuCurCard-cpuFirstCard);
+                    
                 } else {
                     cout << "The cpu pulled " << cpuCurCard << " which is higher or equal to " << pCurCard << endl;
                     cDeck.Enqueue(pCurCard);
-                    cDeck.Enqueue(cpuCurCard);
+                    cDeck.Enqueue(cpuFirstCard);
+                    GetBothCardsIfTwo(cDeck, twoCards, cpuCurCard-cpuFirstCard);
                 }
                 break;
         }
