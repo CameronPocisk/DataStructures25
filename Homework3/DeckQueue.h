@@ -8,9 +8,10 @@
 class DeckQueue{
     private:
         LL data;
-        int index = 0;
+        int index;
 
     public:
+        DeckQueue(){index = 0;}
         void Enqueue(int in);
 
         int Dequeue();
