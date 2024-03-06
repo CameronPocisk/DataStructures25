@@ -8,9 +8,12 @@ class SidePile{
     private:
     const static int maxSize = 5;
     int cards[maxSize];
-    int index = 0; //Where next we add goes
+    int index;
 
     public:
+    SidePile(){
+        index = 0;
+    }
     void AddCard(int in); // Add card
 
     // No Peek (Not allowed)

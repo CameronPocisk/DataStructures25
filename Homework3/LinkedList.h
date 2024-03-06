@@ -26,67 +26,20 @@ class LL{
         head = nullptr;
     }
 
-    void InsertEnd(int in){
-        Node* newNode = new Node(in);
-        length++;
-
-        if(head == nullptr){ // Empty case
-            head = newNode; 
-            return;
-        }
-
-        // Iterate to empty node
-        Node* temp = head;
-        while(temp->next != nullptr){
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
+    void InsertEnd(int in);
     
-    void InsertFront(int in){
-        Node* atFront = new Node(in);
-        atFront->next = head;
-        head = atFront;
-        length++;
-    }
+    void InsertFront(int in);
 
-    void RemoveEnd(int in){
-        if(head == nullptr){ // Empty case
-            throw UnderflowError();
-        }
-
-        // Itterate to empty node
-        Node* temp = head;
-        while(true){
-            if(temp->next == nullptr){
-                temp = nullptr;
-                length--;
-                return;
-            }
-        }
-    }
+    void RemoveEnd(int in);
     
-    int RemoveFront(){
-        if(head->next == nullptr){
-            throw UnderflowError();
-        }
-        Node *temp = head;
-        head = head->next;
-        length--;
-        return temp->data;
-    }
+    int RemoveFront();
 
     int Length(){
         return length;
     }
-    void MakeEmpty(){
-        head = nullptr; // This should remove everything
-        length = 0;
-    }
+    void MakeEmpty();
 
-    bool IsEmpty(){
-        return head == nullptr;
-    }
+    bool IsEmpty(){return head == nullptr;}
 
     ~LL(){
         //Destructor

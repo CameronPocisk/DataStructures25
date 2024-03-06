@@ -181,7 +181,6 @@ int main(){
         case 3:
             cout << "There are " << pDeck.length() << " cards in your deck, and " << cDeck.length() << " cards in the computer's deck." << endl << endl;
             cout << "There are a total of" << pDeck.length() + cDeck.length() + cSide.GetNumCards() + pSide.GetNumCards() << " cards" << endl;
-            cout << pSide.GetNumCards() << ", " << cSide.GetNumCards();
         
         default:
             break;
