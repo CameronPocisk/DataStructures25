@@ -11,13 +11,9 @@ class DeckQueue{
         int index;
 
     public:
-<<<<<<< HEAD
         DeckQueue(){
             index = 0;
         }
-=======
-        DeckQueue(){index = 0;}
->>>>>>> dee7ac1ab4c633424aef4be0fddd7ee1fb82abc6
         void Enqueue(int in);
 
         int Dequeue();

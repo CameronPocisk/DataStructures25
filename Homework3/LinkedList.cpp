@@ -42,7 +42,7 @@ void LL::RemoveEnd(int in){
 }
 
 int LL::RemoveFront(){
-    if(head->next == nullptr){
+    if(head == nullptr){
         throw UnderflowError();
     }
     Node *temp = head;

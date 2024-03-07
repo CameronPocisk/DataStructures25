@@ -30,10 +30,10 @@ void distributeCards(DeckQueue &p, DeckQueue &cpu){
         deck[swapInd1] = deck[swapInd2];
         deck[swapInd2] = hold;
     }
-    
-    // Add to both decks
-    for(int i = 0; i < 26; i++){
-        p.Enqueue(deck[i]);
+
+    // Add to both decks, 26 is the main
+    for(int i = 0; i < 3; i++){
+        p.Enqueue(14);
         cpu.Enqueue(deck[26 + i]);
     }
 }
@@ -45,8 +45,12 @@ int GetCpuValue(int curCard, DeckQueue &cpuDeck, SidePile &cpuPile, bool &twoCar
     }
     else if(curCard < 7 && !cpuPile.IsFull()){ // Add To Side Pile
         cout << "Cpu added a card to the side pile" << endl;
-        cpuPile.AddCard(curCard);
-        curCard = cpuDeck.Dequeue();
+        try{
+            cpuPile.AddCard(curCard);
+            curCard = cpuDeck.Dequeue();
+        } catch(UnderflowError &e){
+            cerr << e.what() << endl;
+        }
         return curCard;
     }
     else{ // Get from side if possible
@@ -85,7 +89,7 @@ int main(){
     int cpuCurCard;
     int cpuSideCard;
 
-    while((pDeck.length() != 0 || pSide.GetNumCards() != 0) && (cDeck.length() != 0 || pSide.GetNumCards() != 0)){
+    while((pDeck.length() != 0 || pSide.GetNumCards() != 0) && (cDeck.length() != 0 || cSide.GetNumCards() != 0)){
         // If user has 0 cards in deck, must use side card
         try{
             pCurCard = pDeck.Dequeue();
@@ -102,21 +106,28 @@ int main(){
         }
         
         // Find CPU choice and use sum to check if they use 2 cards
+        cout << cDeck.length() << cSide.GetNumCards() << endl;
         int cpuFirstCard;
         try{
             cpuFirstCard = cDeck.Dequeue();
             
         } catch(UnderflowError &e){
             cerr << e.what() << endl;
+            cout << cSide.GetNumCards();
+            cout << "Out of main deck, going to side" << endl;
             try{
-                int cpuFirstCard = cSide.RemoveCard();
+                cpuFirstCard = cSide.RemoveCard();
             } catch(UnderflowError &e){
                 cerr << e.what() << endl;
                 cout << "No cards left" << endl;
             }
         }
         bool twoCards = false; //Every loop it's changed to false, if the cpu draws two cards it's set to true
-        cpuCurCard = GetCpuValue(cpuFirstCard, cDeck, cSide, twoCards);
+        if(cDeck.length() <= 0){
+            cpuCurCard = GetCpuValue(cpuFirstCard, cDeck, cSide, twoCards);
+        } else {
+            cpuCurCard = cpuFirstCard;
+        }
 
 
         cout << "The first card you pulled is a: " << pCurCard << endl << endl;
@@ -224,12 +235,12 @@ int main(){
     // Winner message
     if(pDeck.length() != 0){
         cout << "************" << endl;
-        cout << "Player wins!";
+        cout << "Player wins!" << endl;
         cout << "************" << endl;
     }
     else{
         cout << "********" << endl;
-        cout << "Cpu won (you suck :/)";
+        cout << "Cpu won (you suck :/)" << endl;;
         cout << "********" << endl;
     }
 

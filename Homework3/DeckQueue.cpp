@@ -8,6 +8,7 @@ void DeckQueue::Enqueue(int in){
 
 int DeckQueue::Dequeue(){
     if(data.IsEmpty()) {
+        index--;
         throw UnderflowError();
     }
     int hold = data.RemoveFront();
