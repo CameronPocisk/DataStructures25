@@ -1,15 +1,23 @@
-// #include "LinkedList.h"
 #include "DeckQueue.h"
 #include "PileStack.h"
-// #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-// #include "doctest.h"
-
 #include<iostream>
 using namespace std;
 
+enum{
+    DeckSize = 52,
+    HandSize = 26,
+    PlayCurCard = 1,
+    PullFromSide = 2,
+    PushToSide = 3,
+    CheckCardsInDeck = 1,
+    CheckComputerCards = 2,
+    CheckBothCards = 3,
+    Continue = 4,
+};
+
 void distributeCards(DeckQueue &p, DeckQueue &cpu){
     // Create deck
-    int deck[52];
+    int deck[DeckSize];
     int cur = 0;
     for(int i = 2; i <= 14; i++){
         for(int j = 0; j < 4; j++){
@@ -19,12 +27,12 @@ void distributeCards(DeckQueue &p, DeckQueue &cpu){
     }
 
     //Shuffle deck by swapping decksize*2 times
-    int numSwaps = 52*2;
+    int numSwaps = DeckSize*2;
     int swapInd1;
     int swapInd2;
     for(int i = 0; i < numSwaps; i++){
-        swapInd1 = rand() % 52;
-        swapInd2 = rand() % 52;
+        swapInd1 = rand() % DeckSize;
+        swapInd2 = rand() % DeckSize;
 
         int hold = deck[swapInd1];
         deck[swapInd1] = deck[swapInd2];
@@ -32,38 +40,43 @@ void distributeCards(DeckQueue &p, DeckQueue &cpu){
     }
 
     // Add to both decks, 26 is the main
-    for(int i = 0; i < 3; i++){
-        p.Enqueue(14);
-        cpu.Enqueue(deck[26 + i]);
+    for(int i = 0; i < HandSize; i++){
+        p.Enqueue(deck[i]);
+        cpu.Enqueue(deck[HandSize + i]);
     }
 }
 
-int GetCpuValue(int curCard, DeckQueue &cpuDeck, SidePile &cpuPile, bool &twoCards){
+int GetCpuValue(int curCard, DeckQueue &cpuDeck, SidePile &cpuPile, bool &twoCards)
+{
+    // cout << "CPU GOT: " << curCard << endl; // (for testing)
     if(curCard >= 10){ // Cur card is enough
         cout << "Cpu is happy with card" << endl;
         return curCard;
     }
-    else if(curCard < 7 && !cpuPile.IsFull()){ // Add To Side Pile
-        cout << "Cpu added a card to the side pile" << endl;
-        try{
+    else if(curCard < 7){ // Add To Side Pile
+        // Cannot add to side
+        if(cpuPile.IsFull() || cpuDeck.IsEmpty()){
+            cout << "CPU wanted to add to side but couldnt. Playing cur card" << endl;
+            return curCard;
+        }
+        else{ // Can add to pile and play next card
+            cout << "Cpu addded to pile and plays next card" << endl;
             cpuPile.AddCard(curCard);
             curCard = cpuDeck.Dequeue();
-        } catch(UnderflowError &e){
-            cerr << e.what() << endl;
+            return curCard;
         }
-        return curCard;
     }
     else{ // Get from side if possible
         if(!(cpuPile.IsEmpty())){
-            cout << "Cpu pulled the top card from the side pile" << endl;
+            cout << "Cpu pulled from pile and played both" << endl;
             twoCards = true;
             return curCard + cpuPile.RemoveCard();
         }
         else{
-            cout << "Cpu played average card" << endl;
+            cout << "Cpu played card after finding nothing in side" << endl;
             return curCard;
         }
-    }        
+    }
 }
 
 void GetBothCardsIfTwo(DeckQueue &deckIn, bool shouldGetBoth, int secondCard){
@@ -81,65 +94,50 @@ int main(){
     DeckQueue pDeck, cDeck;
     SidePile pSide, cSide;
     distributeCards(pDeck, cDeck);
+    int userChoice;
+    int pCurCard, pSideCard;
+    int cpuCurCard, cpuSideCard;
 
     cout << "Welcome to War. The game will end when someone is out of cards." << endl;
-    int userChoice;
-    int pCurCard;
-    int pSideCard;
-    int cpuCurCard;
-    int cpuSideCard;
 
-    while((pDeck.length() != 0 || pSide.GetNumCards() != 0) && (cDeck.length() != 0 || cSide.GetNumCards() != 0)){
-        // If user has 0 cards in deck, must use side card
+    while((!pDeck.IsEmpty() || !pSide.IsEmpty()) && (!cDeck.IsEmpty() || !cSide.IsEmpty()))
+    {
         try{
             pCurCard = pDeck.Dequeue();
         }
         catch(UnderflowError &e){
-            cerr << "No cards left in deck" << endl;
-            try{
+            cerr << "No cards left in deck, resorting to side" << endl;
             pCurCard = pSide.RemoveCard();
-            }
-            catch(UnderflowError &e){
-                cerr << e.what() << endl;
-                cout << "No cards left" << endl;
-            }
         }
-        
+
+        cout << "The first card you pulled is a: " << pCurCard << endl << endl;
+        cout << "Press 1 to play this card." << endl << "Press 2 to pull from the side pile." << endl << "Press 3 to push to the side pile." << endl;
+        cin >> userChoice;
+
+        while(userChoice != PlayCurCard && userChoice != PullFromSide && userChoice != PushToSide){
+            cout << "Please type 1, 2, or 3: ";
+            cin >> userChoice;
+        }
         // Find CPU choice and use sum to check if they use 2 cards
-        cout << cDeck.length() << cSide.GetNumCards() << endl;
         int cpuFirstCard;
         try{
             cpuFirstCard = cDeck.Dequeue();
-            
-        } catch(UnderflowError &e){
+        } 
+        catch(UnderflowError &e){
             cerr << e.what() << endl;
-            cout << cSide.GetNumCards();
-            cout << "Out of main deck, going to side" << endl;
-            try{
-                cpuFirstCard = cSide.RemoveCard();
-            } catch(UnderflowError &e){
-                cerr << e.what() << endl;
-                cout << "No cards left" << endl;
-            }
+            cout << "CPU is out of main deck, resorting to side" << endl;
+            cpuFirstCard = cSide.RemoveCard();
         }
+
         bool twoCards = false; //Every loop it's changed to false, if the cpu draws two cards it's set to true
-        if(cDeck.length() <= 0){
+        if(!cDeck.IsEmpty()){
             cpuCurCard = GetCpuValue(cpuFirstCard, cDeck, cSide, twoCards);
         } else {
             cpuCurCard = cpuFirstCard;
         }
 
-
-        cout << "The first card you pulled is a: " << pCurCard << endl << endl;
-        cout << "Press 1 to play this card." << endl << "Press 2 to pull from the side pile." << endl << "Press 3 to push to the side pile." << endl;
-        cin >> userChoice;
-        while(userChoice != 1 && userChoice != 2 && userChoice != 3){
-            cout << "Please type 1, 2, or 3: ";
-            cin >> userChoice;
-        }
-
         switch(userChoice){
-            case 1:
+            case PlayCurCard:
                 if(pCurCard > cpuCurCard){
                     cout << "Your " << pCurCard << " is higher then the cpu card of " << cpuCurCard << endl << endl;
                     pDeck.Enqueue(pCurCard);
@@ -155,13 +153,13 @@ int main(){
                 }
                 
                 break;
-            case 2:
+            case PullFromSide:
                 try{  
                 pSideCard = pSide.RemoveCard();
                 }
                 catch(UnderflowError &e){
                     cerr << e.what() << endl;
-                    cout << "Cannot grab from empty pile comparing" << endl;
+                    cout << "Cannot grab from empty pile, using origional card" << endl;
                     pSideCard = 0;
                 }
                 
@@ -183,7 +181,7 @@ int main(){
                     GetBothCardsIfTwo(cDeck, twoCards, cpuCurCard-cpuFirstCard);
                 }
                 break;
-            case 3:
+            case PushToSide:
                 try{
                     pSide.AddCard(pCurCard);
                     pCurCard = pDeck.Dequeue();
@@ -192,7 +190,11 @@ int main(){
                     cerr << e.what() << endl;
                     cout << "Cannot add to full pile (5)" << endl;
                 }
-
+                catch(UnderflowError &e){
+                    cerr << e.what() << endl;
+                    pSide.RemoveCard();
+                    cout << "Main deck empty" << endl;
+                }
                 if(pCurCard > cpuCurCard){
                     cout << "Your " << pCurCard << " is higher then the cpu card of " << cpuCurCard << endl;
                     pDeck.Enqueue(pCurCard);
@@ -211,37 +213,40 @@ int main(){
         cout << "Press 1 to check how many cards are in your deck." << endl << "Press 2 to check how many cards are in the computer's deck." << endl << "Press 3 to check both" << endl << "Press 4 to continue." << endl;
         cin >> userChoice;
         
-        while(userChoice != 1 && userChoice != 2 && userChoice != 3 && userChoice != 4){
+        while(userChoice != CheckCardsInDeck && userChoice != CheckComputerCards && userChoice != CheckBothCards && userChoice != Continue){
             cout << "Please type 1, 2, 3, or 4: ";
             cin >> userChoice;
         }
-        switch (userChoice)
-        {
-        case 1:
-            cout << "There are " << pDeck.length() << " cards in your deck." << endl << endl;
-            break;
-        case 2:
-            cout << "There are " << cDeck.length() << " cards in the computer's deck." << endl << endl;
-            break;
-        case 3:
-            cout << "There are " << pDeck.length() << " cards in your deck, and " << cDeck.length() << " cards in the computer's deck." << endl << endl;
-            cout << "There are a total of" << pDeck.length() + cDeck.length() + cSide.GetNumCards() + pSide.GetNumCards() << " cards" << endl;
-        
-        default:
-            break;
+
+        switch (userChoice) {
+            case CheckCardsInDeck:
+                cout << "There are " << pDeck.length() << " cards in your deck." << endl;
+                cout << "There are " << pSide.GetNumCards() << " cards in your side pile" << endl << endl;
+                break;
+            case CheckComputerCards:
+                cout << "There are " << cDeck.length() << " cards in the computer's deck." << endl;
+                cout << "There are " << cSide.GetNumCards() << " cards in the computer's side pile" << endl << endl;
+                break;
+            case CheckBothCards:
+                cout << "There are " << pDeck.length() << " cards in your deck, and " << pSide.GetNumCards() << " cards in your side pile." << endl;
+                cout << "There are " << cDeck.length() << " cards in the computer's deck, and " << cSide.GetNumCards() << " cards in the computer's side pile." << endl << endl;
+                cout << "There are a total of " << pDeck.length() + cDeck.length() + cSide.GetNumCards() + pSide.GetNumCards() << " cards" << endl;
+    
+            default:
+                break;
         }
     }
     
     // Winner message
-    if(pDeck.length() != 0){
+    if(!pDeck.IsEmpty()){
         cout << "************" << endl;
         cout << "Player wins!" << endl;
         cout << "************" << endl;
     }
     else{
-        cout << "********" << endl;
-        cout << "Cpu won (you suck :/)" << endl;;
-        cout << "********" << endl;
+        cout << "*********************" << endl;
+        cout << "Cpu won (you suck :/)" << endl;
+        cout << "*********************" << endl;
     }
 
     return 0;

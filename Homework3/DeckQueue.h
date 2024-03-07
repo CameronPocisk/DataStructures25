@@ -20,6 +20,7 @@ class DeckQueue{
 
         // bool IsFull(){return index >= 52;}
         int length() {return index;}
+        bool IsEmpty(){return index <= 0;}
 };
 
 #endif
