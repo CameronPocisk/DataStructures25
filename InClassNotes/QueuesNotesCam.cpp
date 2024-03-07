@@ -25,9 +25,13 @@ class Queue{
     protected:
     static const int size = 5;
     char data[size];
-    int index = 0;
+    int index;
 
     public:
+
+    Queue(){
+        index = 0;
+    }
     bool isEmpty(){
         return index == 0;
     }
@@ -67,41 +71,59 @@ class Queue{
         return holdReturn;
     }
 
+    void printQueue(){
+        for(int i = 0; i < index; i++){
+            cout << data[i] << ", ";
+        }
+        cout << endl;
+    }
+
 };
 
 
-// class RingQueue{
-//     int start = 0;
-//     int end = 0;
-//     static const int size = 5;
-//     char data[size];
+class RingQueue{
+    int start;
+    int end;
+    static const int size = 5;
+    char data[size];
 
-//     public:
+    public:
 
-//     bool isFull(){
-//         return start == end && end != 0;
-//     }
-//     bool isEmpty(){
-//         return end == 0;
-//     }
-//     void enqueue(char in){
-//         if(isFull()){
-//             throw overflow_error("overlfowring q");
-//         }
+    RingQueue(){
+        start = 0;
+        end = 0;
+    }
 
-//         end = (end + 1) % 5; // Nathan cooked
-//         data[end] = in;
-//         end++;
-//     }
-//     char dequeue(){
-//         if(isEmpty()){
-//             throw overflow_error("Underflow ring");
-//         }
-//         char temp = data[start];
-//         start = (start + 1) % size;
-//         return start;
-//     }
-// }
+    bool isFull(){
+        return end + -(start) >= size;
+    }
+    bool isEmpty(){
+        return end == start;
+    }
+    void enqueue(char in){
+        if(isFull()){
+            throw overflow_error("overlfowring q");
+        }
+        end = (end) % 5; // Nathan cooked // End has to be add after the data is inputted
+        data[end] = in;
+        end++; //If this is in the (end) than it starts at value 1
+    }
+    char dequeue(){
+        if(isEmpty()){
+            throw overflow_error("Underflow ring");
+        }
+        char temp = data[start];
+        start = (start) % size;
+        start++;
+        return temp;
+    }
+    void printQueue(){
+        for(int i = start; i < end; i++){
+            cout << data[i] << ", ";
+        }
+        cout << endl;
+    }
+};
 
 int main(){
 
@@ -110,17 +132,22 @@ int main(){
     cout << "Is full: " << qExample.isFull() << endl;
 
     for(int i = 0; i < 5; i++){
-        cout << "enqueing " << char('a' + i) << endl; qExample.enqueue('a' + i);
+        cout << "enqueing " << char('a' + i) << endl; 
+        qExample.enqueue('a' + i);
     }
+    qExample.printQueue();
     cout << "Is full: " << qExample.isFull() << endl;
 
     for(int i = 0; i < 5; i++){
         cout << "Printing dequeue: " << qExample.dequeue() << endl;
+        qExample.printQueue();
     }
+    qExample.printQueue();
     cout << "Is empty: " << qExample.isEmpty() << endl;
+    
     return 0;
 }
 
-// g++ -c QueuesNotes.cpp
-// g++ -o main.exe QueuesNotes.o
+// g++ -c QueuesNotesCam.cpp
+// g++ -o main.exe QueuesNotesCam.o
 // ./main.exe
