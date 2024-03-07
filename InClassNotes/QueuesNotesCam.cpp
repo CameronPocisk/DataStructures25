@@ -127,23 +127,32 @@ class RingQueue{
 
 int main(){
 
-    Queue qExample;
-    cout << "Is empty: " << qExample.isEmpty() << endl;
-    cout << "Is full: " << qExample.isFull() << endl;
+    Queue q;
+    char value;
+    q.enqueue('a');
+    q.enqueue('b');
+    value = q.dequeue();
+    q.enqueue('c');
+    value = q.dequeue();
+    cout << value << endl;
 
-    for(int i = 0; i < 5; i++){
-        cout << "enqueing " << char('a' + i) << endl; 
-        qExample.enqueue('a' + i);
-    }
-    qExample.printQueue();
-    cout << "Is full: " << qExample.isFull() << endl;
+    // Queue qExample;
+    // cout << "Is empty: " << qExample.isEmpty() << endl;
+    // cout << "Is full: " << qExample.isFull() << endl;
 
-    for(int i = 0; i < 5; i++){
-        cout << "Printing dequeue: " << qExample.dequeue() << endl;
-        qExample.printQueue();
-    }
-    qExample.printQueue();
-    cout << "Is empty: " << qExample.isEmpty() << endl;
+    // for(int i = 0; i < 5; i++){
+    //     cout << "enqueing " << char('a' + i) << endl; 
+    //     qExample.enqueue('a' + i);
+    // }
+    // qExample.printQueue();
+    // cout << "Is full: " << qExample.isFull() << endl;
+
+    // for(int i = 0; i < 5; i++){
+    //     cout << "Printing dequeue: " << qExample.dequeue() << endl;
+    //     qExample.printQueue();
+    // }
+    // qExample.printQueue();
+    // cout << "Is empty: " << qExample.isEmpty() << endl;
     
     return 0;
 }
