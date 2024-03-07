@@ -13,7 +13,7 @@ void OrderedDll<T>::AddItem(T *in){
     // // loop to find DLL Node
     // Node<T>* curNode = head;
     // while (curNode->next)
-    // while(curNode->next != nullptr && curNode->next->data < *in)
+    // while(curNode->next != nullptr && curNode->next->data < *in) {
     //     curNode = curNode->next;
     //     cout << "loop" << endl;
     // } // Cur Node is Above lesser node
@@ -46,19 +46,26 @@ void OrderedDll<T>::AddItem(T *in){
     }
     // loop to find DLL Node
     Node<T>* curNode = head;
+    if(curNode->next == nullptr && curNode->data < *in){
+        curNode = curNode->next;
+    }
+
     while(curNode->next != nullptr && *in <= curNode->data){
         curNode = curNode->next;
         cout << "loop" << endl;
-        cout << curNode->data;
     } // Cur Node is where we should add
-
     Node<T>* toInsert = new Node<T>(*in);
 
+    toInsert->previous = curNode->previous;
     toInsert->next = curNode;
-    curNode->previous = toInsert;
-    toInsert->next = curNode;
-    cout << "next not null" << endl;
     
+    if(curNode->previous != nullptr) {
+        curNode->previous->next = toInsert;
+    } else {
+        head = toInsert;
+    }
+
+    curNode->previous = toInsert;
     
     
         
