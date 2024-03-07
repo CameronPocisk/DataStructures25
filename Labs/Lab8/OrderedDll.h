@@ -25,10 +25,12 @@ class OrderedDll{
     Node<T>* head;
     int length;
     int seePlace;
+    Node<T>* place;
     
     public:
     OrderedDll(){
         head = nullptr;
+        place = head;
         length = 0;
         seePlace = 0;
     }
@@ -39,7 +41,7 @@ class OrderedDll{
     int Size() {return length;} // Inline
     T SeeNext();
     T SeePrev();
-    T SeeAt(int place);
+    T SeeAt(int userPlace);
     void Reset();
     void PrintItems();
 

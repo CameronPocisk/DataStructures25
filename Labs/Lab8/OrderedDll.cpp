@@ -36,48 +36,35 @@ void OrderedDll<T>::AddItem(T *in){
     //     toInsert->next->previous = toInsert;
     // }
 
-    
-
-
     length++;
-    if(head == nullptr){
-        head = new Node<T>(*in);
-        return; // null <- head -> null
+    Node<T>* insertNode = new Node<T>(*in);
+    if(!head) {
+        head = insertNode;
+        return;
     }
-    // loop to find DLL Node
+
+    if(*in < head->data) {
+        insertNode->next = head;
+        head->previous = insertNode;
+        head = insertNode;
+        return;
+    }
+
     Node<T>* curNode = head;
-    if(curNode->next == nullptr && curNode->data < *in){
+
+    while(curNode->next != nullptr && curNode->next->data < *in){
         curNode = curNode->next;
     }
 
-    while(curNode->next != nullptr && *in <= curNode->data){
-        curNode = curNode->next;
-        cout << "loop" << endl;
-    } // Cur Node is where we should add
-    Node<T>* toInsert = new Node<T>(*in);
-
-    toInsert->previous = curNode->previous;
-    toInsert->next = curNode;
-    
-    if(curNode->previous != nullptr) {
-        curNode->previous->next = toInsert;
+    if(curNode->next == nullptr) {
+        curNode->next = insertNode;
+        insertNode->previous = curNode;
     } else {
-        head = toInsert;
+        insertNode->next = curNode->next;
+        insertNode->previous = curNode;
+        curNode->next->previous = insertNode;
+        curNode->next = insertNode;
     }
-
-    curNode->previous = toInsert;
-    
-    
-        
-
-
-
-
-
-
-
-
-
 
 }
 
@@ -86,23 +73,35 @@ T OrderedDll<T>::GetItem(T *val){
     if(head == nullptr){throw UnderflowError();}
     if(head->data == *val){
         int tempVal = head->data;
-        Node<T>* newHead = head->next;
-        Node<T>* old = head;
-        newHead->previous = nullptr;
-        delete old;
+        if(head->next != nullptr){
+            head = head->next;
+            head->previous = nullptr;
+        } else {
+            head = nullptr;
+        }
         length--;
         return tempVal;
+
+        // Node<T>* newHead = head->next;
+        // Node<T>* old = head;
+        // newHead->previous = nullptr;
+        // delete old;
+        // length--;
+        // return tempVal;
     }
     Node<T>* curNode = head;
     while(curNode->next != nullptr && curNode->next->data != *val){
         curNode = curNode->next;
     }
     if(curNode->next == nullptr){throw NotFound();}
+
     int tempVal = curNode->next->data;
-    Node<T>* old = curNode->next;
-    curNode->next = curNode->next->next;
-    curNode->next->previous = curNode;
-    delete old;
+    if(curNode->next->next){
+        curNode->next = curNode->next->next;
+        curNode->next->previous = curNode;
+    } else {
+        curNode->next = nullptr;
+    }
     length--;
     return tempVal;
 }
@@ -129,40 +128,44 @@ T OrderedDll<T>::SeeNext(){
         throw UnderflowError();
     }
 
-    if(seePlace >= length - 1){
+    if(place == nullptr) {
+        place = head;
+        return place->data;
+    }
+    if(place->next == nullptr){
+        cout << "end" << endl;
         return 0;
     }
 
-    Node<T>* curNode = head;
-    
-    for(int i = 0; i <= seePlace; i++){
-        curNode = curNode->next;
-    }
-    seePlace++;
-    return curNode->data;
+    place = place->next;
+    return place->data;
 }
 
 template <typename T>
 
 T OrderedDll<T>::SeePrev(){
-    Node<T>* curNode = head;
-    
-    for(int i = 0; i <= seePlace; i++){
-        curNode = curNode->previous;
+    if(IsEmpty()){
+        throw UnderflowError();
     }
-    seePlace--;
-    return curNode->data;
+
+    if(place == nullptr){
+        return 0;
+    }
+
+    int temp = place->data;
+    place = place->previous;
+    return temp;
 }
 
 template <typename T>
-T OrderedDll<T>::SeeAt(int place){
+T OrderedDll<T>::SeeAt(int userPlace){
     Node<T>* curNode = head;
 
-    for(int i = 0; i < place; i++){
+    for(int i = 0; i < userPlace - 1; i++){
         curNode = curNode->next;
     }
     
-    seePlace = place;
+    place = curNode;
     return curNode->data;
 
 }
@@ -170,13 +173,13 @@ T OrderedDll<T>::SeeAt(int place){
 template <typename T>
 void OrderedDll<T>::Reset(){
     // call Delete on all Items?
-    seePlace = 0;
+    place = head;
 }
 
 template <typename T>
 void OrderedDll<T>::PrintItems(){
-    if(IsEmpty()){cout << "was empty" << endl; return;}
     cout << "Printing items: " << endl;
+    if(IsEmpty()){cout << "was empty" << endl; return;}
     Node<T>* curNode = head;
     cout << curNode->data << ", ";
     while(curNode->next != nullptr){
