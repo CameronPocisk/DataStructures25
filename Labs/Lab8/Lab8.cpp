@@ -45,16 +45,16 @@ int main(){
     cout << instance.SeeNext() << endl;
     cout << instance.SeeNext() << endl;
 
-    instance.GetItem(&val15);
-    instance.PrintItems();
-    instance.GetItem(&val10);
-    instance.PrintItems();
-    instance.GetItem(&val30);
-    instance.PrintItems();
-    instance.GetItem(&val25);
-    instance.PrintItems();
-    instance.GetItem(&val20);
-    instance.PrintItems();
+    // instance.GetItem(&val15);
+    // instance.PrintItems();
+    // instance.GetItem(&val10);
+    // instance.PrintItems();
+    // instance.GetItem(&val30);
+    // instance.PrintItems();
+    // instance.GetItem(&val25);
+    // instance.PrintItems();
+    // instance.GetItem(&val20);
+    // instance.PrintItems();
 
     return 0;
 }

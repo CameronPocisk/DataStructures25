@@ -47,6 +47,12 @@ class OrderedDll{
 
     //Destructor
     ~OrderedDll(){
+        cout << "Destroying" << endl;
+        while(head != nullptr) {
+            Node<T>* temp = head;
+            head = head->next;
+            delete temp;
+        }
         
     }
     
