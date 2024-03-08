@@ -4,45 +4,16 @@ template class OrderedDll<int>;
 
 template <typename T>
 void OrderedDll<T>::AddItem(T *in){
-    // length++;
-    // if(head == nullptr){
-    //     head = new Node<T>(*in);
-    //     return; // null <- head -> null
-    // }
-    
-    // // loop to find DLL Node
-    // Node<T>* curNode = head;
-    // while (curNode->next)
-    // while(curNode->next != nullptr && curNode->next->data < *in) {
-    //     curNode = curNode->next;
-    //     cout << "loop" << endl;
-    // } // Cur Node is Above lesser node
-    // if(curNode->previous != nullptr){
-    //     cout << "Previous node was: " << curNode->previous->data << endl;
-    // }
-
-    
-    
-    // Node<T>* toInsert = new Node<T>(*in);
-    
-    // Next note
-    // curNode->next = toInsert;
-
-    // toInsert->previous = curNode; // Safe from nullptr assignment bc head call at top
-    // toInsert->next = curNode->next; // Next is chill being nullptr if prevwas nullptr
-    // // cout << toInsert->previous->data;
-    
-    // if(toInsert->next != nullptr){
-    //     toInsert->next->previous = toInsert;
-    // }
-
     length++;
     Node<T>* insertNode = new Node<T>(*in);
-    if(!head) {
+
+    // head case
+    if(head == nullptr) {
         head = insertNode;
         return;
     }
 
+    // Before case
     if(*in < head->data) {
         insertNode->next = head;
         head->previous = insertNode;
@@ -50,13 +21,13 @@ void OrderedDll<T>::AddItem(T *in){
         return;
     }
 
+    // Get behind greater element
     Node<T>* curNode = head;
-
     while(curNode->next != nullptr && curNode->next->data < *in){
         curNode = curNode->next;
     }
 
-    if(curNode->next == nullptr) {
+    if(curNode->next == nullptr){
         curNode->next = insertNode;
         insertNode->previous = curNode;
     } else {

@@ -5,7 +5,7 @@ using namespace std;
 
 int main(){
     cout << "Running program" << endl;
-    cout << __cplusplus << endl;
+    // cout << __cplusplus << endl;
     OrderedDll<int> instance;
     int val10 = 10;
     int val15 = 15;
