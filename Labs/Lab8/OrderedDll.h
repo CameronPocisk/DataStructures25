@@ -10,7 +10,7 @@ class Node{
     Node* previous;
     T data;
     // Constructor
-    Node(T dataIn = 0){
+    Node(T dataIn = nullptr){
         data = dataIn;
         next = nullptr;
         previous = nullptr;

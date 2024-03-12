@@ -1,7 +1,5 @@
 #include "OrderedDll.h"
 
-template class OrderedDll<int>;
-
 template <typename T>
 void OrderedDll<T>::AddItem(T *in){
     length++;
@@ -43,7 +41,7 @@ template <typename T>
 T OrderedDll<T>::GetItem(T *val){
     if(head == nullptr){throw UnderflowError();}
     if(head->data == *val){
-        int tempVal = head->data;
+        T tempVal = head->data;
         if(head->next != nullptr){
             head = head->next;
             head->previous = nullptr;
@@ -66,7 +64,7 @@ T OrderedDll<T>::GetItem(T *val){
     }
     if(curNode->next == nullptr){throw NotFound();}
 
-    int tempVal = curNode->next->data;
+    T tempVal = curNode->next->data;
     if(curNode->next->next){
         curNode->next = curNode->next->next;
         curNode->next->previous = curNode;
@@ -104,8 +102,7 @@ T OrderedDll<T>::SeeNext(){
         return place->data;
     }
     if(place->next == nullptr){
-        cout << "end" << endl;
-        return 0;
+        throw NotFound();
     }
 
     place = place->next;
@@ -120,16 +117,24 @@ T OrderedDll<T>::SeePrev(){
     }
 
     if(place == nullptr){
-        return 0;
+        throw NotFound();
     }
 
-    int temp = place->data;
+    T temp = place->data;
     place = place->previous;
     return temp;
 }
 
 template <typename T>
 T OrderedDll<T>::SeeAt(int userPlace){
+    if(IsEmpty()){
+        throw UnderflowError();
+    }
+
+    if(userPlace > length) {
+        throw NotFound();
+    }
+
     Node<T>* curNode = head;
 
     for(int i = 0; i < userPlace - 1; i++){
@@ -152,10 +157,9 @@ void OrderedDll<T>::PrintItems(){
     cout << "Printing items: " << endl;
     if(IsEmpty()){cout << "was empty" << endl; return;}
     Node<T>* curNode = head;
-    cout << curNode->data << ", ";
+    curNode->data.DisplayItem();
     while(curNode->next != nullptr){
         curNode = curNode->next;
-        cout << curNode->data << ", ";
+        curNode->data.DisplayItem();
     }
-    cout << endl;
 }
