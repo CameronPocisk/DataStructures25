@@ -23,9 +23,10 @@ bool Item::IsAvailable(int desiredDate){
 
 void Item::DisplayItem(){
     cout << "-----------------" << endl;
-    cout << "Sku: " << SKU << endl;
-    cout << "Description: " << description << endl;
-    cout << "Quantity: " << quantity << endl;
+    cout << "|  Sku: " << SKU << endl;
+    cout << "|  Description: " << description << endl;
+    cout << "|  Price: " << price << endl;
+    cout << "|  Quantity: " << quantity << endl;
     cout << "-----------------" << endl;
 }
 

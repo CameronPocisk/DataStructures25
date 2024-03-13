@@ -6,24 +6,42 @@
 
 using namespace std;
 
+enum{
+    AddItem = 1,
+    GetItem = 2,
+    IsInList = 3,
+    IsEmpty = 4,
+    Size = 5,
+    SeeNext = 6,
+    SeePrev = 7,
+    SeeAt = 8,
+    Reset = 9,
+    DisplayList = 10,
+    Quit = 11,
+};
+
+
 int main(){
     cout << "Running program" << endl;
     // cout << __cplusplus << endl;
 
     OrderedDll<Item> instance;
     int userChoice = 0;
-    int sku, p, lt, q = 0;
+    int sku, lt, q = 0;
+    double p;
     string desc, uom, qChoice;
 
-    while(userChoice != 10){
+    while(userChoice != 11){
+        cout << endl;
         cout << "Menu:" << endl;
-        cout << "1: AddItem, 2: GetItem, 3:IsInList, 4: Size, 5: SeeNext, 6: SeePrev, 7: SeeAt, 8: Reset, 9: Display List, 10: Quit" << endl;
+        cout << "1: AddItem, 2: GetItem, 3:IsInList, 4: IsEmpty, 5: Size, 6: SeeNext, 7: SeePrev, 8: SeeAt, 9: Reset, 10: Display List, 11: Quit" << endl;
+        cout << "Enter your choice: ";
         cin >> userChoice;
         cout << endl;
 
         switch (userChoice)
         {
-        case 1: {
+        case AddItem: {
             cout << "Enter the SKU: ";
             cin >> sku;
             cout << "Enter the description: ";
@@ -32,7 +50,8 @@ int main(){
             cout << "Enter the price: ";
             cin >> p;
             cout << "Enter the unit of measure: ";
-            cin >> uom;
+            cin.ignore();
+            getline(cin, uom);
             cout << "Enter the Lead Time: ";
             cin >> lt;
             cout << "Do you want to add a quantity? (y/n)";
@@ -43,76 +62,95 @@ int main(){
             }
             Item item(sku, desc, p, uom, lt, q);
             instance.AddItem(&item);
+            cout << endl;
+            cout << "---------------------- ITEM ADDED TO LIST ----------------------" << endl;
 
             break;
         }
-        case 2: {
+        case GetItem: {
             cout << "Enter the sku of the item to remove: ";
             cin >> sku;
             Item item(sku);
+            cout << endl;
             try{
-                instance.GetItem(&item);
+                cout << "---------------------- REMOVING ITEM: " << instance.GetItem(&item).GetPartInfo();
             } catch(UnderflowError &e){
-                cerr << e.what() << endl;
+                cerr << e.what();
             } catch(NotFound &e){
-                cerr << e.what() << endl;
+                cerr << e.what();
             }
+            cout << " ----------------------" << endl;
 
             break;
         }
-        case 3: {
+        case IsInList: {
             cout << "Enter the sku to search for: ";
             cin >> sku;
             Item item(sku);
             try{
                 if(instance.IsInList(&item)){
-                    cout << "Sku: " << sku << " is in list." << endl;
+                    cout << "Sku " << sku << " is in list." << endl;
                 } else {
-                    cout << "Sku: " << sku << " is NOT in list." << endl;
+                    cout << "Sku " << sku << " is NOT in list." << endl;
                 }
             } catch(UnderflowError &e) {
                 cerr << e.what() << endl;
             }
             break;
 ;        }
-        case 4:
-            cout << ">>>>>>>>> List Size: " << instance.Size() << " <<<<<<<<<<<<" << endl;
+        case IsEmpty:
+            if(instance.IsEmpty()){
+                cout << "The list is currently empty" << endl;
+            } else {
+                cout << "The list is not empty with " << instance.Size() << " element(s)" << endl;
+            }
             break;
-        case 5:
+        case Size:
+            cout << "---------------------- List Size: " << instance.Size() << " ----------------------" << endl;
+            break;
+        case SeeNext:
             try{
-                instance.SeeNext().DisplayItem();
+                cout << "---------------------- Next Item: " << instance.SeeNext().GetPartInfo();
             } catch(UnderflowError &e) {
-                cerr << e.what() << endl;
+                cerr << e.what();
             }catch(NotFound  &e){
-                cerr << e.what() << endl;
+                cerr << e.what();
             };
+            cout << "----------------------" << endl;
             break;
-        case 6:
+        case SeePrev:
             try{
-                instance.SeePrev().DisplayItem();
+                cout << "---------------------- Prev Item: " << instance.SeePrev().GetPartInfo();
             } catch(UnderflowError &e) {
-                cerr << e.what() << endl;
+                cerr << e.what();
             }catch(NotFound  &e){
-                cerr << e.what() << endl;
+                cerr << e.what();
             };
+            cout << "----------------------" << endl;
             break;
-        case 7:
+        case SeeAt:
             cout << "Enter the place get the item from: ";
             cin >> sku;
+            cout << endl;
             try{
-                instance.SeeAt(sku).DisplayItem();
+                cout << "---------------------- Item at " << sku << ": " << instance.SeeAt(sku).GetPartInfo();
             } catch(UnderflowError &e) {
-                cerr << e.what() << endl;
+                cerr << e.what();
             }catch(NotFound  &e){
-                cerr << e.what() << endl;
+                cerr << e.what();
             };
+            cout << "----------------------" << endl;
             break;
-        case  8:
+        case  Reset:
             cout << "Resetting see place to first position" << endl;
             instance.Reset();
             break;
-        case 9:
-            instance.PrintItems();
+        case DisplayList:
+            try{
+                instance.PrintItems();
+            } catch(UnderflowError &e){
+                cerr << e.what() << endl;
+            }
             break;
         default:
             break;

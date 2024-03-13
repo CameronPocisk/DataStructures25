@@ -25,6 +25,7 @@ class OrderedDll{
     Node<T>* head;
     int length;
     int seePlace;
+    bool endReached;
     Node<T>* place;
     
     public:
@@ -33,6 +34,7 @@ class OrderedDll{
         place = head;
         length = 0;
         seePlace = 0;
+        endReached = false;
     }
     void AddItem(T *in);
     T GetItem(T *val);
