@@ -8,6 +8,7 @@ void OrderedDll<T>::AddItem(T *in){
     // head case
     if(head == nullptr) {
         head = insertNode;
+        place = head;
         return;
     }
 
@@ -92,37 +93,41 @@ bool OrderedDll<T>::IsInList(T *val){
 }
 
 template <typename T>
-T OrderedDll<T>::SeeNext(){
-    if(IsEmpty()){
+T OrderedDll<T>::SeeNext() {
+    if (IsEmpty()) {
         throw UnderflowError();
     }
-
-    if(place == nullptr) {
-        place = head;
-        return place->data;
+    if (place->next == nullptr && endReached) {
+        throw NotFound(); // End of list reached, throw NotFound
     }
-    if(place->next == nullptr){
-        throw NotFound();
+    Node<T>* temp = place;
+    if (place->next == nullptr) {
+        endReached = true; // Mark end of list reached
+    } else {
+        place = place->next;
     }
-
-    place = place->next;
-    return place->data;
+    return temp->data;
 }
 
 template <typename T>
 
-T OrderedDll<T>::SeePrev(){
-    if(IsEmpty()){
+T OrderedDll<T>::SeePrev() {
+    if (IsEmpty()) {
         throw UnderflowError();
     }
-
-    if(place == nullptr){
+    if (place->next == nullptr && endReached) {
+        endReached = false; // Reset endReached flag;
+        return place->data; // Return the last node's data
+    }
+    if(place->previous == nullptr && begReached){
         throw NotFound();
     }
-
-    T temp = place->data;
-    place = place->previous;
-    return temp;
+    if(place->previous == nullptr) {
+        begReached = true; //Mark begining of list true
+    } else {
+        place = place->previous;
+    }
+    return place->data;
 }
 
 template <typename T>
@@ -131,7 +136,7 @@ T OrderedDll<T>::SeeAt(int userPlace){
         throw UnderflowError();
     }
 
-    if(userPlace > length) {
+    if(userPlace > length || userPlace <= 0) {
         throw NotFound();
     }
 
@@ -155,7 +160,7 @@ void OrderedDll<T>::Reset(){
 template <typename T>
 void OrderedDll<T>::PrintItems(){
     cout << "Printing items: " << endl;
-    if(IsEmpty()){cout << "was empty" << endl; return;}
+    if(IsEmpty()){throw UnderflowError();}
     Node<T>* curNode = head;
     curNode->data.DisplayItem();
     while(curNode->next != nullptr){
