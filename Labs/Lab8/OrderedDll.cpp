@@ -153,7 +153,8 @@ T OrderedDll<T>::SeeAt(int userPlace){
 
 template <typename T>
 void OrderedDll<T>::Reset(){
-    // call Delete on all Items?
+    begReached = true;
+    endReached = false;
     place = head;
 }
 
