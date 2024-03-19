@@ -6,6 +6,7 @@ using namespace std;
 
 class Item{
     private:
+        // Nesscessary data from the lab doc
         int SKU;
         string description;
         double price;
@@ -14,6 +15,7 @@ class Item{
         int leadTime;
 
     public:
+        // Constructor with optional quntity (everything pretty much)
         Item(int sku = 0, string desc = "", double p = 0, string uom = "", int lt = 0, int q = 0){
             SKU = sku;
             description = desc;
@@ -22,6 +24,7 @@ class Item{
             leadTime = lt;
             quantity = q;
         }
+        // Filled in Item.cpp
         string GetPartInfo();
         double GetPrice();
         bool InStock();
@@ -32,8 +35,6 @@ class Item{
         bool operator <(const Item &right) const;
         bool operator >(const Item &right) const;
         bool operator !=(const Item &right) const;
-
-        
 
 };
 

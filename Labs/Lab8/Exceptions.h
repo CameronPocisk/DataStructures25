@@ -4,7 +4,6 @@
 #include <iostream>
 #include <stdexcept>
 using namespace std;
-
 class OverflowError : public exception
 {
 public:

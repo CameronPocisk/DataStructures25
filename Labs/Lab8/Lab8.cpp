@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// enum for readablitiy
 enum{
     AddItem = 1,
     GetItem = 2,
@@ -25,12 +26,14 @@ int main(){
     cout << "Running program" << endl;
     // cout << __cplusplus << endl;
 
+    // Inits :)
     OrderedDll<Item> instance;
     int userChoice = 0;
     int sku, lt, q = 0;
     double p;
     string desc, uom, qChoice;
 
+    // Valid user choice and act accoringly
     while(userChoice != 11){
         cout << endl;
         cout << "Menu:" << endl;
@@ -42,6 +45,7 @@ int main(){
         switch (userChoice)
         {
         case AddItem: {
+            // Get needed data
             cout << "Enter the SKU: ";
             cin >> sku;
             cout << "Enter the description: ";
@@ -60,6 +64,7 @@ int main(){
                 cout << "Enter the quantity: ";
                 cin >> q;
             }
+            // Using data from user make an item and add it to DLL
             Item item(sku, desc, p, uom, lt, q);
             instance.AddItem(&item);
             cout << endl;
@@ -73,6 +78,7 @@ int main(){
             Item item(sku);
             cout << endl;
             try{
+                // Remove the item if possible using member funtion
                 cout << "---------------------- REMOVING ITEM: " << instance.GetItem(&item).GetPartInfo();
             } catch(UnderflowError &e){
                 cerr << e.what();
@@ -84,10 +90,12 @@ int main(){
             break;
         }
         case IsInList: {
+            // Just need SKU for deletion
             cout << "Enter the sku to search for: ";
             cin >> sku;
             Item item(sku);
             try{
+                // Watch out for underflow, otherwise follow DLL implementation
                 if(instance.IsInList(&item)){
                     cout << "Sku " << sku << " is in list." << endl;
                 } else {
@@ -97,8 +105,9 @@ int main(){
                 cerr << e.what() << endl;
             }
             break;
-;        }
+        }
         case IsEmpty:
+            // Member function utilization. Be sure to catch errors
             if(instance.IsEmpty()){
                 cout << "The list is currently empty" << endl;
             } else {
@@ -110,16 +119,18 @@ int main(){
             break;
         case SeeNext:
             try{
+                // Go to next according to implementation, also grab the part info so it can be displayed.
                 cout << "---------------------- Next Item: " << instance.SeeNext().GetPartInfo();
             } catch(UnderflowError &e) {
                 cerr << e.what();
             }catch(NotFound  &e){
                 cerr << e.what();
             };
-            cout << "----------------------" << endl;
+            cout << "----------------------" << endl; // Purty
             break;
         case SeePrev:
             try{
+                // Same as prev, catch errors and try the member funtions.
                 cout << "---------------------- Prev Item: " << instance.SeePrev().GetPartInfo();
             } catch(UnderflowError &e) {
                 cerr << e.what();
@@ -129,6 +140,7 @@ int main(){
             cout << "----------------------" << endl;
             break;
         case SeeAt:
+            // Use sku and search to find item.
             cout << "Enter the place get the item from: ";
             cin >> sku;
             cout << endl;
@@ -141,6 +153,7 @@ int main(){
             };
             cout << "----------------------" << endl;
             break;
+        // Both options below are simple implementations of the member funtions included in the DLL
         case  Reset:
             cout << "Resetting see place to first position" << endl;
             instance.Reset();

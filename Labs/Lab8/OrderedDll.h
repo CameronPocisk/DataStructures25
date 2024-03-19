@@ -38,6 +38,7 @@ class OrderedDll{
         endReached = false;
         begReached = true;
     }
+    // Peep the cpp
     void AddItem(T *in);
     T GetItem(T *val);
     bool IsInList(T *val);
@@ -53,11 +54,11 @@ class OrderedDll{
     ~OrderedDll(){
         cout << "Destroying" << endl;
         while(head != nullptr) {
+            // itterate and call delete on teh temp node
             Node<T>* temp = head;
             head = head->next;
             delete temp;
         }
-        
     }
     
 };

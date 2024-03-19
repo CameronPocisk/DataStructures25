@@ -15,13 +15,15 @@ bool Item::InStock(){
 bool Item::IsAvailable(int desiredDate){
     if(quantity > 0){
         return true;
-    } else if(desiredDate < leadTime){ //Not sure???
+        // If it arrives before they want it it is counted as avaliable
+    } else if(desiredDate > leadTime){
         return true;
     }
     return false;
 }
 
 void Item::DisplayItem(){
+    //mmmmmmmhmm
     cout << "-----------------" << endl;
     cout << "|  Sku: " << SKU << endl;
     cout << "|  Description: " << description << endl;
@@ -30,6 +32,8 @@ void Item::DisplayItem(){
     cout << "-----------------" << endl;
 }
 
+
+// Operator overloading for DLL work
 bool Item::operator ==(const Item &right) const{
     return SKU == right.SKU;
 }

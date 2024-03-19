@@ -2,7 +2,7 @@
 
 template <typename T>
 void OrderedDll<T>::AddItem(T *in){
-    length++;
+    length++; // Len will increase no matter what and you will make a node no matter what
     Node<T>* insertNode = new Node<T>(*in);
 
     // head case
@@ -26,6 +26,7 @@ void OrderedDll<T>::AddItem(T *in){
         curNode = curNode->next;
     }
 
+    // Assign pointers for new node, previous, and next if it exists
     if(curNode->next == nullptr){
         curNode->next = insertNode;
         insertNode->previous = curNode;
@@ -40,9 +41,11 @@ void OrderedDll<T>::AddItem(T *in){
 
 template <typename T>
 T OrderedDll<T>::GetItem(T *val){
-    if(head == nullptr){throw UnderflowError();}
+    if(head == nullptr){throw UnderflowError();} // Throw error if not found
+    // Head case
     if(head->data == *val){
         T tempVal = head->data;
+        // Swap pointers and check for existince
         if(head->next != nullptr){
             head = head->next;
             head->previous = nullptr;
@@ -50,21 +53,16 @@ T OrderedDll<T>::GetItem(T *val){
             head = nullptr;
         }
         length--;
-        return tempVal;
-
-        // Node<T>* newHead = head->next;
-        // Node<T>* old = head;
-        // newHead->previous = nullptr;
-        // delete old;
-        // length--;
-        // return tempVal;
+        return tempVal; // Done !!
     }
+    // Search from here
     Node<T>* curNode = head;
     while(curNode->next != nullptr && curNode->next->data != *val){
         curNode = curNode->next;
     }
-    if(curNode->next == nullptr){throw NotFound();}
+    if(curNode->next == nullptr){throw NotFound();} // gas
 
+    //Set pointers accoringly
     T tempVal = curNode->next->data;
     if(curNode->next->next){
         curNode->next = curNode->next->next;
@@ -78,10 +76,11 @@ T OrderedDll<T>::GetItem(T *val){
 
 template <typename T>
 bool OrderedDll<T>::IsInList(T *val){
-    if(IsEmpty()){
+    if(IsEmpty()){ // Error check
         throw UnderflowError();
     }
     
+    // traverse with copy of head and compare to values
     Node<T>* curNode = head;
     for(int i = 0; i < length; i++){
         if(curNode->data == *val){
@@ -94,7 +93,7 @@ bool OrderedDll<T>::IsInList(T *val){
 
 template <typename T>
 T OrderedDll<T>::SeeNext() {
-    if (IsEmpty()) {
+    if (IsEmpty()) { // Error handling
         throw UnderflowError();
     }
     if (place->next == nullptr && endReached) {
@@ -135,17 +134,16 @@ T OrderedDll<T>::SeeAt(int userPlace){
     if(IsEmpty()){
         throw UnderflowError();
     }
-
     if(userPlace > length || userPlace <= 0) {
         throw NotFound();
     }
 
     Node<T>* curNode = head;
-
+    // Grab the node at the user place.
     for(int i = 0; i < userPlace - 1; i++){
         curNode = curNode->next;
     }
-    
+
     place = curNode;
     return curNode->data;
 
@@ -161,9 +159,13 @@ void OrderedDll<T>::Reset(){
 template <typename T>
 void OrderedDll<T>::PrintItems(){
     cout << "Printing items: " << endl;
+
     if(IsEmpty()){throw UnderflowError();}
+    
+    // Head case and traversal head copy
     Node<T>* curNode = head;
     curNode->data.DisplayItem();
+    //  go to next and print if there
     while(curNode->next != nullptr){
         curNode = curNode->next;
         curNode->data.DisplayItem();
