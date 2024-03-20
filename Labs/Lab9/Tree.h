@@ -112,7 +112,7 @@ public:
     vector<Node<T>*> GetAllAscending(); // Returns an array of each node from smallest to largest // Theese are going to look the the print fn done in class
     vector<Node<T>*> GetAllDecending(); // Returns an array of each node form largest to smallest // Theese are going to look the the print fn done in class
     void EmptyTree(); //Removes and deletes all nodes (No memory leaks pls)
-    Node<T>* Remove(T value); // Removes the value then rebalances the tree
+    Node<T>* Remove(T *value); // Removes the value then rebalances the tree
     void PrintStructured();
     void PrintOrdered();
 };

@@ -16,12 +16,13 @@ int main(){
 
     cout << "Size: " << t.Size() << endl;
 
-    t.Insert(&val2);
     t.Insert(&val1);
+    t.Insert(&val2);
     t.Insert(&val3);
     t.Insert(&val4);
+    t.Remove(&val3);
 
-    cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
+    // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
     cout << "Size: " << t.Size() << endl;
     // cout << t.EmptyTree() << endl;
     
@@ -33,7 +34,7 @@ int main(){
     // Ascending and descending things
     
     // Descending already tested
-    vector<Node<int>*> arr = t.GetAllAscending();
+    vector<Node<int>*> arr = t.GetAllDecending();
     
     // I feel weird abt this
     for(int i = 0; i < arr.size(); i++){

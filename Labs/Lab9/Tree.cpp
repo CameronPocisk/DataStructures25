@@ -51,13 +51,13 @@ vector<Node<T>*>  Tree<T>:: GetAllDecending(){ // Returns an array of each node 
 }
 
 template <typename T>
-Node<T>* Tree<T>::Remove(T value){ // Removes the value then rebalances the tree
-    if(find(root, value) == nullptr){
-        throw NotFound();
-    }
+Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tree
+    // if(Find(root, value) == nullptr){
+    //     throw NotFound();
+    // }
 
     Node<T>* parent = removeHelper(root, value);
-    if(value < parent->data){ //Remove one on left
+    if(*value < *parent->data){ //Remove one on left
         if(parent->left->left == nullptr && parent->left->right == nullptr){ // no children
             Node<T>* remNode = parent->left;
             parent->left = nullptr;
@@ -87,7 +87,12 @@ Node<T>* Tree<T>::Remove(T value){ // Removes the value then rebalances the tree
                 replace = replace->right;
                 temp = temp->right;
             }
-            temp->right = nullptr;
+            if(replace->left == nullptr){
+                temp->right = nullptr;
+            }
+            else{
+                temp->right = temp->right->left;
+            }
             parent->left = replace;
             replace->right = remNode->right;
             replace->left = remNode->left;
@@ -130,11 +135,11 @@ Node<T>* Tree<T>::Remove(T value){ // Removes the value then rebalances the tree
                 temp->right = nullptr;
             }
             else{
-                temp->right = ;
+                temp->right = temp->right->left;
             }
-            parent->left = replace;
-            replace->right = remNode->right;
+            parent->right = replace;
             replace->left = remNode->left;
+            replace->right = remNode->right;
             remNode->right = nullptr;
             remNode->left = nullptr;
             return remNode;
