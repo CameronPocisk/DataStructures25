@@ -76,6 +76,7 @@ class tree{
         while(cur->right != nullptr){
             cur = cur->right;
         }
+        return cur;
     }
 
     int remove(int val){
@@ -117,7 +118,7 @@ class tree{
                 // Replace with smallest larger or largest smaller
                 int replace = largestSmaller(temp->left->left);
                 int returnVal = temp->left->data;
-                temp->left->data = replace;
+                temp->left = replace;
             }
 
         }

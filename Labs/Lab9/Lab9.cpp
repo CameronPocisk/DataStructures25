@@ -14,18 +14,35 @@ int main(){
 
     int val4Copy = 4;
 
+    cout << "Size: " << t.Size() << endl;
+
     t.Insert(&val2);
     t.Insert(&val1);
     t.Insert(&val3);
     t.Insert(&val4);
 
     cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
+    cout << "Size: " << t.Size() << endl;
+    // cout << t.EmptyTree() << endl;
     
     t.PrintOrdered();
     cout << endl;
     t.PrintStructured();
 
 
+    // Ascending and descending things
+    
+    // Descending already tested
+    vector<Node<int>*> arr = t.GetAllAscending();
+    
+    // I feel weird abt this
+    for(int i = 0; i < arr.size(); i++){
+        cout << *arr.at(i)->data << ',';
+    } 
+    cout << endl;
+
+    t.EmptyTree(); 
+    cout << "Size: " << t.Size() << endl;
     return 0;
 }
 

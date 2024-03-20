@@ -1,6 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 #include "Exceptions.h"
+#include <vector>
 
 
 template <typename T>
@@ -24,8 +25,11 @@ class Tree{
 private:
     Node<T>* root;
 
-    void PrintOrderedHelper(Node<T>* in);
-    void PrintStructuredHelper(Node<T>* in);
+    void PrintOrderedHelper(Node<T>* curNode);
+    void PrintStructuredHelper(Node<T>* curNode);
+    void EmptyTreeHelper(Node<T>* curNode);
+    void GetAllAscendingHelper(Node<T>* curNode, vector<Node<T>*> &result); 
+    void GetAllDecendingHelper(Node<T>* curNode, vector<Node<T>*> &result);
 
     Node<T>* insertHelper(Node<T>* current, T* value){
         if(current == nullptr){
@@ -58,15 +62,39 @@ private:
     }
 
     Node<T>* removeHelper(Node<T>* current, T* value){
-        // if(*value < *current->data && *value != *current->left->data){
-        //     current = removeHelper(current->left, value);
-        // }
-        // else if(*value > *current->data && *value != *current->right->data){
-        //     current = removeHelper(current->right, value)
-        // }
-        // return current;
+        if(*value < *current->data && *value != *current->left->data){
+            current = removeHelper(current->left, value);
+        }
+        else if(*value > *current->data && *value != *current->right->data){
+            current = removeHelper(current->right, value);
+        }
+        if(*value == *current->right->data || *value == *current->right->data){
+            return current;
+        }
+        return nullptr;
     }
 
+    int sizeHelper(Node<T>* current){
+        if(IsEmpty()){
+            return 0;
+        }
+        int leftSize = 0;
+        int rightSize = 0;
+
+        if(current->right == nullptr){
+            rightSize = 0;
+        } else {
+            rightSize = sizeHelper(current->right);
+        }
+
+        if(current->left == nullptr){
+            leftSize = 0;
+        } else {
+            leftSize = sizeHelper(current->left);
+        }
+
+        return leftSize + rightSize + 1;
+    }
     
 public:
     Tree(){
@@ -81,8 +109,8 @@ public:
     Node<T>* Find(T *value); // Returns pointer to the value
     int Size(); //Get's the number of elements in the tree
     bool IsEmpty() {return root == nullptr;}
-    int* GetAllAscending(); // Returns an array of each node from smallest to largest // Theese are going to look the the print fn done in class
-    int* GetAllDecending(); // Returns an array of each node form largest to smallest // Theese are going to look the the print fn done in class
+    vector<Node<T>*> GetAllAscending(); // Returns an array of each node from smallest to largest // Theese are going to look the the print fn done in class
+    vector<Node<T>*> GetAllDecending(); // Returns an array of each node form largest to smallest // Theese are going to look the the print fn done in class
     void EmptyTree(); //Removes and deletes all nodes (No memory leaks pls)
     Node<T>* Remove(T value); // Removes the value then rebalances the tree
     void PrintStructured();
