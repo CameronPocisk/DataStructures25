@@ -4,9 +4,8 @@
 using namespace std;
 
 template <typename T>
-Node<T>* Tree<T>::Find(Node<T>* current, T value){
-    
-    return nullptr;
+Node<T>* Tree<T>::Find(T *value){
+    return findHelper(root, value);
 } 
 
 template <typename T>
@@ -33,20 +32,49 @@ void Tree<T>::EmptyTree(){ //Removes and deletes all nodes (No memory leaks pls)
 
 template <typename T>
 Node<T>* Tree<T>::Remove(T value){ // Removes the value then rebalances the tree
+    // Node<T>* temp
+    
+    
     return nullptr;
 }
 
 template <typename T>
-void Tree<T>::PrintStructured(){
+void Tree<T>::PrintStructuredHelper(Node<T>* curNode){
     // NOT COMPLETE EDGE CASE MISSING (From Class)
+    if (curNode == nullptr) { return; }
+
+    // Print root and children data
+    cout << *curNode->data << '(';
+
+    // Put left info in paren if it exists
+    if(curNode->left != nullptr){
+        cout << *curNode->left->data << " ,";
+    }
+    else{
+        cout << "_ , ";
+    }
+
+    if(curNode->right != nullptr){
+        cout << *curNode->right->data << ')' << endl;
+    }
+    else{
+        cout << "_)" << endl;
+    }
+
+    PrintStructuredHelper(curNode->left); // Do same with Left
+    PrintStructuredHelper(curNode->right); // Then same w/ right
     
+}
+template <typename T>
+void Tree<T>::PrintStructured(){ 
+    PrintStructuredHelper(root);
 }
 
 template <typename T>
 void Tree<T>::PrintOrderedHelper(Node<T>* curNode){
 
     if (curNode == nullptr){
-        return; // cannot porint nthing so..
+        return; // cannot porint nothing so..
     }
 
     PrintOrderedHelper(curNode->left); // Print left side first 

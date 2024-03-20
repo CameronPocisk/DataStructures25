@@ -25,6 +25,8 @@ private:
     Node<T>* root;
 
     void PrintOrderedHelper(Node<T>* in);
+    void PrintStructuredHelper(Node<T>* in);
+
     Node<T>* insertHelper(Node<T>* current, T* value){
         if(current == nullptr){
             return new Node<T>(value);
@@ -39,6 +41,32 @@ private:
         return current;
     }
 
+    Node<T>* findHelper(Node<T>* current, T* value) {
+        if(current == nullptr){
+            throw NotFound();
+        }
+
+        if(*value == *current->data){
+            return current; // Found it!
+        }
+
+        if(*value < *current->data){
+            return findHelper(current->left, value);
+        } else {
+            return findHelper(current->right, value);
+        }
+    }
+
+    Node<T>* removeHelper(Node<T>* current, T* value){
+        // if(*value < *current->data && *value != *current->left->data){
+        //     current = removeHelper(current->left, value);
+        // }
+        // else if(*value > *current->data && *value != *current->right->data){
+        //     current = removeHelper(current->right, value)
+        // }
+        // return current;
+    }
+
     
 public:
     Tree(){
@@ -50,7 +78,7 @@ public:
     }
     
     void Insert(T *data){root = insertHelper(root, data);}
-    Node<T>* Find(Node<T>* current, T value); // Returns pointer to the value
+    Node<T>* Find(T *value); // Returns pointer to the value
     int Size(); //Get's the number of elements in the tree
     bool IsEmpty() {return root == nullptr;}
     int* GetAllAscending(); // Returns an array of each node from smallest to largest // Theese are going to look the the print fn done in class

@@ -12,12 +12,18 @@ int main(){
     int val3 = 3;
     int val4 = 4;
 
+    int val4Copy = 4;
 
-    t.Insert(&val1);
     t.Insert(&val2);
+    t.Insert(&val1);
     t.Insert(&val3);
     t.Insert(&val4);
+
+    cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
+    
     t.PrintOrdered();
+    cout << endl;
+    t.PrintStructured();
 
 
     return 0;
