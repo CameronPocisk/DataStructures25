@@ -11,7 +11,6 @@ Node<T>* Tree<T>::Find(T *value){
 template <typename T>
 int Tree<T>::Size(){
     return sizeHelper(root);
-
 }
 
 template <typename T>
@@ -50,6 +49,46 @@ vector<Node<T>*>  Tree<T>:: GetAllDecending(){ // Returns an array of each node 
     return result;
 }
 
+// Insert and Remove helpers
+template <typename T>
+int Tree<T>::NodeHeight(Node<T>* targetNode){
+    Node<T>* curNode = root;
+    int height = 0;
+    while (*curNode->data != *targetNode->data){ // While we havent found the node
+        height++;
+        if(*targetNode->data < *curNode->data){
+            curNode = curNode->left;
+        }else{
+            curNode = curNode->right;
+        }
+    }
+    return height;
+}
+
+template <typename T>
+// If you spot a node below that can be rotated call this fn
+void Tree<T>::RotateLeft(Node<T>* parent, Node<T>* child){\
+    if (child == parent->right){
+    parent->right = child->right;
+    parent->right->left = child;
+    child->right = nullptr;
+    
+    }
+    else if (child == parent->left){
+        parent->left = child->right;
+        child->right = parent->left->left;    
+    }
+    else{
+        return;
+    }
+
+}
+template <typename T>
+void Tree<T>::RotateRight(Node<T>* parent, Node<T>* child){
+    return;
+}
+
+
 template <typename T>
 Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tree
     // if(Find(root, value) == nullptr){
@@ -57,31 +96,32 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
     // }
 
     Node<T>* parent = removeHelper(root, value);
+    // Make child node for simplicity?
+    
     if(*value < *parent->data){ //Remove one on left
+        Node<T>* remNode = parent->left;
         if(parent->left->left == nullptr && parent->left->right == nullptr){ // no children
-            Node<T>* remNode = parent->left;
             parent->left = nullptr;
             return remNode;
         }
         else if(parent->left->left == nullptr || parent->left->right == nullptr){ // one child
-            Node<T>* remNode = parent->left;
-            if(parent->left->left == nullptr){
-                parent->left = parent->left->right;
-                remNode->right = nullptr;
+            if(parent->left->left == nullptr){ // child Right child 
+                // Assign other pointers?
+                parent->left = parent->left->right; // Parents Left becomes childs right
+                remNode->right = nullptr; // Remove no longer points to anything
                 return remNode;
             }
-            else{
+            else{ // child Left child
                 parent->left = parent->left->left;
                 remNode->left = nullptr;
                 return remNode;
             }
         }
         else{ // two children
-            Node<T>* remNode = parent->left;
             Node<T>* replace = parent->left->left;
             Node<T>* temp = parent->left->left;
             if(replace->right != nullptr){
-                replace = replace->right;
+                replace = replace->right; // ?
             }
             while(replace->right != nullptr){ // finds largest smaller
                 replace = replace->right;
@@ -96,19 +136,18 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
             parent->left = replace;
             replace->right = remNode->right;
             replace->left = remNode->left;
-            remNode->right = nullptr;
+            remNode->right = nullptr; // Three below clear the removed node before returning
             remNode->left = nullptr;
             return remNode;
         }
     }
     else{ //Remove one on right
+        Node<T>* remNode = parent->right;
         if(parent->right->left == nullptr && parent->right->right == nullptr){ // no children
-            Node<T>* remNode = parent->right;
             parent->right = nullptr;
             return remNode;
         }
         else if(parent->right->left == nullptr || parent->right->right == nullptr){ // one child
-            Node<T>* remNode = parent->right;
             if(parent->right->left == nullptr){
                 parent->right = parent->right->right;
                 remNode->right = nullptr;
@@ -121,7 +160,6 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
             }
         }
         else{ // two children
-            Node<T>* remNode = parent->right;
             Node<T>* replace = parent->right->left;
             Node<T>* temp = parent->right->left;
             if(replace->right != nullptr){
@@ -146,12 +184,12 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
         }
     }
     
-    return nullptr;
+    // return nullptr;
 }
 
 template <typename T>
 void Tree<T>::PrintStructuredHelper(Node<T>* curNode){
-    // NOT COMPLETE EDGE CASE MISSING (From Class)
+    //(From Class)
     if (curNode == nullptr) { return; }
 
     // Print root and children data
@@ -160,15 +198,13 @@ void Tree<T>::PrintStructuredHelper(Node<T>* curNode){
     // Put left info in paren if it exists
     if(curNode->left != nullptr){
         cout << *curNode->left->data << " ,";
-    }
-    else{
+    }else{
         cout << "_ , ";
     }
 
     if(curNode->right != nullptr){
         cout << *curNode->right->data << ')' << endl;
-    }
-    else{
+    }else{
         cout << "_)" << endl;
     }
 

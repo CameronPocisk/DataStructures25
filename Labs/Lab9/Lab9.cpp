@@ -11,6 +11,7 @@ int main(){
     int val2 = 2;
     int val3 = 3;
     int val4 = 4;
+    int val5 = 5;
 
     int val4Copy = 4;
 
