@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <vector>
 using namespace std;
 
 struct Node {
@@ -80,12 +81,58 @@ private:
         return searchRecursive(current->right, value);
     }
 
-    void inOrderTraversalRecursive(Node* current) {
+    void inOrderTraversalRecursive(Node* current, vector<Node*> &sorted) {
         if (current != nullptr) {
-            inOrderTraversalRecursive(current->left);
-            cout << current->data << " ";
-            inOrderTraversalRecursive(current->right);
+            inOrderTraversalRecursive(current->left, sorted);
+            sorted.push_back(current);
+            inOrderTraversalRecursive(current->right, sorted);
         }
+    }
+
+    Node* balanceTreeOnHelper(vector<Node*> sorted, int begPos, int endPos){
+        if(begPos > endPos){
+            return nullptr;
+        }
+
+        int mid = (begPos + endPos) / 2;
+
+        Node* current = new Node(sorted[mid]->data);
+
+        current->left = balanceTreeOnHelper(sorted, begPos, mid - 1);
+        current->right = balanceTreeOnHelper(sorted, mid+1, endPos);
+
+        return current;
+    }
+
+    Node* balanceTreeLogNHelper(Node* curNode){
+
+
+        return curNode;
+    }
+
+    void PrintStructuredHelper(Node* curNode){
+        //(From Class)
+        if (curNode == nullptr) { return; }
+
+        // Print root and children data
+        cout << curNode->data << '(';
+
+        // Put left info in paren if it exists
+        if(curNode->left != nullptr){
+            cout << curNode->left->data << " ,";
+        }else{
+            cout << "_ , ";
+        }
+
+        if(curNode->right != nullptr){
+            cout << curNode->right->data << ')' << endl;
+        }else{
+            cout << "_)" << endl;
+        }
+
+        PrintStructuredHelper(curNode->left); // Do same with Left
+        PrintStructuredHelper(curNode->right); // Then same w/ right
+        
     }
 
 public:
@@ -95,31 +142,120 @@ public:
 
     void insert(int value) {
         root = insertRecursive(root, value);
+        root = balanceTreeOn();
     }
 
     void remove(int value) {
         root = deleteRecursive(root, value);
+        root = balanceTreeOn();
     }
 
     bool search(int value) {
         return searchRecursive(root, value);
     }
 
-    void inOrderTraversal() {
-        inOrderTraversalRecursive(root);
-        cout << endl;
+    vector<Node*> inOrderTraversal() {
+        vector<Node*> result;
+        inOrderTraversalRecursive(root, result);
+        return result;
     }
+
+    Node* balanceTreeOn(){ // Balances the tree with O(n) (not super efficient but simple)
+        vector<Node*> sorted = inOrderTraversal();
+        int n = sorted.size();
+        return balanceTreeOnHelper(sorted, 0, n-1);
+    }
+
+    Node* balanceTreeLogN(){
+        return balanceTreeLogNHelper(root);
+    }
+
+    void PrintTree(){
+        PrintStructuredHelper(root);
+    }
+
+
+
+
+
+    //Rotate Notes 
+    void RotateR(Node* parent, Node* child){
+        if(child == parent->left){
+            parent->left = child->left;
+            child->left = parent->left->right;
+            parent->left->right = child;
+        }
+        else if(child==parent->right){
+            parent->right = child->left;
+            child->left = parent->right->right;
+            parent->right->right = child;
+        }
+        else {
+            root = child->left;
+            child->left = root->right;
+            root->right = child;
+        }
+    }
+
+    void RotateL(Node* parent, Node* child){
+        
+    }
+
+    // void RotateLeftRight(Node* parent, Node* child){
+    //     parent->left = child->left->right;
+    //     child->left->right = parent->left->left;
+    //     parent->left->right = child;
+    //     parent->left->left = child->left;
+    //     child->left = nullptr;
+    //     parent->left->left->right = nullptr;
+    // }
+    //Not working above below is correct
+
+    void RotateLeftRight(Node* parent, Node* child){
+        parent->left = child->left->right;
+        child->left->right = parent->left->left;
+        parent->left->left = child->left;
+        child->left = parent->left->right;
+        parent->left->right = child;
+    }
+
+    void RotateRightLeft(Node* parent, Node* child){
+        parent->right = child->right->left;
+        child->right->left = parent->right->right;
+        parent->right->right = child->right;
+        child->right = parent->right->left;
+        parent->right->left = child;
+    }
+
+    int depth(Node* curr, Node* parent){
+        if(curr == nullptr){return 0;}
+        //Curr is child for rotate function
+        int Ldepth = depth(curr->left, curr); //Curr will become the next parent, to call for rotate later
+        int Rdepth = depth(curr->right, curr);
+        if(Ldepth > Rdepth){
+            return Ldepth + 1;
+        }
+        return Rdepth + 1;
+    }
+
+    //If L depth and R depth are 1 or less different from each other it's balanced
+    //Other wise if it's greater than 1 it's out of balance and we can fix it
+    //Right depth is greater we rotate left, Left depth is greater we rotate right, from that position
+
+
+    
 };
+
 
 int main() {
     BinaryTree tree;
-    tree.insert(10);
-    tree.insert(5);
-    tree.insert(15);
-    tree.insert(2);
-    tree.insert(7);
-    tree.insert(12);
     tree.insert(20);
+    tree.insert(15);
+    tree.insert(12);
+    tree.insert(10);
+    tree.insert(7);
+    tree.insert(5);
+    tree.insert(2);
     /*
 
     After root, tree checks value vs root and goes to the left if smaller, right if larger
@@ -134,16 +270,7 @@ int main() {
     
     
     */
-
-    cout << "In-order traversal: ";
-    tree.inOrderTraversal();
-
-    cout << "Is 7 present in the tree? " << (tree.search(7) ? "Yes" : "No") << endl;
-
-    tree.remove(10);
-    cout << "In-order traversal after removing 10: ";
-    tree.inOrderTraversal();
-
+    tree.PrintTree();
     return 0;
 }
 
