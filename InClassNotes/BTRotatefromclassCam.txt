@@ -1,0 +1,100 @@
+Goal of today is to rotate to the right to balance the tree
+            8
+        6
+    4
+2
+
+Should become
+            8
+        4
+    2       6
+    
+void RotateRight(Node<T>* parent, Node<T>* child){
+    if(child == parent->left) // You should check that the child(ren) exist too
+    { 
+        Parent->left = child->left;
+        child->left = parent->left->right;
+        parent->left->right = child;
+    }
+    else if(child == parent->right)
+    {
+        Parent->right = child->left;
+        child->left = parent->right->right;
+        parent->right->right = child;
+    }
+    else{ // Child is root (Check the order please bc in this case parent is nullptr)
+
+        root = child->left;
+        chlid->left = root->right;
+        root->right = child;
+    }
+
+}
+
+int Depth(Node* curNode){
+    if(cur = nullptr){
+        return 0; // Not in tree // No Depth
+    }
+
+    int lDepth = Depth(cur->left);
+    int rDepth = Depth(cur->right);
+
+    return max(lDepth, rDepth) + 1;
+}
+
+/*
+How do we know when to rotate things???
+(levels of tree are off? | big O is off | Tree is not Red/Black | Check left vs right number of children | check symmetry
+My Guess -> CHeck min vs max height)
+*/
+
+
+Ok my guesss is gas, IF the right and left depth are not within one of each other, 
+You need to fix the tree - you need to do so by rotation
+abs (Depth(left) - Depth(right)) >= 2;
+
+Before the return of the Depth thing, you know the Depth of the left and right children at a point and
+call rotate before you keep going down for depth
+
+// prof made changes for depth Now its FindROtationPoint
+int FindRotationPoint(Node* curNode, Node* parent){
+    if(curNode = nullptr){
+        return 0; // Not in tree // No Depth
+    }
+
+    int lDepth = Depth(curNode->left, curNode); // Add teh cur node becuase the parent also becomes smaller
+    int rDepth = Depth(curNode->right, curNode);
+
+    if(lDepth > rDepth){ // The cur node is the child of what we need to rotate
+        // Call rotate Right
+    }
+    else if (rDepth > lDepth){
+        // Call rotate left
+    }
+
+    return max(lDepth, rDepth) + 1;
+}
+
+// This tree needs a leftRight rotate to happen to it
+        8
+    6
+4
+    5
+
+// becomes
+        8
+    5
+4       6
+
+void rotateLeftRight(Node* parent, Node* child){
+    parent->left = child->left->right;
+    child->left->right = parent->left->left;
+
+
+}
+
+
+/*
+General stratagey for left and right is that you can see whos pointers are already assigned
+Remove the safe one and replace with desired
+*/
