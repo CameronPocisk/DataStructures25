@@ -198,7 +198,21 @@ public:
     }
 
     void RotateL(Node* parent, Node* child){
-        
+        if(child == parent->right){
+            parent->right = child->right;
+            child->right = parent->right->left;
+            parent->right->left = child;
+        }
+        else if(child == parent->left){
+            parent->left = child->right;
+            child->right = parent->left->left;
+            parent->left->left = child;
+        }
+        else {
+            root = child->right;
+            child->right = root->left;
+            root->left = child;
+        }
     }
 
     // void RotateLeftRight(Node* parent, Node* child){
