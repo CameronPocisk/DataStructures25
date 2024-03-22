@@ -7,9 +7,11 @@ struct Node {
     int data;
     Node* left;
     Node* right;
+    int height;
 
     Node(int value) {
         data = value;
+        height = 0;
         left = nullptr;
         right = nullptr;
     }
@@ -19,15 +21,15 @@ class BinaryTree {
 private:
     Node* root;
 
-    Node* insertRecursive(Node* current, int value) {
+    Node* insertRecursive(Node* current, int value, Node* parent) {
         if (current == nullptr) {
             return new Node(value);
         }
 
         if (value < current->data) {
-            current->left = insertRecursive(current->left, value);
+            current->left = insertRecursive(current->left, value, current);
         } else if (value > current->data) {
-            current->right = insertRecursive(current->right, value);
+            current->right = insertRecursive(current->right, value, current);
         }
 
         return current;
@@ -100,12 +102,17 @@ private:
 
         current->left = balanceTreeOnHelper(sorted, begPos, mid - 1);
         current->right = balanceTreeOnHelper(sorted, mid+1, endPos);
-
         return current;
     }
 
-    Node* balanceTreeLogNHelper(Node* curNode){
+    int balanceFactor(Node* curNode){
+        if(curNode == nullptr){
+            return 0;
+        }
+        return curNode->right->height - curNode->left->height;
+    }
 
+    Node* balanceTreeLogNHelper(Node* curNode, Node* parent){
 
         return curNode;
     }
@@ -125,9 +132,9 @@ private:
         }
 
         if(curNode->right != nullptr){
-            cout << curNode->right->data << ')' << endl;
+            cout << curNode->right->data << ')' << curNode->height << endl;
         }else{
-            cout << "_)" << endl;
+            cout << "_)"  << curNode->height << endl;
         }
 
         PrintStructuredHelper(curNode->left); // Do same with Left
@@ -141,8 +148,9 @@ public:
     }
 
     void insert(int value) {
-        root = insertRecursive(root, value);
-        root = balanceTreeOn();
+        root = insertRecursive(root, value, nullptr);
+        root->height = depth(root, nullptr);
+        // root = balanceTreeOn();
     }
 
     void remove(int value) {
@@ -167,7 +175,7 @@ public:
     }
 
     Node* balanceTreeLogN(){
-        return balanceTreeLogNHelper(root);
+        return balanceTreeLogNHelper(root, nullptr);
     }
 
     void PrintTree(){
@@ -180,7 +188,12 @@ public:
 
     //Rotate Notes 
     void RotateR(Node* parent, Node* child){
-        if(child == parent->left){
+        if(parent == nullptr){
+            root = child->left;
+            child->left = root->right;
+            root->right = child;
+        }
+        else if(child == parent->left){
             parent->left = child->left;
             child->left = parent->left->right;
             parent->left->right = child;
@@ -190,15 +203,15 @@ public:
             child->left = parent->right->right;
             parent->right->right = child;
         }
-        else {
-            root = child->left;
-            child->left = root->right;
-            root->right = child;
-        }
     }
 
     void RotateL(Node* parent, Node* child){
-        if(child == parent->right){
+        if(parent == nullptr){
+            root = child->right;
+            child->right = root->left;
+            root->left = child;
+        }
+        else if(child == parent->right){
             parent->right = child->right;
             child->right = parent->right->left;
             parent->right->left = child;
@@ -207,11 +220,6 @@ public:
             parent->left = child->right;
             child->right = parent->left->left;
             parent->left->left = child;
-        }
-        else {
-            root = child->right;
-            child->right = root->left;
-            root->left = child;
         }
     }
 
@@ -244,32 +252,46 @@ public:
     int depth(Node* curr, Node* parent){
         if(curr == nullptr){return 0;}
         //Curr is child for rotate function
-        int Ldepth = depth(curr->left, curr); //Curr will become the next parent, to call for rotate later
-        int Rdepth = depth(curr->right, curr);
-        if(Ldepth > Rdepth){
-            return Ldepth + 1;
+        int Lheight = depth(curr->left, curr); //Curr will become the next parent, to call for rotate later
+        int Rheight = depth(curr->right, curr);
+        if(Lheight > Rheight + 1){
+            //Ldepth is 2 higher here, have to balance
+            cout << "balance it left high" << endl;
+            RotateR(parent, curr);
+        } else if(Rheight > Lheight + 1) {
+            //Rdepth is 2 higher here, have to balance
+            cout << "balance it right high" << endl;
+            RotateL(parent, curr);
         }
-        return Rdepth + 1;
+
+        if(Lheight > Rheight){
+            curr->height = Lheight;
+            return Lheight + 1;
+        }
+        curr->height = Rheight;
+        return Rheight + 1;
     }
 
     //If L depth and R depth are 1 or less different from each other it's balanced
     //Other wise if it's greater than 1 it's out of balance and we can fix it
     //Right depth is greater we rotate left, Left depth is greater we rotate right, from that position
-
-
     
 };
 
 
 int main() {
     BinaryTree tree;
-    tree.insert(20);
-    tree.insert(15);
-    tree.insert(12);
     tree.insert(10);
-    tree.insert(7);
-    tree.insert(5);
-    tree.insert(2);
+    tree.insert(11);
+    tree.insert(14);
+    tree.insert(23);
+    tree.insert(32);
+    tree.insert(41);
+    tree.insert(45);
+    tree.insert(47);
+    // tree.insert(2);
+    // tree.insert(25);
+    // tree.insert(29);
     /*
 
     After root, tree checks value vs root and goes to the left if smaller, right if larger
