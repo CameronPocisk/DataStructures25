@@ -117,7 +117,7 @@ private:
         return curNode;
     }
 
-    void PrintStructuredHelper(Node* curNode){
+    void PrintStructuredHelper(Node* curNode, Node* parent){
         //(From Class)
         if (curNode == nullptr) { return; }
 
@@ -132,13 +132,13 @@ private:
         }
 
         if(curNode->right != nullptr){
-            cout << curNode->right->data << ')' << curNode->height << endl;
+            cout << curNode->right->data << ')' << depthNew(curNode, parent) << endl;
         }else{
             cout << "_)"  << curNode->height << endl;
         }
 
-        PrintStructuredHelper(curNode->left); // Do same with Left
-        PrintStructuredHelper(curNode->right); // Then same w/ right
+        PrintStructuredHelper(curNode->left, curNode); // Do same with Left
+        PrintStructuredHelper(curNode->right, curNode); // Then same w/ right
         
     }
 
@@ -149,7 +149,8 @@ public:
 
     void insert(int value) {
         root = insertRecursive(root, value, nullptr);
-        root->height = depth(root, nullptr);
+        // RotateBalance(root, nullptr);
+        root->height = depthNew(root, nullptr);
         // root = balanceTreeOn();
     }
 
@@ -179,7 +180,7 @@ public:
     }
 
     void PrintTree(){
-        PrintStructuredHelper(root);
+        PrintStructuredHelper(root, nullptr);
     }
 
 
@@ -187,7 +188,7 @@ public:
 
 
     //Rotate Notes 
-    void RotateR(Node* parent, Node* child){
+    int RotateR(Node* parent, Node* child){
         if(parent == nullptr){
             root = child->left;
             child->left = root->right;
@@ -203,9 +204,10 @@ public:
             child->left = parent->right->right;
             parent->right->right = child;
         }
+        return depthNew(child, parent);
     }
 
-    void RotateL(Node* parent, Node* child){
+    int RotateL(Node* parent, Node* child){
         if(parent == nullptr){
             root = child->right;
             child->right = root->left;
@@ -221,32 +223,81 @@ public:
             child->right = parent->left->left;
             parent->left->left = child;
         }
+        return depthNew(child, parent);
     }
 
-    // void RotateLeftRight(Node* parent, Node* child){
-    //     parent->left = child->left->right;
-    //     child->left->right = parent->left->left;
-    //     parent->left->right = child;
-    //     parent->left->left = child->left;
-    //     child->left = nullptr;
-    //     parent->left->left->right = nullptr;
-    // }
-    //Not working above below is correct
+    int RotateLeftRight(Node* parent, Node* child){
+        if(parent == nullptr){
+            //Rotate around root
+            Node* newRoot = root->left->right;
+            root->left->right = newRoot->left;
+            newRoot->left = root->left;
+            root->left = newRoot->right;
+            newRoot->right = root;
+            root = newRoot;
 
-    void RotateLeftRight(Node* parent, Node* child){
+            return depthNew(root, nullptr);
+        }
         parent->left = child->left->right;
         child->left->right = parent->left->left;
         parent->left->left = child->left;
         child->left = parent->left->right;
         parent->left->right = child;
+
+        return depthNew(child, parent);
     }
 
-    void RotateRightLeft(Node* parent, Node* child){
+    int RotateRightLeft(Node* parent, Node* child){
+        if(parent == nullptr){
+            //Rotate around root
+            Node* newRoot = root->right->left;
+            root->right->left = newRoot->right;
+            newRoot->right = root->right;
+            root->right = newRoot->left;
+            newRoot->left = root;
+            root = newRoot;
+
+            return depthNew(root, nullptr);
+        }
         parent->right = child->right->left;
         child->right->left = parent->right->right;
         parent->right->right = child->right;
         child->right = parent->right->left;
         parent->right->left = child;
+
+        return depthNew(child, parent);
+    }
+
+   void RotateBalance(Node* curr, Node* parent){
+        int childLeft = depth(curr->left, curr);
+        int childRight = depth(curr->right, curr);
+        cout << childLeft << endl;
+        cout << childRight << endl;
+        if(childLeft > childRight + 1){
+            //Ldepth is 2 higher here, have to balance
+            if(depth(curr->left->right, curr->left) > depth(curr->left->left, curr->left) + 1) {
+                cout << "LEFTRIGHT" << endl;
+                RotateLeftRight(curr, curr->left);
+            } else {
+                cout << "RIGHT" << endl;
+                RotateR(curr, curr->left);
+            }
+        } else if(childRight > childLeft + 1) {
+            //Rdepth is 2 higher here, have to balance
+            cout << "_____" << endl;
+            cout << depth(curr->right->right, curr->right) << endl;
+            cout << depth(curr->right->left, curr->right) << endl;
+            if(depth(curr->right->right, curr->right) > depth(curr->right->left, curr->right) + 1){
+                PrintStructuredHelper(curr, parent);
+                cout << "RIGHTLEFT" << endl;
+                RotateRightLeft(curr, curr->right);
+            } else {
+                PrintStructuredHelper(curr, parent);
+                cout << "LEFT" << endl;
+                RotateL(parent, curr);
+            }
+        }
+        cout << "already balanced" << endl;
     }
 
     int depth(Node* curr, Node* parent){
@@ -254,21 +305,52 @@ public:
         //Curr is child for rotate function
         int Lheight = depth(curr->left, curr); //Curr will become the next parent, to call for rotate later
         int Rheight = depth(curr->right, curr);
-        if(Lheight > Rheight + 1){
-            //Ldepth is 2 higher here, have to balance
-            cout << "balance it left high" << endl;
-            RotateR(parent, curr);
-        } else if(Rheight > Lheight + 1) {
-            //Rdepth is 2 higher here, have to balance
-            cout << "balance it right high" << endl;
-            RotateL(parent, curr);
-        }
-
         if(Lheight > Rheight){
-            curr->height = Lheight;
+            curr->height = Lheight + 1;
             return Lheight + 1;
         }
-        curr->height = Rheight;
+        curr->height = Rheight + 1;
+        return Rheight + 1;
+    }
+
+
+
+    int depthNew(Node* curr, Node* parent){
+        if(curr == nullptr){return 0;}
+        //Curr is child for rotate function
+        int Lheight = depthNew(curr->left, curr); //Curr will become the next parent, to call for rotate later
+        int Rheight = depthNew(curr->right, curr);
+        if(Lheight > Rheight){
+            if(Lheight > Rheight + 1){
+                int Lchild = depthNew(curr->left->left, curr->left);
+                int Rchild =  depthNew(curr->left->right, curr->left);
+                if(Rchild > Lchild) {
+                    PrintStructuredHelper(curr, parent);
+                    cout << "LEFTRIGHT" << endl;
+                    Lheight = RotateLeftRight(parent, curr);
+                } else if(Lchild > Rchild){
+                    cout << "RIGHT" << endl;
+                    Lheight = RotateR(parent, curr);
+                }
+            } 
+            curr->height = Lheight + 1;
+            return Lheight + 1;
+        } else if(Rheight > Lheight){
+            if(Rheight > Lheight + 1){
+            int Lchild = depthNew(curr->right->left, curr->right);
+            int Rchild =  depthNew(curr->right->right, curr->right);
+                if(Lchild > Rchild) {
+                    PrintStructuredHelper(curr, parent);
+                    cout << "RIGHTLEFT" << endl;
+                    Rheight = RotateRightLeft(parent, curr); //Readjust height after rotate
+                } else if(Rchild > Lchild){
+                    // PrintStructuredHelper(curr, parent);
+                    cout << "LEFT" << endl;
+                    Rheight = RotateL(parent, curr); //Readjust height after rotate
+                }   
+            }
+        }
+        curr->height = Rheight + 1;
         return Rheight + 1;
     }
 
@@ -281,17 +363,11 @@ public:
 
 int main() {
     BinaryTree tree;
-    tree.insert(10);
-    tree.insert(11);
-    tree.insert(14);
-    tree.insert(23);
-    tree.insert(32);
-    tree.insert(41);
-    tree.insert(45);
-    tree.insert(47);
-    // tree.insert(2);
-    // tree.insert(25);
-    // tree.insert(29);
+    tree.insert(100);
+    tree.insert(98);
+    tree.insert(99);
+    tree.insert(97);
+    tree.insert(95);
     /*
 
     After root, tree checks value vs root and goes to the left if smaller, right if larger
