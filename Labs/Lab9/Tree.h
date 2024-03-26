@@ -27,6 +27,7 @@ private:
 
     void PrintOrderedHelper(Node<T>* curNode);
     void PrintStructuredHelper(Node<T>* curNode);
+    void PrintStructuredWithRootSizesHelper(Node<T>* curNode);
     void EmptyTreeHelper(Node<T>* curNode);
     void GetAllAscendingHelper(Node<T>* curNode, vector<Node<T>*> &result); 
     void GetAllDecendingHelper(Node<T>* curNode, vector<Node<T>*> &result);
@@ -124,7 +125,7 @@ public:
         delete root; // Deletes final part of tree (the root)
     }
     
-    Node<T>* balanceTree(){
+    Node<T>* balanceTree(){ // works but need to do something else
         vector<Node<T>*> sorted = GetAllAscending();
         int n = sorted.size();
         return balanceTreeHelper(sorted, 0, n-1);
@@ -134,19 +135,26 @@ public:
     void Insert(T *data){
         root = insertHelper(root, data);
         root = balanceTree();
-        }
+    }
+
     Node<T>* Remove(T *value); // Removes the value then rebalances the tree
     void RotateLeft(Node<T>* parent, Node<T>* child);
     void RotateRight(Node<T>* parent, Node<T>* child);
     int NodeHeight(Node<T>* curNode);
+    int LeftNodeHeight(Node<T>* curNode);
+    int RightNodeHeight(Node<T>* curNode);
+    
     Node<T>* Find(T *value); // Returns pointer to the value
     int Size(); //Get's the number of elements in the tree
     bool IsEmpty() {return root == nullptr;}
     vector<Node<T>*> GetAllAscending(); // Returns an array of each node from smallest to largest // Theese are going to look the the print fn done in class
     vector<Node<T>*> GetAllDecending(); // Returns an array of each node form largest to smallest // Theese are going to look the the print fn done in class
     void EmptyTree(); //Removes and deletes all nodes (No memory leaks pls)
-    void PrintStructured();
-    void PrintOrdered();
+    
+    void PrintStructured(){PrintStructuredHelper(root);}
+    void PrintOrdered(){PrintOrderedHelper(root);}
+    void PrintStructuredWithRootSizes(){PrintStructuredWithRootSizesHelper(root);}
+
 };
 
 #endif

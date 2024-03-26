@@ -21,7 +21,7 @@ int main(){
     t.Insert(&val2);
     t.Insert(&val3);
     t.Insert(&val4);
-    t.Remove(&val3);
+    // t.Remove(&val3);
 
     // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
     cout << "Size: " << t.Size() << endl;
@@ -29,7 +29,8 @@ int main(){
     
     t.PrintOrdered();
     cout << endl;
-    t.PrintStructured();
+    // t.PrintStructured();
+    t.PrintStructuredWithRootSizes();
 
 
     // Ascending and descending things
@@ -38,13 +39,13 @@ int main(){
     vector<Node<int>*> arr = t.GetAllDecending();
     
     // I feel weird abt this
-    for(int i = 0; i < arr.size(); i++){
-        cout << *arr.at(i)->data << ',';
-    } 
-    cout << endl;
+    // for(int i = 0; i < arr.size(); i++){
+    //     cout << *arr.at(i)->data << ',';
+    // } 
+    // cout << endl;
 
-    t.EmptyTree(); 
-    cout << "Size: " << t.Size() << endl;
+    // t.EmptyTree(); 
+    // cout << "Size: " << t.Size() << endl;
     return 0;
 }
 

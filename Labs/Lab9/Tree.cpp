@@ -13,6 +13,7 @@ int Tree<T>::Size(){
     return sizeHelper(root);
 }
 
+
 template <typename T>
 void Tree<T>:: GetAllAscendingHelper(Node<T>* current, vector<Node<T>*> &result){
     
@@ -49,21 +50,43 @@ vector<Node<T>*>  Tree<T>:: GetAllDecending(){ // Returns an array of each node 
     return result;
 }
 
+
 // Insert and Remove helpers
 template <typename T>
-int Tree<T>::NodeHeight(Node<T>* targetNode){
-    Node<T>* curNode = root;
-    int height = 0;
-    while (*curNode->data != *targetNode->data){ // While we havent found the node
-        height++;
-        if(*targetNode->data < *curNode->data){
-            curNode = curNode->left;
-        }else{
-            curNode = curNode->right;
-        }
+int Tree<T>::NodeHeight(Node<T>* curNode){
+    if(curNode == nullptr){
+        return 0;
     }
-    return height;
+
+    int lHeight = NodeHeight(curNode->left);
+    int rHeight = NodeHeight(curNode->right);
+
+
+    return max(lHeight, rHeight) + 1;
 }
+
+// Used for checking which rotations to use
+template <typename T>
+int Tree<T>::LeftNodeHeight(Node<T>* curNode){
+    if(curNode == nullptr){
+        return 0;
+    } 
+    else if(curNode->left == nullptr){
+        return 1;
+    } // else
+    return NodeHeight(curNode->left) + 1;
+}
+template <typename T>
+int Tree<T>::RightNodeHeight(Node<T>* curNode){
+    if(curNode == nullptr){
+        return 0;
+    } // else
+    else if(curNode->right == nullptr){
+        return 1;
+    }
+    return NodeHeight(curNode->right) + 1;
+}
+
 
 template <typename T>
 // If you spot a node below that can be rotated call this fn
@@ -188,6 +211,18 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
 }
 
 template <typename T>
+void Tree<T>::PrintOrderedHelper(Node<T>* curNode){
+
+    if (curNode == nullptr){
+        return; // cannot porint nothing so..
+    }
+
+    PrintOrderedHelper(curNode->left); // Print left side first 
+    cout << *(curNode->data);
+    PrintOrderedHelper(curNode->right); // Print right side after cur (bc its larger)
+}
+
+template <typename T>
 void Tree<T>::PrintStructuredHelper(Node<T>* curNode){
     //(From Class)
     if (curNode == nullptr) { return; }
@@ -212,27 +247,30 @@ void Tree<T>::PrintStructuredHelper(Node<T>* curNode){
     PrintStructuredHelper(curNode->right); // Then same w/ right
     
 }
-template <typename T>
-void Tree<T>::PrintStructured(){ 
-    PrintStructuredHelper(root);
-}
 
 template <typename T>
-void Tree<T>::PrintOrderedHelper(Node<T>* curNode){
-
-    if (curNode == nullptr){
-        return; // cannot porint nothing so..
+void Tree<T>::PrintStructuredWithRootSizesHelper(Node<T>* curNode){
+    if (curNode == nullptr) { return; }
+    // Print root and children data
+    cout << *curNode->data << '(';
+    // Put left info in paren if it exists
+    if(curNode->left != nullptr){
+        cout << *curNode->left->data << " ,";
+    }else{
+        cout << "_ , ";
     }
+    if(curNode->right != nullptr){
+        cout << *curNode->right->data << ')';
+    }else{
+        cout << "_)";
+    }
+    // Same as structured but also print depths
+    cout << "Depth: " << NodeHeight(curNode) <<
+    ", L Depth: " << LeftNodeHeight(curNode->left) <<
+    ", R Depth: " << RightNodeHeight(curNode->right) << endl;
 
-    PrintOrderedHelper(curNode->left); // Print left side first 
-
-    cout << *(curNode->data);
-
-    PrintOrderedHelper(curNode->right); // Print right side after cur (bc its larger)
-}
-template <typename T>
-void Tree<T>::PrintOrdered(){ 
-    PrintOrderedHelper(root); 
+    PrintStructuredWithRootSizesHelper(curNode->left); // Do same with Left
+    PrintStructuredWithRootSizesHelper(curNode->right); // Then same w/ right
 }
 
 template <typename T>
