@@ -21,15 +21,15 @@ class BinaryTree {
 private:
     Node* root;
 
-    Node* insertRecursive(Node* current, int value, Node* parent) {
+    Node* insertRecursive(Node* current, int value) {
         if (current == nullptr) {
             return new Node(value);
         }
 
         if (value < current->data) {
-            current->left = insertRecursive(current->left, value, current);
+            current->left = insertRecursive(current->left, value);
         } else if (value > current->data) {
-            current->right = insertRecursive(current->right, value, current);
+            current->right = insertRecursive(current->right, value);
         }
 
         return current;
@@ -136,7 +136,7 @@ public:
     }
 
     void insert(int value) {
-        root = insertRecursive(root, value, nullptr);
+        root = insertRecursive(root, value);
         // RotateBalance(root, nullptr);
         root->height = depthNew(root, nullptr);
         // root = balanceTreeOn();
@@ -144,6 +144,7 @@ public:
 
     void remove(int value) {
         root = deleteRecursive(root, value);
+        cout << "Depthnew" << endl;
         root->height = depthNew(root, nullptr);
     }
 
@@ -268,7 +269,7 @@ public:
                     // PrintStructuredHelper(curr, parent);
                     cout << "LEFTRIGHT" << endl;
                     Lheight = RotateLeftRight(parent, curr);
-                } else if(Lchild > Rchild){
+                } else{
                     cout << "RIGHT" << endl;
                     Lheight = RotateR(parent, curr);
                 }
@@ -283,7 +284,7 @@ public:
                     // PrintStructuredHelper(curr, parent);
                     cout << "RIGHTLEFT" << endl;
                     Rheight = RotateRightLeft(parent, curr); //Readjust height after rotate
-                } else if(Rchild > Lchild){
+                } else{
                     // PrintStructuredHelper(curr, parent);
                     cout << "LEFT" << endl;
                     Rheight = RotateL(parent, curr); //Readjust height after rotate
@@ -294,50 +295,52 @@ public:
         return Rheight + 1;
     }
 
-   void RotateBalance(Node* curr, Node* parent){
-        int childLeft = depth(curr->left, curr);
-        int childRight = depth(curr->right, curr);
-        cout << childLeft << endl;
-        cout << childRight << endl;
-        if(childLeft > childRight + 1){
-            //Ldepth is 2 higher here, have to balance
-            if(depth(curr->left->right, curr->left) > depth(curr->left->left, curr->left) + 1) {
-                cout << "LEFTRIGHT" << endl;
-                RotateLeftRight(curr, curr->left);
-            } else {
-                cout << "RIGHT" << endl;
-                RotateR(curr, curr->left);
-            }
-        } else if(childRight > childLeft + 1) {
-            //Rdepth is 2 higher here, have to balance
-            cout << "_____" << endl;
-            cout << depth(curr->right->right, curr->right) << endl;
-            cout << depth(curr->right->left, curr->right) << endl;
-            if(depth(curr->right->right, curr->right) > depth(curr->right->left, curr->right) + 1){
-                PrintStructuredHelper(curr, parent);
-                cout << "RIGHTLEFT" << endl;
-                RotateRightLeft(curr, curr->right);
-            } else {
-                PrintStructuredHelper(curr, parent);
-                cout << "LEFT" << endl;
-                RotateL(parent, curr);
-            }
-        }
-        cout << "already balanced" << endl;
-    }
+    
+// Old scuffed code
+//    void RotateBalance(Node* curr, Node* parent){
+//         int childLeft = depth(curr->left, curr);
+//         int childRight = depth(curr->right, curr);
+//         cout << childLeft << endl;
+//         cout << childRight << endl;
+//         if(childLeft > childRight + 1){
+//             //Ldepth is 2 higher here, have to balance
+//             if(depth(curr->left->right, curr->left) > depth(curr->left->left, curr->left) + 1) {
+//                 cout << "LEFTRIGHT" << endl;
+//                 RotateLeftRight(curr, curr->left);
+//             } else {
+//                 cout << "RIGHT" << endl;
+//                 RotateR(curr, curr->left);
+//             }
+//         } else if(childRight > childLeft + 1) {
+//             //Rdepth is 2 higher here, have to balance
+//             cout << "_____" << endl;
+//             cout << depth(curr->right->right, curr->right) << endl;
+//             cout << depth(curr->right->left, curr->right) << endl;
+//             if(depth(curr->right->right, curr->right) > depth(curr->right->left, curr->right) + 1){
+//                 PrintStructuredHelper(curr, parent);
+//                 cout << "RIGHTLEFT" << endl;
+//                 RotateRightLeft(curr, curr->right);
+//             } else {
+//                 PrintStructuredHelper(curr, parent);
+//                 cout << "LEFT" << endl;
+//                 RotateL(parent, curr);
+//             }
+//         }
+//         cout << "already balanced" << endl;
+//     }
 
-    int depth(Node* curr, Node* parent){
-        if(curr == nullptr){return 0;}
-        //Curr is child for rotate function
-        int Lheight = depth(curr->left, curr); //Curr will become the next parent, to call for rotate later
-        int Rheight = depth(curr->right, curr);
-        if(Lheight > Rheight){
-            curr->height = Lheight + 1;
-            return Lheight + 1;
-        }
-        curr->height = Rheight + 1;
-        return Rheight + 1;
-    }
+//     int depth(Node* curr, Node* parent){
+//         if(curr == nullptr){return 0;}
+//         //Curr is child for rotate function
+//         int Lheight = depth(curr->left, curr); //Curr will become the next parent, to call for rotate later
+//         int Rheight = depth(curr->right, curr);
+//         if(Lheight > Rheight){
+//             curr->height = Lheight + 1;
+//             return Lheight + 1;
+//         }
+//         curr->height = Rheight + 1;
+//         return Rheight + 1;
+//     }
     //If L depth and R depth are 1 or less different from each other it's balanced
     //Other wise if it's greater than 1 it's out of balance and we can fix it
     //Right depth is greater we rotate left, Left depth is greater we rotate right, from that position
@@ -347,16 +350,10 @@ public:
 
 int main() {
     BinaryTree tree;
-    tree.insert(100);
-    tree.insert(98);
-    tree.insert(99);
-    tree.insert(97);
-    tree.insert(95);
+    tree.insert(13);
+    tree.insert(55);
+    tree.insert(33);
 
-    tree.PrintTree();
-    cout << "lkjasdfljasdf" << endl;
-
-    tree.remove(100);
     /*
 
 
