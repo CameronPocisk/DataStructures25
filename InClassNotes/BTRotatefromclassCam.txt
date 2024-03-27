@@ -98,3 +98,8 @@ void rotateLeftRight(Node* parent, Node* child){
 General stratagey for left and right is that you can see whos pointers are already assigned
 Remove the safe one and replace with desired
 */
+
+// For rotating checking grandchildren depths will be nesceccary
+
+Last rotations to make are called 
+-- 

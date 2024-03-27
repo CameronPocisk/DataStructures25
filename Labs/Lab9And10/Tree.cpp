@@ -54,14 +54,10 @@ vector<Node<T>*>  Tree<T>:: GetAllDecending(){ // Returns an array of each node 
 // Insert and Remove helpers
 template <typename T>
 int Tree<T>::NodeHeight(Node<T>* curNode){
-    if(curNode == nullptr){
-        return 0;
-    }
+    if(curNode == nullptr){return 0;}
 
     int lHeight = NodeHeight(curNode->left);
     int rHeight = NodeHeight(curNode->right);
-
-
     return max(lHeight, rHeight) + 1;
 }
 
@@ -90,26 +86,130 @@ int Tree<T>::RightNodeHeight(Node<T>* curNode){
 
 template <typename T>
 // If you spot a node below that can be rotated call this fn
-void Tree<T>::RotateLeft(Node<T>* parent, Node<T>* child){\
-    if (child == parent->right){
-    parent->right = child->right;
-    parent->right->left = child;
-    child->right = nullptr;
-    
-    }
-    else if (child == parent->left){
-        parent->left = child->right;
-        child->right = parent->left->left;    
-    }
-    else{
-        return;
-    }
-
+int Tree<T>::RotateLeft(Node<T>* parent, Node<T>* child){
+        if(parent == nullptr){
+            root = child->right;
+            child->right = root->left;
+            root->left = child;
+        }
+        else if(child == parent->right){
+            parent->right = child->right;
+            child->right = parent->right->left;
+            parent->right->left = child;
+        }
+        else if(child == parent->left){
+            parent->left = child->right;
+            child->right = parent->left->left;
+            parent->left->left = child;
+        }
+        return depthNew(child, parent);
 }
 template <typename T>
-void Tree<T>::RotateRight(Node<T>* parent, Node<T>* child){
-    return;
+int Tree<T>::RotateLeftRight(Node<T>* parent, Node<T>* child){
+        if(parent == nullptr){
+            //Rotate around root
+            Node<T>* newRoot = root->left->right;
+            root->left->right = newRoot->left;
+            newRoot->left = root->left;
+            root->left = newRoot->right;
+            newRoot->right = root;
+            root = newRoot;
+
+            return depthNew(root, nullptr);
+        }
+        parent->left = child->left->right;
+        child->left->right = parent->left->left;
+        parent->left->left = child->left;
+        child->left = parent->left->right;
+        parent->left->right = child;
+
+        return depthNew(child, parent);
+
 }
+
+template <typename T>
+int Tree<T>::RotateRight(Node<T>* parent, Node<T>* child){
+        if(parent == nullptr){
+            root = child->left;
+            child->left = root->right;
+            root->right = child;
+        }
+        else if(child == parent->left){
+            parent->left = child->left;
+            child->left = parent->left->right;
+            parent->left->right = child;
+        }
+        else if(child==parent->right){
+            parent->right = child->left;
+            child->left = parent->right->right;
+            parent->right->right = child;
+        }
+        //Rebalance height afterwards
+        return depthNew(child, parent);
+}
+template <typename T>
+int Tree<T>::RotateRightLeft(Node<T>* parent, Node<T>* child){
+            if(parent == nullptr){
+            //Rotate around root
+            Node<T>* newRoot = root->right->left;
+            root->right->left = newRoot->right;
+            newRoot->right = root->right;
+            root->right = newRoot->left;
+            newRoot->left = root;
+            root = newRoot;
+
+            return depthNew(root, nullptr);
+        }
+        parent->right = child->right->left;
+        child->right->left = parent->right->right;
+        parent->right->right = child->right;
+        child->right = parent->right->left;
+        parent->right->left = child;
+
+        return depthNew(child, parent);
+        //Balance depths
+}
+template <typename T>
+int Tree<T>::depthNew(Node<T>* curr, Node<T>* parent){
+    if(curr == nullptr){return 0;}
+    //Curr is child for rotate function
+    int Lheight = depthNew(curr->left, curr); //Curr will become the next parent, to call for rotate later
+    int Rheight = depthNew(curr->right, curr);
+
+    if(Lheight > Rheight){
+        if(Lheight > Rheight + 1){ // need to rotate
+            int Lchild = depthNew(curr->left->left, curr->left);
+            int Rchild = depthNew(curr->left->right, curr->left);
+            if(Rchild > Lchild) {
+                // PrintStructuredHelper(curr, parent);
+                cout << "LEFTRIGHT" << endl;
+                Lheight = RotateLeftRight(parent, curr);
+            } else{
+                cout << "RIGHT" << endl;
+                Lheight = RotateRight(parent, curr);
+            }
+        } 
+        curr->height = Lheight + 1;
+        return Lheight + 1;
+    } else if(Rheight > Lheight){
+        if(Rheight > Lheight + 1){
+        int Lchild = depthNew(curr->right->left, curr->right);
+        int Rchild =  depthNew(curr->right->right, curr->right);
+            if(Lchild > Rchild) {
+                // PrintStructuredHelper(curr, parent);
+                cout << "RIGHTLEFT" << endl;
+                Rheight = RotateRightLeft(parent, curr); //Readjust height after rotate
+            } else{
+                // PrintStructuredHelper(curr, parent);
+                cout << "LEFT" << endl;
+                Rheight = RotateLeft(parent, curr); //Readjust height after rotate
+            }   
+        }
+    }
+    curr->height = Rheight + 1;
+    return Rheight + 1;
+}
+
 
 
 template <typename T>

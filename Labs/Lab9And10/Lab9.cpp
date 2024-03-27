@@ -21,6 +21,7 @@ int main(){
     t.Insert(&val2);
     t.Insert(&val3);
     t.Insert(&val4);
+    t.Insert(&val5);
     // t.Remove(&val3);
 
     // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
