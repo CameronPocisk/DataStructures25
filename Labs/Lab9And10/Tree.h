@@ -138,7 +138,7 @@ public:
     void Insert(T *data){
         root = insertHelper(root, data);
         // root = balanceTree();
-        root->height = depthNew(root, nullptr);
+        // root->height = depthNew(root, nullptr);
     }
 
     Node<T>* Remove(T *value); // Removes the value then rebalances the tree
@@ -146,6 +146,7 @@ public:
     int RotateRight(Node<T>* parent, Node<T>* child);
     int RotateLeftRight(Node<T>* parent, Node<T>* child);
     int RotateRightLeft(Node<T>* parent, Node<T>* child);
+    Node<T>* RemoveNew(Node<T>* currNode, T* value);
     int depthNew(Node<T>* curr, Node<T>* parent);
     int NodeHeight(Node<T>* curNode);
     int LeftNodeHeight(Node<T>* curNode);

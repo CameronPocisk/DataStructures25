@@ -14,6 +14,7 @@ int main(){
     int val5 = 5;
     int val6 = 6;
     int val7 = 7;
+    int val8 = 8;
 
     int val4Copy = 4;
 
@@ -23,11 +24,11 @@ int main(){
     t.Insert(&val2);
     t.Insert(&val3);
     t.Insert(&val4);
-    t.Insert(&val5);
     t.Insert(&val6);
     t.Insert(&val7);
+    t.Insert(&val5);
 
-    // t.Remove(&val6);
+    t.Remove(&val5);
 
     // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
     cout << "Size: " << t.Size() << endl;
