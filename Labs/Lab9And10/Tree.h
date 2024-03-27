@@ -39,10 +39,11 @@ private:
             return new Node<T>(value);
         }
 
-        if(*value == *current->data){
+        if(*value == *(current->data)){
             throw OverflowError(); //If the value is already in the tree
         }
-        else if(*value < *current->data){
+
+        else if(*value < *(current->data)){
             current->left = insertHelper(current->left, value);
         } else {
             current->right = insertHelper(current->right, value);
@@ -56,11 +57,11 @@ private:
             throw NotFound();
         }
 
-        if(*value == *current->data){
+        if(*value == *(current->data)){
             return current; // Found it!
         }
 
-        if(*value < *current->data){
+        if(*value < *(current->data)){
             return findHelper(current->left, value);
         } else {
             return findHelper(current->right, value);
@@ -69,10 +70,10 @@ private:
 
     Node<T>* removeHelper(Node<T>* current, T* value){
         // Finds parent of remove node ?
-        if(*value < *current->data && *value != *current->left->data){
+        if(*value < *(current->data) && *value != *current->left->data){
             current = removeHelper(current->left, value);
         }
-        else if(*value > *current->data && *value != *current->right->data){
+        else if(*value > *(current->data) && *value != *current->right->data){
             current = removeHelper(current->right, value);
         }
         if(*value == *current->right->data || *value == *current->right->data){

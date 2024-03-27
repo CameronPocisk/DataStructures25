@@ -12,6 +12,8 @@ int main(){
     int val3 = 3;
     int val4 = 4;
     int val5 = 5;
+    int val6 = 6;
+    int val7 = 7;
 
     int val4Copy = 4;
 
@@ -22,7 +24,10 @@ int main(){
     t.Insert(&val3);
     t.Insert(&val4);
     t.Insert(&val5);
-    // t.Remove(&val3);
+    t.Insert(&val6);
+    t.Insert(&val7);
+
+    // t.Remove(&val6);
 
     // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
     cout << "Size: " << t.Size() << endl;
@@ -33,6 +38,14 @@ int main(){
     // t.PrintStructured();
     t.PrintStructuredWithRootSizes();
 
+    int toFind = 5; // Test find
+    try{
+        t.Find(&toFind);
+        cout << "Found it!" << endl;
+    }
+    catch(NotFound &e){
+        cout << "did not find value" << endl;
+    }
 
     // Ascending and descending things
     
