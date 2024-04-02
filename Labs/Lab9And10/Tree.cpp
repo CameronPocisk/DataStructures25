@@ -102,7 +102,7 @@ int Tree<T>::RotateLeft(Node<T>* parent, Node<T>* child){
             child->right = parent->left->left;
             parent->left->left = child;
         }
-        return depthNew(child, parent);
+        return depthNew(child, parent) - 1;
 }
 template <typename T>
 int Tree<T>::RotateLeftRight(Node<T>* parent, Node<T>* child){
@@ -115,15 +115,20 @@ int Tree<T>::RotateLeftRight(Node<T>* parent, Node<T>* child){
             newRoot->right = root;
             root = newRoot;
 
-            return depthNew(root, nullptr);
+            return depthNew(root, nullptr) - 1;
         }
-        parent->left = child->left->right;
-        child->left->right = parent->left->left;
-        parent->left->left = child->left;
-        child->left = parent->left->right;
-        parent->left->right = child;
+        Node<T>* newChild = child->left->right;
+        child->left->left =  newChild->right;
+        child->left->right = newChild->left;
+        //No child->right other wise wouldn't be in
 
-        return depthNew(child, parent);
+        newChild->left = child->left;
+        newChild->right = child;
+        child->left = child->left->left;
+        child = newChild;
+        parent->right = child;
+
+        return depthNew(child, parent) - 1;
 
 }
 
@@ -145,11 +150,11 @@ int Tree<T>::RotateRight(Node<T>* parent, Node<T>* child){
             parent->right->right = child;
         }
         //Rebalance height afterwards
-        return depthNew(child, parent);
+        return depthNew(child, parent) - 1;
 }
 template <typename T>
 int Tree<T>::RotateRightLeft(Node<T>* parent, Node<T>* child){
-            if(parent == nullptr){
+        if(parent == nullptr){
             //Rotate around root
             Node<T>* newRoot = root->right->left;
             root->right->left = newRoot->right;
@@ -158,15 +163,21 @@ int Tree<T>::RotateRightLeft(Node<T>* parent, Node<T>* child){
             newRoot->left = root;
             root = newRoot;
 
-            return depthNew(root, nullptr);
+            return depthNew(root, nullptr) - 1;
         }
-        parent->right = child->right->left;
-        child->right->left = parent->right->right;
-        parent->right->right = child->right;
-        child->right = parent->right->left;
-        parent->right->left = child;
 
-        return depthNew(child, parent);
+        Node<T>* newChild = child->right->left;
+        child->right->right =  newChild->left;
+        child->right->left = newChild->right;
+        //No child->right other wise wouldn't be in
+
+        newChild->right = child->right;
+        newChild->left = child;
+        child->right = child->right->right;
+        child = newChild;
+        parent->left = child;
+
+        return depthNew(child, parent) - 1;
         //Balance depths
 }
 template <typename T>
@@ -175,8 +186,9 @@ int Tree<T>::depthNew(Node<T>* curr, Node<T>* parent){
     //Curr is child for rotate function
     int Lheight = depthNew(curr->left, curr); //Curr will become the next parent, to call for rotate later
     int Rheight = depthNew(curr->right, curr);
-
     if(Lheight > Rheight){
+        cout << "Heights: " << Lheight << ", " << Rheight << endl;
+        PrintStructuredHelper(curr);
         if(Lheight > Rheight + 1){ // need to rotate
             int Lchild = depthNew(curr->left->left, curr->left);
             int Rchild = depthNew(curr->left->right, curr->left);
@@ -191,10 +203,13 @@ int Tree<T>::depthNew(Node<T>* curr, Node<T>* parent){
         } 
         curr->height = Lheight + 1;
         return Lheight + 1;
-    } else if(Rheight > Lheight){
+    } else if(Rheight > Lheight + 1){
+        cout << "Heights: " << Lheight << ", " << Rheight << endl;
+        PrintStructuredHelper(curr);
         if(Rheight > Lheight + 1){
         int Lchild = depthNew(curr->right->left, curr->right);
         int Rchild =  depthNew(curr->right->right, curr->right);
+        cout << Lchild << ", " << Rchild << endl;
             if(Lchild > Rchild) {
                 // PrintStructuredHelper(curr, parent);
                 cout << "RIGHTLEFT" << endl;
@@ -211,50 +226,32 @@ int Tree<T>::depthNew(Node<T>* curr, Node<T>* parent){
 }
 
 template <typename T>
-// Node<T>* Tree<T>::RemoveNew(Node<T>* curNode, Node<T>* parent, T* value){
-Node<T>* Tree<T>::RemoveNew(Node<T>* curNode, T* value){
-    if(curNode == nullptr){
-        throw NotFound();
-    }
-
-    // traverse to correct node
-    if(*value < *curNode->data) {
-        curNode = RemoveNew(curNode->left, value);
-    }
-    else if(*value > *curNode->data){
-        curNode = RemoveNew(curNode->right, value);
-    }
-    else { // *value = *curNode->data{}
-        if(curNode->left == nullptr && curNode->right == nullptr){
-            //no children
-            Node<T>* temp = curNode;
-            delete curNode;
-            return temp;
-        }
-        else if(curNode->left == nullptr || curNode->right == nullptr){
-            //
-            ;
-        }
-    }
-
-    return curNode;
-}
-
-
-// restore jakes remove code to former glory
-template <typename T>
 Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tree
-    Node<T>* parent = removeHelper(root, value);
 
-    cout << *value << endl;
-    cout << *parent->data << endl;
-    if(*value < *parent->data){ //Remove one on left
+    // Get parent
+    Node<T>* parent = removeHelper(root, value);
+    // if(parent == nullptr) {cout << "Not found " << endl; throw NotFound();} // Throw for not found?
+
+    cout << "Value: " << *value << endl;
+    cout << "Parent: "<< *parent->data << endl;
+    PrintStructured();
+
+
+    if(*value < *parent->data){ //Remove on left side
+        cout << "Left delete" << endl;
+
         if(parent->left->left == nullptr && parent->left->right == nullptr){ // no children
+            // No root case needed
+            cout <<  "No children" << endl;
             Node<T>* remNode = parent->left;
             parent->left = nullptr;
             return remNode;
+
         }
+
         else if(parent->left->left == nullptr || parent->left->right == nullptr){ // one child
+            cout <<  "One child " << endl;
+
             Node<T>* remNode = parent->left;
             if(parent->left->left == nullptr){
                 parent->left = parent->left->right;
@@ -268,6 +265,8 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
             }
         }
         else{ // two children
+            cout << "Two children " << endl;
+            
             Node<T>* remNode = parent->left;
             Node<T>* replace = parent->left->left;
             Node<T>* temp = parent->left->left;
@@ -293,13 +292,17 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
         }
     }
     else{ //Remove one on right
+        cout << "Right delete" << endl;
+
         if(parent->right->left == nullptr && parent->right->right == nullptr){ // no children
+            cout <<  "No children" << endl;
             Node<T>* remNode = parent->right;
             parent->right = nullptr;
-            cout << "remove";
             return remNode;
         }
         else if(parent->right->left == nullptr || parent->right->right == nullptr){ // one child
+            cout <<  "One child " << endl;
+
             Node<T>* remNode = parent->right;
             if(parent->right->left == nullptr){
                 parent->right = parent->right->right;
@@ -313,7 +316,7 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
             }
         }
         else{ // two children
-            cout << "bruhhh" << endl;
+            cout << "Two children " << endl;
             Node<T>* remNode = parent->right;
             Node<T>* replace = parent->right;
             Node<T>* temp = parent->right->right;
@@ -341,13 +344,47 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
 }
 
 
+template <typename T>
+// Node<T>* Tree<T>::RemoveNew(Node<T>* curNode, Node<T>* parent, T* value){
+Node<T>* Tree<T>::RemoveNew(Node<T>* curNode, T* value){
+    if(curNode == nullptr){
+        throw NotFound();
+    }
 
+    // traverse to correct node
+    if(*value < *curNode->data) {
+        curNode = RemoveNew(curNode->left, value);
+    }
+    else if(*value > *curNode->data){
+        curNode = RemoveNew(curNode->right, value);
+    }
+    else { // *value = *curNode->data correct node to remove
+        //No children
+        if(curNode->left == nullptr){
+            //no children
+            Node<T>* temp = curNode;
+            delete curNode;
+            return temp;
+        } else if(curNode->right == nullptr){
+            Node<T>* temp = curNode;
+            delete curNode;
+            return temp;
+        }
+        Node<T>* temp = //The leftest right
+        curNode->data = temp->data;
+        curNode->right = RemoveNew(curNode->right, temp->data);
+    }
 
+    return curNode;
+}
 
-
-
-
-
+template <typename T>
+Node<T>* Tree<T>::FindRightestLeft(Node<T>* curNode){
+    while(curNode->left != nullptr){
+        curNode = curNode->left;
+    }
+    return curNode;
+}
 
 template <typename T>
 void Tree<T>::PrintOrderedHelper(Node<T>* curNode){

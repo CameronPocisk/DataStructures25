@@ -6,7 +6,7 @@ using namespace std;
 
 int main(){
     Tree<int> t;
-
+    int val0 = 0;
     int val1 = 1;
     int val2 = 2;
     int val3 = 3;
@@ -20,38 +20,36 @@ int main(){
 
     cout << "Size: " << t.Size() << endl;
 
-    t.Insert(&val1);
     t.Insert(&val2);
-    t.Insert(&val3);
-    t.Insert(&val4);
     t.Insert(&val6);
     t.Insert(&val7);
-    t.Insert(&val5);
+    // t.Insert(&val5);
+    t.Insert(&val1);
 
-    t.Remove(&val5);
+    t.Remove(&val2);
 
     // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
-    cout << "Size: " << t.Size() << endl;
-    // cout << t.EmptyTree() << endl;
+    // cout << "Size: " << t.Size() << endl;
+    // // cout << t.EmptyTree() << endl;
     
-    t.PrintOrdered();
-    cout << endl;
-    // t.PrintStructured();
-    t.PrintStructuredWithRootSizes();
+    // t.PrintOrdered();
+    // cout << endl;
+    t.PrintStructured();
+    // t.PrintStructuredWithRootSizes();
 
-    int toFind = 5; // Test find
-    try{
-        t.Find(&toFind);
-        cout << "Found it!" << endl;
-    }
-    catch(NotFound &e){
-        cout << "did not find value" << endl;
-    }
+    // int toFind = 5; // Test find
+    // try{
+    //     t.Find(&toFind);
+    //     cout << "Found it!" << endl;
+    // }
+    // catch(NotFound &e){
+    //     cout << "did not find value" << endl;
+    // }
 
-    // Ascending and descending things
+    // // Ascending and descending things
     
-    // Descending already tested
-    vector<Node<int>*> arr = t.GetAllDecending();
+    // // Descending already tested
+    // vector<Node<int>*> arr = t.GetAllDecending();
     
     // I feel weird abt this
     // for(int i = 0; i < arr.size(); i++){

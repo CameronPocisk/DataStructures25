@@ -70,6 +70,12 @@ private:
 
     Node<T>* removeHelper(Node<T>* current, T* value){
         // Finds parent of remove node ?
+
+        // if(current->right != nullptr && *value == *(current->right->data)
+        // || current->left != nullptr && *value == *(current->right->data)){
+        //     return current;
+        // }
+
         if(*value == *(current->right->data) || *value == *(current->left->data)){
             return current;
         }
@@ -79,7 +85,9 @@ private:
         else if(*value > *(current->data)){
             current = removeHelper(current->right, value);
         }
-        return current;
+        cout << "Left conditions" << endl;
+        throw NotFound();
+        return nullptr; // Not found here?
     }
 
     int sizeHelper(Node<T>* current){
@@ -142,11 +150,12 @@ public:
     }
 
     Node<T>* Remove(T *value); // Removes the value then rebalances the tree
+    Node<T>* RemoveNew(Node<T>* curNode, T* value);
+    Node<T>* FindRightestLeft(Node<T>* curNode)
     int RotateLeft(Node<T>* parent, Node<T>* child);
     int RotateRight(Node<T>* parent, Node<T>* child);
     int RotateLeftRight(Node<T>* parent, Node<T>* child);
     int RotateRightLeft(Node<T>* parent, Node<T>* child);
-    Node<T>* RemoveNew(Node<T>* currNode, T* value);
     int depthNew(Node<T>* curr, Node<T>* parent);
     int NodeHeight(Node<T>* curNode);
     int LeftNodeHeight(Node<T>* curNode);
