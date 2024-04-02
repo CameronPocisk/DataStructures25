@@ -70,16 +70,16 @@ private:
 
     Node<T>* removeHelper(Node<T>* current, T* value){
         // Finds parent of remove node ?
-        if(*value < *(current->data) && *value != *current->left->data){
-            current = removeHelper(current->left, value);
-        }
-        else if(*value > *(current->data) && *value != *current->right->data){
-            current = removeHelper(current->right, value);
-        }
-        if(*value == *current->right->data || *value == *current->right->data){
+        if(*value == *(current->right->data) || *value == *(current->left->data)){
             return current;
         }
-        return nullptr;
+        else if(*value < *(current->data)){
+            current = removeHelper(current->left, value);
+        }
+        else if(*value > *(current->data)){
+            current = removeHelper(current->right, value);
+        }
+        return current;
     }
 
     int sizeHelper(Node<T>* current){
@@ -138,7 +138,7 @@ public:
     void Insert(T *data){
         root = insertHelper(root, data);
         // root = balanceTree();
-        // root->height = depthNew(root, nullptr);
+        root->height = depthNew(root, nullptr);
     }
 
     Node<T>* Remove(T *value); // Removes the value then rebalances the tree

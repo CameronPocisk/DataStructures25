@@ -244,8 +244,10 @@ Node<T>* Tree<T>::RemoveNew(Node<T>* curNode, T* value){
 // restore jakes remove code to former glory
 template <typename T>
 Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tree
-
     Node<T>* parent = removeHelper(root, value);
+
+    cout << *value << endl;
+    cout << *parent->data << endl;
     if(*value < *parent->data){ //Remove one on left
         if(parent->left->left == nullptr && parent->left->right == nullptr){ // no children
             Node<T>* remNode = parent->left;
@@ -294,6 +296,7 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
         if(parent->right->left == nullptr && parent->right->right == nullptr){ // no children
             Node<T>* remNode = parent->right;
             parent->right = nullptr;
+            cout << "remove";
             return remNode;
         }
         else if(parent->right->left == nullptr || parent->right->right == nullptr){ // one child
@@ -310,15 +313,14 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
             }
         }
         else{ // two children
+            cout << "bruhhh" << endl;
             Node<T>* remNode = parent->right;
-            Node<T>* replace = parent->right->left;
-            Node<T>* temp = parent->right->left;
-            if(replace->right != nullptr){
-                replace = replace->right;
-            }
+            Node<T>* replace = parent->right;
+            Node<T>* temp = parent->right->right;
             while(replace->right != nullptr){ // finds largest smaller
                 replace = replace->right;
-                temp = temp->right;
+                parent->right = replace;
+                parent = replace;
             }
             if(replace->left == nullptr){
                 temp->right = nullptr;
