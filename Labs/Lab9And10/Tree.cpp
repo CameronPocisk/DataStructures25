@@ -368,24 +368,30 @@ Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
         //No children
         if(curNode->left == nullptr && curNode->right == nullptr){
             cout << "No children" << endl;
+            cout << *parent->data << endl;
+            cout << *curNode->data << endl;
             Node<T>* temp = parent;
             curNode = nullptr;
-            parent->right = curNode;
             PrintStructured();
+            if(curNode->left == nullptr){
+                parent->left = curNode;
+            } else {
+                parent->right = curNode;
+            }
             return temp;
         }
         if(curNode->left == nullptr){
             cout << "One on right" << endl;
             //one child on the right
             Node<T>* temp = curNode->right;
-            parent->left = temp;
+            parent->right = temp;
             curNode = nullptr;
             return temp;
         } else if(curNode->right == nullptr){
             cout << "One on left" << endl;
             //One child on the left
             Node<T>* temp = curNode->left;
-            parent->right = temp;
+            parent->left = temp;
             curNode = nullptr;
             return temp;
         }
