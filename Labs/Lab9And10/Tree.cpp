@@ -188,7 +188,6 @@ int Tree<T>::depthNew(Node<T>* curr, Node<T>* parent){
     int Rheight = depthNew(curr->right, curr);
     if(Lheight > Rheight){
         cout << "Heights: " << Lheight << ", " << Rheight << endl;
-        PrintStructuredHelper(curr);
         if(Lheight > Rheight + 1){ // need to rotate
             int Lchild = depthNew(curr->left->left, curr->left);
             int Rchild = depthNew(curr->left->right, curr->left);
@@ -205,7 +204,6 @@ int Tree<T>::depthNew(Node<T>* curr, Node<T>* parent){
         return Lheight + 1;
     } else if(Rheight > Lheight + 1){
         cout << "Heights: " << Lheight << ", " << Rheight << endl;
-        PrintStructuredHelper(curr);
         if(Rheight > Lheight + 1){
         int Lchild = depthNew(curr->right->left, curr->right);
         int Rchild =  depthNew(curr->right->right, curr->right);
@@ -343,36 +341,44 @@ Node<T>* Tree<T>::Remove(T *value){ // Removes the value then rebalances the tre
     return nullptr;
 }
 
+template <typename T>
+void Tree<T>::RemoveNew(T* value){
+    Node<T>* temp = RemoveNewHelper(root, nullptr, value);
+    root->height = depthNew(root, nullptr);
+}
 
 template <typename T>
 // Node<T>* Tree<T>::RemoveNew(Node<T>* curNode, Node<T>* parent, T* value){
-Node<T>* Tree<T>::RemoveNew(Node<T>* curNode, T* value){
+Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
     if(curNode == nullptr){
-        throw NotFound();
+        return nullptr;
     }
 
     // traverse to correct node
     if(*value < *curNode->data) {
-        curNode = RemoveNew(curNode->left, value);
+        curNode = RemoveNewHelper(curNode->left, curNode, value);
     }
     else if(*value > *curNode->data){
-        curNode = RemoveNew(curNode->right, value);
+        curNode = RemoveNewHelper(curNode->right, curNode, value);
     }
     else { // *value = *curNode->data correct node to remove
         //No children
+        cout << *curNode->data << endl;
         if(curNode->left == nullptr){
             //no children
-            Node<T>* temp = curNode;
-            delete curNode;
+            Node<T>* temp = curNode->right;
+            curNode = nullptr;
+            parent->left = curNode;
             return temp;
         } else if(curNode->right == nullptr){
-            Node<T>* temp = curNode;
-            delete curNode;
+            Node<T>* temp = curNode->left;
+            curNode = nullptr;
+            parent->right = curNode;
             return temp;
         }
-        Node<T>* temp = //The leftest right
+        Node<T>* temp = FindRightestLeft(curNode->right);
         curNode->data = temp->data;
-        curNode->right = RemoveNew(curNode->right, temp->data);
+        curNode->right = RemoveNewHelper(curNode->right, curNode, temp->data);
     }
 
     return curNode;

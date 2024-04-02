@@ -26,7 +26,7 @@ int main(){
     // t.Insert(&val5);
     t.Insert(&val1);
 
-    t.Remove(&val2);
+    t.RemoveNew(&val1);
 
     // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
     // cout << "Size: " << t.Size() << endl;
@@ -68,6 +68,6 @@ int main(){
 
 
 // For dom, mac is weird fr
-// g++ --std=c++17 -c Lab8.cpp
-// g++ --std=c++17 -o main.exe Lab9.o
+// g++ --std=c++17 -c Lab9.cpp Tree.cpp
+// g++ --std=c++17 -o main.exe Lab9.o Tree.o
 // ./main.exe
