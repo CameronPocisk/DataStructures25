@@ -20,13 +20,15 @@ int main(){
 
     cout << "Size: " << t.Size() << endl;
 
-    t.Insert(&val2);
+    t.Insert(&val3);
     t.Insert(&val6);
     t.Insert(&val7);
-    // t.Insert(&val5);
+    t.Insert(&val5);
     t.Insert(&val1);
+    t.Insert(&val8);
+    t.Insert(&val2);
 
-    t.RemoveNew(&val1);
+    t.RemoveNew(&val5);
 
     // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
     // cout << "Size: " << t.Size() << endl;

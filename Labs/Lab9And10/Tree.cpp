@@ -117,6 +117,9 @@ int Tree<T>::RotateLeftRight(Node<T>* parent, Node<T>* child){
 
             return depthNew(root, nullptr) - 1;
         }
+        cout << *child->data << endl;
+        cout << *parent->data << endl;
+
         Node<T>* newChild = child->left->right;
         child->left->left =  newChild->right;
         child->left->right = newChild->left;
@@ -126,7 +129,7 @@ int Tree<T>::RotateLeftRight(Node<T>* parent, Node<T>* child){
         newChild->right = child;
         child->left = child->left->left;
         child = newChild;
-        parent->right = child;
+        parent->left = child;
 
         return depthNew(child, parent) - 1;
 
@@ -363,22 +366,35 @@ Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
     }
     else { // *value = *curNode->data correct node to remove
         //No children
-        cout << *curNode->data << endl;
-        if(curNode->left == nullptr){
-            //no children
-            Node<T>* temp = curNode->right;
-            curNode = nullptr;
-            parent->left = curNode;
-            return temp;
-        } else if(curNode->right == nullptr){
-            Node<T>* temp = curNode->left;
+        if(curNode->left == nullptr && curNode->right == nullptr){
+            cout << "No children" << endl;
+            Node<T>* temp = parent;
             curNode = nullptr;
             parent->right = curNode;
+            PrintStructured();
             return temp;
         }
-        Node<T>* temp = FindRightestLeft(curNode->right);
+        if(curNode->left == nullptr){
+            cout << "One on right" << endl;
+            //one child on the right
+            Node<T>* temp = curNode->right;
+            parent->left = temp;
+            curNode = nullptr;
+            return temp;
+        } else if(curNode->right == nullptr){
+            cout << "One on left" << endl;
+            //One child on the left
+            Node<T>* temp = curNode->left;
+            parent->right = temp;
+            curNode = nullptr;
+            return temp;
+        }
+
+        //Two children Not right atm
+        Node<T>* temp = FindRightestLeft(curNode->left);
         curNode->data = temp->data;
-        curNode->right = RemoveNewHelper(curNode->right, curNode, temp->data);
+        //Temp is what should be put in the removed spot
+        curNode->left = RemoveNewHelper(curNode->left, curNode, temp->data);
     }
 
     return curNode;
@@ -386,8 +402,8 @@ Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
 
 template <typename T>
 Node<T>* Tree<T>::FindRightestLeft(Node<T>* curNode){
-    while(curNode->left != nullptr){
-        curNode = curNode->left;
+    while(curNode->right != nullptr){
+        curNode = curNode->right;
     }
     return curNode;
 }
