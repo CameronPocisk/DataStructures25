@@ -117,8 +117,8 @@ int Tree<T>::RotateLeftRight(Node<T>* parent, Node<T>* child){
 
             return depthNew(root, nullptr) - 1;
         }
-        cout << *child->data << endl;
-        cout << *parent->data << endl;
+        // cout << *child->data << endl;
+        // cout << *parent->data << endl;
 
         Node<T>* newChild = child->left->right;
         child->left->left =  newChild->right;
@@ -190,34 +190,34 @@ int Tree<T>::depthNew(Node<T>* curr, Node<T>* parent){
     int Lheight = depthNew(curr->left, curr); //Curr will become the next parent, to call for rotate later
     int Rheight = depthNew(curr->right, curr);
     if(Lheight > Rheight){
-        cout << "Heights: " << Lheight << ", " << Rheight << endl;
+        // cout << "Heights: " << Lheight << ", " << Rheight << endl;
         if(Lheight > Rheight + 1){ // need to rotate
             int Lchild = depthNew(curr->left->left, curr->left);
             int Rchild = depthNew(curr->left->right, curr->left);
             if(Rchild > Lchild) {
                 // PrintStructuredHelper(curr, parent);
-                cout << "LEFTRIGHT" << endl;
+                // cout << "LEFTRIGHT" << endl;
                 Lheight = RotateLeftRight(parent, curr);
             } else{
-                cout << "RIGHT" << endl;
+                // cout << "RIGHT" << endl;
                 Lheight = RotateRight(parent, curr);
             }
         } 
         curr->height = Lheight + 1;
         return Lheight + 1;
     } else if(Rheight > Lheight + 1){
-        cout << "Heights: " << Lheight << ", " << Rheight << endl;
+        // cout << "Heights: " << Lheight << ", " << Rheight << endl;
         if(Rheight > Lheight + 1){
         int Lchild = depthNew(curr->right->left, curr->right);
         int Rchild =  depthNew(curr->right->right, curr->right);
-        cout << Lchild << ", " << Rchild << endl;
+        // cout << Lchild << ", " << Rchild << endl;
             if(Lchild > Rchild) {
                 // PrintStructuredHelper(curr, parent);
-                cout << "RIGHTLEFT" << endl;
+                // cout << "RIGHTLEFT" << endl;
                 Rheight = RotateRightLeft(parent, curr); //Readjust height after rotate
             } else{
                 // PrintStructuredHelper(curr, parent);
-                cout << "LEFT" << endl;
+                // cout << "LEFT" << endl;
                 Rheight = RotateLeft(parent, curr); //Readjust height after rotate
             }   
         }

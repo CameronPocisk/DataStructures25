@@ -16,7 +16,6 @@ int main(){
     int val7 = 7;
     int val8 = 8;
 
-    int val4Copy = 4;
 
     // cout << "Size: " << t.Size() << endl;
 
@@ -30,7 +29,7 @@ int main(){
     t.PrintStructured();
 
 
-    cout << "Removing..." << endl << endl;
+    cout << "Removing..." << endl;
     t.RemoveNew(&val7); // Two children
     t.RemoveNew(&val6); // One children
     t.RemoveNew(&val8); // Zero children
@@ -39,7 +38,10 @@ int main(){
     cout << "Done removing" << endl;
     t.PrintStructured();
 
+    int val4Copy = 4;
+    int val7Copy = 7;
     cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
+    // cout << "Found val7 : "<< (t.Find(&val7Copy)->data == &val7) << endl; // Throws not found
     cout << "Size: " << t.Size() << endl;
     // cout << t.EmptyTree() << endl;
     
