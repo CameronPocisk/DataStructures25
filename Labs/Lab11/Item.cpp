@@ -1,7 +1,7 @@
 #include "Item.h"
 
 string Item::GetPartInfo(){
-    return "SKU: " + to_string(SKU) + ", Description: " + description;
+    return "SKU: " + SKU + ", Description: " + description;
 }
 
 double Item::GetPrice(){
@@ -49,7 +49,3 @@ bool Item::operator >(const Item &right) const{
 bool Item::operator !=(const Item &right) const{
     return SKU != right.SKU;
 }
-
-// string Item::operator string(){
-//     return SKU;
-// }
