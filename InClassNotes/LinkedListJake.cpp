@@ -24,6 +24,10 @@ class node{
         node* next;
         int data;
 
+    node(int in){
+        data = in;
+    }
+
 };
 
 class LL{
