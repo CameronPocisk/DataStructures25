@@ -152,7 +152,7 @@ public:
     Node<T>* RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value);
     Node<T>* RemoveNew(T* value);
 
-    Node<T>* FindRightestLeft(Node<T>* curNode);
+    Node<T>* RemoveRightestLeft(Node<T>* curNode);
 
     int RotateLeft(Node<T>* parent, Node<T>* child);
     int RotateRight(Node<T>* parent, Node<T>* child);

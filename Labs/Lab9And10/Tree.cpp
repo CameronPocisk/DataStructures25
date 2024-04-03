@@ -373,21 +373,11 @@ Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
         throw NotFound();
     }
 
-
-    // Print parent with its children
-    cout << "Parent: " << *(parent->data) << " curNode: " << *(curNode->data) << endl;
-    cout << *parent->data << '(';
-    if(parent->left != nullptr){cout << *parent->left->data << " ,";}
-    else{cout << "_ , "; }
-
-    if(parent->right != nullptr){cout << *parent->right->data << ')' << endl;}
-    else{ cout << "_)" << endl;}
-
-    // *value = *curNode->data correct node to remove
+    // cout << "Parent: " << *(parent->data) << " curNode: " << *(curNode->data) << endl;
 
     //No children (is left or right of parent)
     if(curNode->left == nullptr && curNode->right == nullptr){
-        cout << "No children" << endl;
+        // cout << "No children" << endl;
 
         if(parent->left == curNode){
             parent->left = nullptr; // Remove left node
@@ -395,25 +385,23 @@ Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
         else if(parent->right == curNode){
             parent->right = nullptr; // Remove right node
         }
-        else{cout << "something bad happened. " << endl;}
-        
+        else{cout << "something bad happened. " << endl;} // Should never happen lol
+
+        if(curNode == root){ root = nullptr; } // Also set the structures root back if needed
         Node<T>* removeHold = curNode; 
-        curNode = nullptr; // Remove the node
-        return removeHold;
+        curNode = nullptr; // Sever the node
+        return removeHold; // Done!
     }
 
     // One node cases
     if(curNode->left == nullptr && curNode->right != nullptr
     || curNode->right == nullptr && curNode->left != nullptr){
-        
-        cout << "One child remove" << endl;
+        // cout << "One child remove" << endl;
        
         Node<T>* grandChild; // Find grandkid no matter what
         if(curNode->left != nullptr){ grandChild = curNode->left;}
         else if(curNode->right != nullptr){ grandChild = curNode->right;}
-
-        else{cout << "Did not find grandchild" << endl;}
-        cout << "Grandchild was: " << *(grandChild->data) << endl;
+        else{cout << "Did not find grandchild" << endl;} // Should also not happen
 
         // Replace correct side with grandkid
         if(parent->left == curNode){
@@ -422,33 +410,36 @@ Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
         else if(parent->right == curNode){
             parent->right = grandChild;
         }
+        else{cout << "issue with parent in one node" << endl;} // Another shouldnt happen
 
-        else{cout << "issue with parent in one node" << endl;}
         
+        if(curNode == root){ root = grandChild; } // Also set the structures root back if needed
         Node<T>* removeHold = curNode; // clean or ewwww
         curNode = nullptr;
 
         return removeHold;
     }
 
-    cout << "Two children" << endl;
+    // TWO CHILDREN CASE HEREONAFTER
+    // cout << "Two children" << endl;
 
-    //Two children Not right atm
-    Node<T>* properGrandChild = FindRightestLeft(curNode); // This tree will default to grabbing the righest node after one traversal
+    // The node we will want to replace is the rightest left, handle in helper
+    Node<T>* properGrandChild = RemoveRightestLeft(curNode);
+
     curNode->data = properGrandChild->data; // Swap the actual data
-    //Temp is what should be put in the removed spot
-    curNode->left = RemoveNewHelper(curNode->left, curNode, properGrandChild->data);
+    if(curNode == root){ root = curNode; }// also set the structures root back if needed
 
+    //Temp is what should be put in the removed spot
+    // curNode->left = RemoveNewHelper(curNode->left, curNode, properGrandChild->data); // ?
     return curNode;
 }
 
 template <typename T>
-Node<T>* Tree<T>::FindRightestLeft(Node<T>* curNode){
+Node<T>* Tree<T>::RemoveRightestLeft(Node<T>* curNode){
 
     Node<T>* deleteParent = curNode;
     Node<T>* rightestLeft = curNode->left; // Only in 2 child call so this is guarenteed
-
-    cout << "cur left: " << *(rightestLeft->data) << endl;
+    // cout << "cur left: " << *(rightestLeft->data) << endl;
 
     while(rightestLeft->right != nullptr){
         deleteParent = rightestLeft; // Traverse as far as possible for best match
