@@ -31,16 +31,20 @@ int main(){
 
 
     cout << "Removing..." << endl << endl;
-    t.RemoveNew(&val7);
+    t.RemoveNew(&val7); // Two children
+    t.RemoveNew(&val6); // One children
+    t.RemoveNew(&val8); // Zero children
+    t.RemoveNew(&val3); // Two and Root
+    // Should be good
     cout << "Done removing" << endl;
+    t.PrintStructured();
 
-    // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
-    // cout << "Size: " << t.Size() << endl;
-    // // cout << t.EmptyTree() << endl;
+    cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
+    cout << "Size: " << t.Size() << endl;
+    // cout << t.EmptyTree() << endl;
     
     // t.PrintOrdered();
     // cout << endl;
-    t.PrintStructured();
     // t.PrintStructuredWithRootSizes();
 
     // int toFind = 5; // Test find
@@ -55,16 +59,17 @@ int main(){
     // // Ascending and descending things
     
     // // Descending already tested
-    // vector<Node<int>*> arr = t.GetAllDecending();
+    vector<Node<int>*> arr = t.GetAllDecending();
     
     // I feel weird abt this
-    // for(int i = 0; i < arr.size(); i++){
-    //     cout << *arr.at(i)->data << ',';
-    // } 
-    // cout << endl;
+    for(int i = 0; i < arr.size(); i++){
+        cout << *arr.at(i)->data << ',';
+    } 
+    cout << endl;
 
-    // t.EmptyTree(); 
-    // cout << "Size: " << t.Size() << endl;
+    cout << "Emptying tree " << endl;
+    t.EmptyTree(); 
+    cout << "Size: " << t.Size() << endl;
     return 0;
 }
 
