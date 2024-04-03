@@ -18,17 +18,21 @@ int main(){
 
     int val4Copy = 4;
 
-    cout << "Size: " << t.Size() << endl;
+    // cout << "Size: " << t.Size() << endl;
 
     t.Insert(&val5);
     t.Insert(&val7);
     t.Insert(&val3);
-    t.Insert(&val8);
+    // t.Insert(&val8);
     t.Insert(&val2);
     t.Insert(&val6);
     t.Insert(&val4);
+    t.PrintStructured();
 
-    t.RemoveNew(&val6);
+
+    cout << "Removing..." << endl << endl;
+    t.RemoveNew(&val7);
+    cout << "Done removing" << endl;
 
     // cout << "Found val4 : "<< (t.Find(&val4Copy)->data == &val4) << endl;
     // cout << "Size: " << t.Size() << endl;
