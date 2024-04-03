@@ -1,0 +1,61 @@
+int Remove(int toRemove){
+    // Cases
+    // leaf
+    // branch
+    // Root
+    // Empty Tree
+    // 2 vs 1 child
+    // Not in
+    
+    Find(Val); // Throw error if not found
+
+    node * curNode = Root;
+
+    // leaf (0 kids so stop at parent)
+    bool LesserNode = toRemove < curNode.data;
+    bool GreaterNode = toRemove > curNode.data;
+    bool LeftExisits = curNode.left != nullptr;
+    bool rightExists = curNode.right != nullptr;
+
+    // Get to parent of elem to Remove
+    while( (LesserNode && LeftExisits) || (GreaterNode && rightExists) ){
+        if(LesserNode){
+            curNode = curNode.left;
+        }
+        else{
+            curNode = curNode.right;
+        }
+
+        // Refresh checks (faster?)
+        LesserNode = toRemove < curNode.data;
+        GreaterNode = toRemove > curNode.data;
+        LeftExisits = curNode.left != nullptr;
+        rightExists = curNode.right != nullptr;
+    }
+
+    // curNode is parent here
+    int numChildren = 0; // Find number of children
+    numChildren += (curNode.Left != nullptr);
+    numChildren += (curNode.right != nullptr);
+
+    if(toRemove > curNode.data){
+        int rightData = curNode.right->data;
+        delete curNode.right;
+        curNode.right = nullptr; // I moved from uc (delete) but they sent mail at same address (make it nullptr)
+        return rightData;
+    }
+    else{
+        int leftData = curNode.left->data;
+        delete curNode.left;
+        curNode.left = nullptr;
+        return leftData;
+    }
+}
+
+
+/* Tree example
+       10       
+    5      12       
+   3 7   11  15     
+          13   
+*/

@@ -83,7 +83,7 @@ class LL{
         while(temp->next != nullptr && temp->next->data != val){
             temp = temp->next;
         } 
-        if(temp->next = nullptr){throw NotFoundException;}
+        if(temp->next == nullptr){throw NotFoundException;}
         int tempVal = temp->next->data;
         node* old = temp->next;
         temp->next = temp->next->next;

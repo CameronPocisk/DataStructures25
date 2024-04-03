@@ -8,15 +8,19 @@
 class DeckQueue{
     private:
         LL data;
-        int index = 0;
+        int index;
 
     public:
+        DeckQueue(){
+            index = 0;
+        }
         void Enqueue(int in);
 
         int Dequeue();
 
         // bool IsFull(){return index >= 52;}
         int length() {return index;}
+        bool IsEmpty(){return index <= 0;}
 };
 
 #endif

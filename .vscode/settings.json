@@ -46,6 +46,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "xutility": "cpp",
+<<<<<<< HEAD
         "charconv": "cpp",
         "cstring": "cpp",
         "ctime": "cpp",
@@ -65,5 +66,8 @@
         "xmemory": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp"
+=======
+        "ratio": "cpp"
+>>>>>>> 2f4c227eceb7f58bd8be9c705496f4180007fb24
     }
 }

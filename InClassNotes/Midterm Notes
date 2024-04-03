@@ -1,0 +1,13 @@
+void reverseQueue(){
+    if(isEmpty()){
+        throw UnderflowError;
+    }
+    Stack<int> stack;
+
+    while(!isEmpty()) {
+        Stack.Push(Pop())
+    }
+
+
+
+}
