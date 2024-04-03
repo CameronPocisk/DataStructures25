@@ -355,8 +355,6 @@ template <typename T>
 // Node<T>* Tree<T>::RemoveNew(Node<T>* curNode, Node<T>* parent, T* value){
 Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
     if(curNode == nullptr){
-        // How is this boutta happen
-        cout << "Null ptr return???" << endl;
         return nullptr;
     }
 
@@ -374,6 +372,7 @@ Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
     if(*(curNode->data) != *value || curNode == nullptr){
         throw NotFound();
     }
+
 
     // Print parent with its children
     cout << "Parent: " << *(parent->data) << " curNode: " << *(curNode->data) << endl;
@@ -435,20 +434,30 @@ Node<T>* Tree<T>::RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value){
     cout << "Two children" << endl;
 
     //Two children Not right atm
-    Node<T>* temp = FindRightestLeft(curNode->left);
-    curNode->data = temp->data;
+    Node<T>* properGrandChild = FindRightestLeft(curNode); // This tree will default to grabbing the righest node after one traversal
+    curNode->data = properGrandChild->data; // Swap the actual data
     //Temp is what should be put in the removed spot
-    curNode->left = RemoveNewHelper(curNode->left, curNode, temp->data);
+    curNode->left = RemoveNewHelper(curNode->left, curNode, properGrandChild->data);
 
     return curNode;
 }
 
 template <typename T>
 Node<T>* Tree<T>::FindRightestLeft(Node<T>* curNode){
-    while(curNode->right != nullptr){
-        curNode = curNode->right;
+
+    Node<T>* deleteParent = curNode;
+    Node<T>* rightestLeft = curNode->left; // Only in 2 child call so this is guarenteed
+
+    cout << "cur left: " << *(rightestLeft->data) << endl;
+
+    while(rightestLeft->right != nullptr){
+        deleteParent = rightestLeft; // Traverse as far as possible for best match
+        rightestLeft = rightestLeft->right;
     }
-    return curNode;
+
+    Node<T>* hold = rightestLeft;
+    RemoveNewHelper(rightestLeft, deleteParent, rightestLeft->data); // Sever the rightest left
+    return hold; // Return the held data for swapping
 }
 
 template <typename T>

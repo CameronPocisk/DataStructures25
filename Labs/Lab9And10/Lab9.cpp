@@ -23,7 +23,7 @@ int main(){
     t.Insert(&val5);
     t.Insert(&val7);
     t.Insert(&val3);
-    // t.Insert(&val8);
+    t.Insert(&val8);
     t.Insert(&val2);
     t.Insert(&val6);
     t.Insert(&val4);
