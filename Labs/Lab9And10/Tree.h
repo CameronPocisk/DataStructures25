@@ -126,7 +126,7 @@ public:
         root->height = depthNew(root, nullptr);
     }
 
-    Node<T>* RemoveNew(T* value);
+    Node<T>* Remove(T* value);
     Node<T>* RemoveNewHelper(Node<T>* curNode, Node<T>* parent, T* value);
     Node<T>* RemoveRightestLeft(Node<T>* curNode);
 

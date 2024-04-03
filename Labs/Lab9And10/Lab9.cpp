@@ -30,10 +30,10 @@ int main(){
 
 
     cout << "Removing..." << endl;
-    t.RemoveNew(&val7); // Two children
-    t.RemoveNew(&val6); // One children
-    t.RemoveNew(&val8); // Zero children
-    t.RemoveNew(&val3); // Two and Root
+    t.Remove(&val7); // Two children
+    t.Remove(&val6); // One children
+    t.Remove(&val8); // Zero children
+    t.Remove(&val3); // Two and Root
     // Should be good
     cout << "Done removing" << endl;
     t.PrintStructured();

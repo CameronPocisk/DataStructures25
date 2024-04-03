@@ -21,15 +21,14 @@ class Word{
     bool operator == (const Word& right){return (word == right.word);}
     bool operator != (const Word& right){return (word != right.word);}
     
-    // Overloading the "<<" operator as a member function
     
+    // Overloading the "<<" operator as a member function
     // Put friend fn inside of class
     friend ostream& operator<<(ostream& os, const Word& data) {
         os << data.word;
         return os;
     }
 
-// Definition of the << operator overload
 };
 
 
@@ -37,9 +36,9 @@ int main(){
 
     Tree<Word> allWords;
     string fileName;
-    // cout << "Enter name of file: ";
-    // cin >> fileName;
-    fileName = "mobydick.txt";
+    cout << "Enter name of file: ";
+    cin >> fileName;
+    // fileName = "mobydick.txt";
 
     ifstream readData;
     readData.open(fileName, ios::in);
@@ -55,13 +54,12 @@ int main(){
         try{
             Node<Word>* spot = allWords.Find(curWord);
             // If code gets here, found word
-            // (spot->data->frequency)++;; // wasnt able to use ++ op?
-            spot->data->incrementFreq();
+            spot->data->incrementFreq(); // ++ was weird
             delete curWord;
         }
         catch(NotFound &e){ // IF NOT FOUND
             cerr << e.what() << endl;
-            allWords.Insert(curWord);
+            allWords.Insert(curWord); // not in? add it!
         }
     }
     cout << endl << endl;
@@ -142,11 +140,9 @@ int main(){
             allWords.PrintStructuredWithRootSizes();
             break;
         }
-        default:
-            break;
         }
     }
-    
+    cout << "Ending program...";
 
     return 0;
 }

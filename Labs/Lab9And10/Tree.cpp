@@ -227,7 +227,7 @@ int Tree<T>::depthNew(Node<T>* curr, Node<T>* parent){
 }
 
 template <typename T>
-Node<T>* Tree<T>::RemoveNew(T* value){
+Node<T>* Tree<T>::Remove(T* value){
     Node<T>* temp = RemoveNewHelper(root, nullptr, value); // Remove
     root->height = depthNew(root, nullptr); // Balance
     return temp;
