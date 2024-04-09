@@ -65,12 +65,12 @@ int main(){
                 cin >> q;
             }
             // Using data from user make an item and add it to DLL
-            Item item(sku, desc, p, uom, lt, q);
-            instance.Insert(&item);
-            cout << endl;
-            cout << "SKU INSERTED: " << sku << endl;
+            Item* item = new Item(sku, desc, p, uom, lt, q);
+            instance.Insert(item);
+            
+            cout << endl << "SKU INSERTED: " << sku << endl;
             cout << "---------------------- ITEM ADDED TO LIST ----------------------" << endl;
-            item.DisplayItem();
+            item->DisplayItem();
 
             break;
         }

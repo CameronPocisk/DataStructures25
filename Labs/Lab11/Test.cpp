@@ -8,12 +8,20 @@ using namespace std;
 int main(){
     Item Test1("abcs");
     Item Test2("zyxs");
+    Item Test3("123");
 
-    string tested = string(Test1);
 
     HashTable<Item> instance(100);
     instance.Insert(&Test1);
     instance.Insert(&Test2);
+
+    try{
+        instance.GetItem(&Test3);
+        cout << "Found item" << endl;
+    }
+    catch(NotFound &e){
+        cout << "Not found" << endl;
+    }
 
     instance.printInTable();
 
