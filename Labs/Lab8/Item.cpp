@@ -1,6 +1,6 @@
 #include "Item.h"
 
-string Item::GetPartInfo(){
+std::string Item::GetPartInfo(){
     return "SKU: " + to_string(SKU) + ", Description: " + description;
 }
 

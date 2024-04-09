@@ -127,9 +127,10 @@ int main(){
     return 0;
 }
 
-// g++ -c Task3.cpp
-// g++ -o main.exe Task3.o
+// g++ -c Task3.cpp HashTable.cpp item.cpp
+// g++ -o main.exe Task3.o HashTable.o item.o
 // ./main.exe
+
 
 
 // For dom, mac is weird fr

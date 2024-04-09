@@ -2,6 +2,7 @@
 #define ITEM_H
 
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Item{
@@ -35,6 +36,10 @@ class Item{
         bool operator <(const Item &right) const;
         bool operator >(const Item &right) const;
         bool operator !=(const Item &right) const;
+
+        // operator string() const{
+        //     return SKU;
+        // }
 
 };
 
