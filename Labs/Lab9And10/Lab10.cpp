@@ -20,6 +20,18 @@ public:
         left = nullptr;
         right = nullptr;
     }
+
+    int balanceFactor(){
+        int rightHeight = 0;
+        int leftHeight = 0;
+        if(left != nullptr){
+            leftHeight = left->height;
+        }
+        if(right != nullptr){
+            rightHeight = right->height;
+        }
+        return rightHeight - leftHeight;
+    }
 };
 
 
@@ -321,11 +333,6 @@ public:
 
                 return depthNew(root, nullptr) - 1;
             }
-            if(child == parent->left){
-                cout << "parent->left" << endl;
-            } else {
-                cout << "parent->right" << endl;
-            }
 
             Node<T>* newChild = child->left->right;
             child->left->right = newChild->left;
@@ -403,39 +410,32 @@ public:
         int Lheight = depthNew(curr->left, curr); //Curr will become the next parent, to call for rotate later
         int Rheight = depthNew(curr->right, curr);
         if(Lheight > Rheight){
-            // cout << "Heights: " << Lheight << ", " << Rheight << endl;
             if(Lheight > Rheight + 1){ // need to rotate
                 int Lchild = depthNew(curr->left->left, curr->left);
                 int Rchild = depthNew(curr->left->right, curr->left);
                 if(Rchild > Lchild) {
-                    cout << "Current: " << *curr->data << endl;
-                    PrintStructuredHelper(root);
-                    cout << "LEFTRIGHT" << endl;
+                    // cout << "Current: " << *curr->data << endl;
+                    // PrintStructuredHelper(root);
                     Lheight = RotateLeftRight(parent, curr);
                 } else{
-                    cout << "Current: " << *curr->data << endl;
-                    PrintStructuredHelper(root);
-                    cout << "RIGHT" << endl;
+                    // cout << "Current: " << *curr->data << endl;
+                    // PrintStructuredHelper(root);
                     Lheight = RotateRight(parent, curr);
                 }
             } 
             curr->height = Lheight + 1;
             return Lheight + 1;
         } else if(Rheight > Lheight + 1){
-            // cout << "Heights: " << Lheight << ", " << Rheight << endl;
             if(Rheight > Lheight + 1){
             int Lchild = depthNew(curr->right->left, curr->right);
             int Rchild =  depthNew(curr->right->right, curr->right);
-            // cout << Lchild << ", " << Rchild << endl;
                 if(Lchild > Rchild) {
-                    cout << "Current: " << *curr->data << endl;
-                    PrintStructuredHelper(root);
-                    cout << "RIGHTLEFT" << endl;
+                    // cout << "Current: " << *curr->data << endl;
+                    // PrintStructuredHelper(root);
                     Rheight = RotateRightLeft(parent, curr); //Readjust height after rotate
                 } else{
-                    cout << "Current: " << *curr->data << endl;
-                    PrintStructuredHelper(root);
-                    cout << "LEFT" << endl;
+                    // cout << "Current: " << *curr->data << endl;
+                    // PrintStructuredHelper(root);
                     Rheight = RotateLeft(parent, curr); //Readjust height after rotate
                 }   
             }
@@ -572,14 +572,14 @@ int main(){
             delete curWord;
         }
         catch(NotFound &e){ // IF NOT FOUND
-            cerr << e.what() << endl;
+            // cerr << e.what() << endl;
             allWords.Insert(curWord); // not in? add it!
         }
     }
-    cout << endl << endl;
-    allWords.PrintStructuredWithRootSizes();
+    cout << endl;
+    // allWords.PrintStructuredWithRootSizes();
 
-    // allWords.PrintOrdered();
+    
 
     int userChoice = 0;
     while(userChoice != 7){
@@ -615,24 +615,28 @@ int main(){
         case 2:{
             vector<Node<Word>*> ascending = allWords.GetAllAscending();
             for(unsigned int i = 0; i < ascending.size(); i++){
-                cout << ascending[i]->data->getWord() << ": " << ascending[i]->data->getFrequency() << endl;
+                cout << ascending[i]->data->getWord() << ": " << ascending[i]->data->getFrequency();
+                cout << ", Depth: " << ascending[i]->height << ", Balance Factor: " << ascending[i]->balanceFactor() << endl;
             }
+            cout << endl;
             break;
         }
         case 3:{
             vector<Node<Word>*> descending = allWords.GetAllDecending();
             for(unsigned int i = 0; i < descending.size(); i++){
-                cout << descending[i]->data->getWord() << ": " << descending[i]->data->getFrequency() << endl;
+                cout << descending[i]->data->getWord() << ": " << descending[i]->data->getFrequency();
+                cout << ", Depth: " << descending[i]->height << ", Balance Factor: " << descending[i]->balanceFactor() << endl;
             }
+            cout << endl;
             break;
         }
         case 4:{
-            cout << "Size of tree:" << allWords.Size() << endl;
+            cout << "Size of tree:" << allWords.Size() << endl << endl;
             break;
         }
         case 5:{
             allWords.EmptyTree();
-            cout << "Tree is now empty" << endl;
+            cout << "Tree is now empty" << endl << endl;
             break;
         }
         case 6:{
@@ -647,10 +651,12 @@ int main(){
             catch(NotFound &e){
                 cout << "Word is not in tree" << endl;
             }
+            cout << endl;
             delete curWord;
             break;
         }
         case 7:{
+            cout << endl;
             allWords.PrintStructuredWithRootSizes();
             break;
         }
