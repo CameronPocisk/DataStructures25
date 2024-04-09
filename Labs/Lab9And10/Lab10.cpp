@@ -321,19 +321,27 @@ public:
 
                 return depthNew(root, nullptr) - 1;
             }
-            // cout << *child->data << endl;
-            // cout << *parent->data << endl;
+            if(child == parent->left){
+                cout << "parent->left" << endl;
+            } else {
+                cout << "parent->right" << endl;
+            }
 
             Node<T>* newChild = child->left->right;
-            child->left->left =  newChild->right;
             child->left->right = newChild->left;
-            //No child->right other wise wouldn't be in
+            //No child->left other wise wouldn't be in
 
             newChild->left = child->left;
+            child->left = newChild->right;
+
             newChild->right = child;
-            child->left = child->left->left;
             child = newChild;
-            parent->left = child;
+            
+            if(newChild->right == parent->left){
+                parent->left = child;
+            } else {
+                parent->right = child;
+            }
 
             return depthNew(child, parent) - 1;
 
@@ -362,11 +370,9 @@ public:
             if(parent == nullptr){
                 //Rotate around root
                 Node<T>* newRoot = root->right->left;
-                root->right->left = newRoot->left;
-                root->right->right = newChild->right;
-
+                root->right->left = newRoot->right;
                 newRoot->right = root->right;
-                root->right = root->right->right;
+                root->right = newRoot->left;
                 newRoot->left = root;
                 root = newRoot;
 
@@ -374,15 +380,19 @@ public:
             }
 
             Node<T>* newChild = child->right->left;
-            child->right->right =  newChild->left;
             child->right->left = newChild->right;
             //No child->right other wise wouldn't be in
 
             newChild->right = child->right;
+            child->right = newChild->left;
+
             newChild->left = child;
-            child->right = child->right->right;
             child = newChild;
-            parent->left = child;
+            if(newChild->left == parent->left){
+                parent->left = child;
+            } else {
+                parent->right = child;
+            }
 
             return depthNew(child, parent) - 1;
             //Balance depths
@@ -398,10 +408,13 @@ public:
                 int Lchild = depthNew(curr->left->left, curr->left);
                 int Rchild = depthNew(curr->left->right, curr->left);
                 if(Rchild > Lchild) {
-                    // PrintStructuredHelper(curr, parent);
+                    cout << "Current: " << *curr->data << endl;
+                    PrintStructuredHelper(root);
                     cout << "LEFTRIGHT" << endl;
                     Lheight = RotateLeftRight(parent, curr);
                 } else{
+                    cout << "Current: " << *curr->data << endl;
+                    PrintStructuredHelper(root);
                     cout << "RIGHT" << endl;
                     Lheight = RotateRight(parent, curr);
                 }
@@ -415,11 +428,13 @@ public:
             int Rchild =  depthNew(curr->right->right, curr->right);
             // cout << Lchild << ", " << Rchild << endl;
                 if(Lchild > Rchild) {
-                    PrintStructuredHelper(curr);
+                    cout << "Current: " << *curr->data << endl;
+                    PrintStructuredHelper(root);
                     cout << "RIGHTLEFT" << endl;
                     Rheight = RotateRightLeft(parent, curr); //Readjust height after rotate
                 } else{
-                    // PrintStructuredHelper(curr, parent);
+                    cout << "Current: " << *curr->data << endl;
+                    PrintStructuredHelper(root);
                     cout << "LEFT" << endl;
                     Rheight = RotateLeft(parent, curr); //Readjust height after rotate
                 }   
@@ -518,6 +533,7 @@ class Word{
     bool operator > (const Word& right){return (word > right.word);}
     bool operator == (const Word& right){return (word == right.word);}
     bool operator != (const Word& right){return (word != right.word);}
+    void operator ++(){frequency++;}
     
     
     // Overloading the "<<" operator as a member function
@@ -556,6 +572,7 @@ int main(){
             delete curWord;
         }
         catch(NotFound &e){ // IF NOT FOUND
+            cerr << e.what() << endl;
             allWords.Insert(curWord); // not in? add it!
         }
     }
