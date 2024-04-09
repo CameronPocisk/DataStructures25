@@ -3,6 +3,7 @@
 
 
 #include <iostream>
+#include "Exceptions.h"
 using namespace std;
 
 enum{
@@ -17,16 +18,13 @@ class HashTable{
     int length = 0;
     
     int Hash(string in){
-
         int hashSum = 0;
         for(int i = 0; i < in.length(); i++){
             hashSum += in[i];
         }
-        cout << "Hashed to: " << hashSum % size << " From sum: " << hashSum << endl;
+        // cout << "Hashed to: " << hashSum % size << " From sum: " << hashSum << endl;
         return hashSum % size;
-        // I think that this is an actually good has fn but will not be used for now since its hardr
     }
-
 
  public:
     HashTable(int s = DefaultMaxSize){
@@ -38,7 +36,7 @@ class HashTable{
         }
     }
     ~HashTable(){
-        cout << "Deleting..." << endl;
+        // cout << "Deleting..." << endl;
         // // THis may need to happen... but maybe not
         // for(int i = 0; i < size; i++){ // Deallocate the memory (what is inside the array needs to be freed)
         //     if(*(hashStorage + i) != nullptr){
@@ -47,19 +45,21 @@ class HashTable{
         //     }
         // }
         delete[] hashStorage; // Is the above code needed? (and this)
-        cout << "Deleted" << endl;
+        // cout << "Deleted" << endl;
     }
     
     void PrintTable(){
         for(int i = 0; i < size; i++){
             cout << i << "th value: ";
             if(*(hashStorage + i) != nullptr){
-                cout << **(hashStorage + i) << ", ";
+                string AsString = string(**(hashStorage + i)); // For template 
+                cout << AsString << ", ";
             }
             else{cout << "_, "; }
             cout << endl;
         }
     }
+    void printInTable();
     
     void Insert(T* in);
     T* Remove(T* in);

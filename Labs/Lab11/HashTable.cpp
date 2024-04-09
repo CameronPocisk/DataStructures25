@@ -1,76 +1,81 @@
 #include "HashTable.h"
 
-#include <iostream>
-using namespace std;
+// using namespace std;
 
 template <typename T>
 void HashTable<T>::Insert(T* in){
-    cout << "Inserting... " << endl;
-    // T inDeref = *in;
-    // cout << inDeref;
+    // cout << "Inserting... " << endl;
     // // if(IsFull){
     // //     throw IsFull;
     // // }
-    // string newIn = to_string(inDeref);
-    string hashIn;
-    hashIn = *in;
-    int space = Hash(hashIn);
-    // int space = Hash(*in);
-    cout << "space " << space << endl;
-    length++;
-    if(*(hashStorage + space) == nullptr) {
-        *(hashStorage + space) = in;
-        cout << "Inserted" << endl;
-        return;
-    }
+
+    string hashIn = string(*in); // Conversion for expected operator
+    int index = Hash(hashIn);
+    // cout << "space: " << index << endl;
     
-    int index = space;
+    length++;
     while(*(hashStorage + index) != nullptr){
         index = (index + 1) % size;
     }
     *(hashStorage + index) = in;
-    cout << "Inserted" << endl;
+    // cout << "Inserted" << endl;
     return;
 }
 
 template <typename T>
 T* HashTable<T>::Remove(T *in){
-    // if(IsEmpty()){
-    //     throw IsEmpty;
-    // }
     // if(GetItem() == nullptr){
     //     return nullptr;
     // }
-    string hashIn;
-    hashIn = *in;
+    string hashIn = string(*in);
     int index = Hash(hashIn);
-    // int index = Hash(*in);
-
-    while(**(hashStorage + index) != *in){
+    
+    int notFoundCount = 0;
+    // itterate while there is nothing or you didnt find it
+    while(*(hashStorage + index) == nullptr || **(hashStorage + index) != *in){
         index = (index + 1) % size;
+        
+        if(notFoundCount > size){
+            throw NotFound(); // Was not in the whole list
+        }
+        notFoundCount++;
     }
 
     T* temp = *(hashStorage + index);
+    // cout << "temp: "  << *temp << endl;
     *(hashStorage + index) = nullptr;
     length--;
-    cout << "temp"  << temp << endl;
     return temp;
 };
 
 template<typename T>
 T* HashTable<T>::GetItem(T* toFind){
-    string hashIn;
-    hashIn = *toFind;
+    
+    string hashIn =  string(*toFind);
     int index = Hash(hashIn);
 
-    cout << "Finding..." << endl;
-    while(**(hashStorage + index) != *toFind){
+    int notFoundCount = 0;
+    while(*(hashStorage + index) == nullptr || **(hashStorage + index) != *toFind){
         index = (index + 1) % size;
+
+        if(notFoundCount > size){
+            throw NotFound(); // Was not in the whole list
+        }
+        notFoundCount++;
     }
 
-    cout << "Found" << endl;
     // Got to the value
     return *(hashStorage + index);
+}
+template<typename T>
+void HashTable<T>::printInTable(){
+    for(int i = 0; i < size; i++){
+        if(*(hashStorage + i) != nullptr){
+            string AsString = string(**(hashStorage + i));
+            cout << AsString << ", ";
+        }
+    }
+    cout << endl;
 }
 
 template<typename T>

@@ -34,18 +34,18 @@ void Item::DisplayItem(){
 
 
 // Operator overloading for DLL work
-bool Item::operator ==(const Item &right) const{
-    return SKU == right.SKU;
-}
+// bool Item::operator ==(const Item &right) const{
+//     return SKU == right.SKU;
+// }
 
-bool Item::operator <(const Item &right) const{
-    return SKU < right.SKU;
-}
+// bool Item::operator <(const Item &right) const{
+//     return SKU < right.SKU;
+// }
 
-bool Item::operator >(const Item &right) const{
-    return SKU > right.SKU;
-}
+// bool Item::operator >(const Item &right) const{
+//     return SKU > right.SKU;
+// }
 
-bool Item::operator !=(const Item &right) const{
-    return SKU != right.SKU;
-}
+// bool Item::operator !=(const Item &right) const{
+//     return SKU != right.SKU;
+// }

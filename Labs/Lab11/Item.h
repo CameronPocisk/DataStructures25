@@ -2,7 +2,7 @@
 #define ITEM_H
 
 #include <iostream>
-#include <string>
+#include <string> // needed?
 using namespace std;
 
 class Item{
@@ -32,15 +32,13 @@ class Item{
         bool IsAvailable(int desiredDate);
         void DisplayItem();
 
-        bool operator ==(const Item &right) const;
-        bool operator <(const Item &right) const;
-        bool operator >(const Item &right) const;
-        bool operator !=(const Item &right) const;
+        bool operator ==(const Item &right) const{ return SKU == right.SKU;}
+        bool operator !=(const Item &right) const{ return SKU != right.SKU;}
 
-        // operator string() const{
-        //     return SKU;
-        // }
+        bool operator <(const Item &right) const{ return SKU < right.SKU;}
+        bool operator >(const Item &right) const{ return SKU > right.SKU;}
 
+        operator string() const{ return SKU;}
 };
 
 
