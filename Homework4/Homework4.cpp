@@ -17,7 +17,6 @@ int main(){
         for(int i = 0; i < size; i ++){
             if(arr[i] == randomNum) {
                 alreadyFound = true;
-                cout << "already found";
                 break;
             }
         }
@@ -37,43 +36,59 @@ int main(){
 
     for(int i = 0; i < 50; i++){
         linearSum += linearHash.Insert(arr[i]);
-        twoDimSum += twoDimHash.Insert(arr[i]);
         tree.Insert(&arr[i]);
+
+        try{
+            twoDimSum += twoDimHash.Insert(arr[i]);
+        } catch (OverflowError &e) {
+            cerr << e.what() << endl;
+        }
     }
 
     for(int i = 0; i < 50; i++){
         if(i % 7 == 0){
             linearSum += linearHash.Remove(arr[i]);
-            twoDimSum += twoDimHash.Remove(arr[i]);
             tree.Remove(&arr[i]);
+
+            try{
+                twoDimSum += twoDimHash.Remove(arr[i]);
+            }
+            catch(NotFound &e){
+                cerr << e.what() << endl;
+            }
         }
     }
 
     for(int i = 50; i < 100; i++){
         linearSum += linearHash.Insert(arr[i]);
-        twoDimSum += twoDimHash.Insert(arr[i]);
         tree.Insert(&arr[i]);
+
+        try{
+            twoDimSum += twoDimHash.Insert(arr[i]);
+        } catch (OverflowError &e) {
+            cerr << e.what() << endl;
+        }
     }
 
     for(int i = 50; i < 100; i++){
         if(i % 9 == 0){
             linearSum += linearHash.Remove(arr[i]);
-            twoDimSum += twoDimHash.Remove(arr[i]);
             tree.Remove(&arr[i]);
+            try{
+                twoDimSum += twoDimHash.Remove(arr[i]);
+            }
+            catch(NotFound &e){
+                cerr << e.what() << endl;
+            }
         }
     }
-
-    linearHash.PrintTable();
-    twoDimHash.PrintTable();
-    tree.PrintStructured();
-
 
     int treeSum = tree.GetSpotsChecked();
 
 
-    cout << "Linear:" << linearSum << endl;
-    cout << "TwoDim: " << twoDimSum << endl;
-    cout << "Tree: " << treeSum << endl;
+    cout << "Linear Spots Checked:" << linearSum << endl;
+    cout << "TwoDim Spots Checked: " << twoDimSum << endl;
+    cout << "Binary Tree Spots Checked: " << treeSum << endl;
 
 
 
