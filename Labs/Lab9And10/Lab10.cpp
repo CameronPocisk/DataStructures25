@@ -333,14 +333,6 @@ public:
 
                 return depthNew(root, nullptr) - 1;
             }
-<<<<<<< HEAD
-            if(child == parent->left){
-                // cout << "parent->left" << endl;
-            } else {
-                // cout << "parent->right" << endl;
-            }
-=======
->>>>>>> 1173c2bb648924afd81a24c65f6e64e3f7e5c347
 
             Node<T>* newChild = child->left->right;
             child->left->right = newChild->left;
@@ -424,18 +416,12 @@ public:
                 if(Rchild > Lchild) {
                     // cout << "Current: " << *curr->data << endl;
                     // PrintStructuredHelper(root);
-<<<<<<< HEAD
                     // cout << "LEFTRIGHT" << endl;
-=======
->>>>>>> 1173c2bb648924afd81a24c65f6e64e3f7e5c347
                     Lheight = RotateLeftRight(parent, curr);
                 } else{
                     // cout << "Current: " << *curr->data << endl;
                     // PrintStructuredHelper(root);
-<<<<<<< HEAD
                     // cout << "RIGHT" << endl;
-=======
->>>>>>> 1173c2bb648924afd81a24c65f6e64e3f7e5c347
                     Lheight = RotateRight(parent, curr);
                 }
             } 
@@ -448,18 +434,12 @@ public:
                 if(Lchild > Rchild) {
                     // cout << "Current: " << *curr->data << endl;
                     // PrintStructuredHelper(root);
-<<<<<<< HEAD
                     // cout << "RIGHTLEFT" << endl;
-=======
->>>>>>> 1173c2bb648924afd81a24c65f6e64e3f7e5c347
                     Rheight = RotateRightLeft(parent, curr); //Readjust height after rotate
                 } else{
                     // cout << "Current: " << *curr->data << endl;
                     // PrintStructuredHelper(root);
-<<<<<<< HEAD
                     // cout << "LEFT" << endl;
-=======
->>>>>>> 1173c2bb648924afd81a24c65f6e64e3f7e5c347
                     Rheight = RotateLeft(parent, curr); //Readjust height after rotate
                 }   
             }
