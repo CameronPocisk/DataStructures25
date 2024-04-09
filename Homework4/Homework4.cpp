@@ -92,10 +92,9 @@ int main(){
 
 
 
-
     return 0;
 }
 
-// g++ -c Homework4.cpp HashLinear.cpp HashTwoDim.cpp Tree.cpp
-// g++ -o main.exe Homework4.o HashLinear.o HashTwoDim.o Tree.o
+// g++ -c Homework4.cpp HashLinear.cpp HashTwoDim.cpp
+// g++ -o main.exe Homework4.o HashLinear.o HashTwoDim.o
 // ./main.exe
