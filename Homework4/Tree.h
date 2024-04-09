@@ -333,11 +333,6 @@ public:
 
                 return depthNew(root, nullptr) - 1;
             }
-            if(child == parent->left){
-                cout << "parent->left" << endl;
-            } else {
-                cout << "parent->right" << endl;
-            }
 
             Node<T>* newChild = child->left->right;
             child->left->right = newChild->left;
@@ -420,10 +415,8 @@ public:
                 int Lchild = depthNew(curr->left->left, curr->left);
                 int Rchild = depthNew(curr->left->right, curr->left);
                 if(Rchild > Lchild) {
-                    cout << "LEFTRIGHT" << endl;
                     Lheight = RotateLeftRight(parent, curr);
                 } else{
-                    cout << "RIGHT" << endl;
                     Lheight = RotateRight(parent, curr);
                 }
             } 
@@ -436,10 +429,8 @@ public:
             int Rchild =  depthNew(curr->right->right, curr->right);
             // cout << Lchild << ", " << Rchild << endl;
                 if(Lchild > Rchild) {
-                    cout << "RIGHTLEFT" << endl;
                     Rheight = RotateRightLeft(parent, curr); //Readjust height after rotate
                 } else{
-                    cout << "LEFT" << endl;
                     Rheight = RotateLeft(parent, curr); //Readjust height after rotate
                 }   
             }

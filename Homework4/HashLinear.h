@@ -27,18 +27,6 @@ class HashLinear{
             hashStorage[i] = 0;
         }
     }
-    ~HashLinear(){
-        cout << "Deleting..." << endl;
-        // // THis may need to happen... but maybe not
-        // for(int i = 0; i < size; i++){ // Deallocate the memory (what is inside the array needs to be freed)
-        //     if(*(hashStorage + i) != nullptr){
-        //         delete *(hashStorage + i); // If you had to do the new * thing, delete it
-        //         *(hashStorage + i) = nullptr; // (Delete does not do this)
-        //     }
-        // }
-        cout << "Deleted" << endl;
-    }
-    
     
     void PrintTable(){
         for(int i = 0; i < DefaultMaxSize; i++){

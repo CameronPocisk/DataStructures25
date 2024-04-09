@@ -1,7 +1,7 @@
+#include "Item.h"
+// #include "Item.cpp"
 #include "HashTable.h"
 #include "HashTable.cpp"
-#include "Item.h"
-#include "Item.cpp"
 #include "Exceptions.h"
 
 using namespace std;
@@ -13,12 +13,8 @@ enum{
     IsInList = 3,
     IsEmpty = 4,
     Size = 5,
-    SeeNext = 6,
-    SeePrev = 7,
-    SeeAt = 8,
-    Reset = 9,
-    DisplayList = 10,
-    Quit = 11,
+    DisplayList = 6,
+    Quit = 7,
 };
 
 
@@ -27,17 +23,21 @@ int main(){
     // cout << __cplusplus << endl;
 
     // Inits :)
-    HashTable<Item> instance;
+    HashTable<Item> instance(100);
     int userChoice = 0;
     int lt, q = 0;
     double p;
     string sku, desc, uom, qChoice;
 
+    // Item Test("zesty");
+    // instance.Insert(&Test);
+
+
     // Valid user choice and act accoringly
-    while(userChoice != 11){
+    while(userChoice != Quit){
         cout << endl;
         cout << "Menu:" << endl;
-        cout << "1: AddItem, 2: GetItem, 3:IsInList, 4: IsEmpty, 5: Size, 6: SeeNext, 7: SeePrev, 8: SeeAt, 9: Reset, 10: Display List, 11: Quit" << endl;
+        cout << "1: AddItem, 2: GetItem, 3:IsInList, 4: IsEmpty, 5: Size, 6: Display List, 7: Quit" << endl;
         cout << "Enter your choice: ";
         cin >> userChoice;
         cout << endl;
@@ -65,10 +65,12 @@ int main(){
                 cin >> q;
             }
             // Using data from user make an item and add it to DLL
-            Item item(sku, desc, p, uom, lt, q);
-            instance.Insert(&item);
-            cout << endl;
+            Item* item = new Item(sku, desc, p, uom, lt, q);
+            instance.Insert(item);
+            
+            cout << endl << "SKU INSERTED: " << sku << endl;
             cout << "---------------------- ITEM ADDED TO LIST ----------------------" << endl;
+            item->DisplayItem();
 
             break;
         }
@@ -81,6 +83,7 @@ int main(){
                 // Remove the item if possible using member funtion
                 Item bruh(*(instance.Remove(&item)));
                 cout << "---------------------- REMOVING ITEM: " << bruh.GetPartInfo();
+                bruh.DisplayItem();
             } catch(UnderflowError &e){
                 cerr << e.what();
             } catch(NotFound &e){
@@ -96,14 +99,11 @@ int main(){
             cin >> sku;
             Item item(sku);
             try{
-                // Watch out for underflow, otherwise follow DLL implementation
-                if(instance.GetItem(&item)){
-                    cout << "Sku " << sku << " is in list." << endl;
-                } else {
-                    cout << "Sku " << sku << " is NOT in list." << endl;
-                }
-            } catch(UnderflowError &e) {
-                cerr << e.what() << endl;
+                instance.GetItem(&item);
+                cout << "Sku " << sku << " is in list." << endl;
+            } catch(NotFound &e){
+                // cerr << e.what() << endl;
+                cout << "Sku " << sku << " not found." << endl;
             }
             break;
         }
@@ -118,17 +118,24 @@ int main(){
         case Size:
             cout << "---------------------- List Size: " << instance.GetLength() << " ----------------------" << endl;
             break;
-        default:
+        case DisplayList:
+            cout << "---------------------- Displaying SKUs ----------------------" << endl;
+            instance.printInTable();
+            cout << "------------------------- Displayed -------------------------" << endl;
+            break;
+        case Quit:
+            cout << "BYE BYE" << endl;
             break;
         }
+        
     }
 
 
     return 0;
 }
 
-// g++ -c Task3.cpp HashTable.cpp item.cpp
-// g++ -o main.exe Task3.o HashTable.o item.o
+// g++ -c Task3.cpp HashTable.cpp Item.cpp
+// g++ -o main.exe Task3.o HashTable.o Item.o 
 // ./main.exe
 
 
