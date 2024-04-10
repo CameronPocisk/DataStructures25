@@ -16,19 +16,15 @@ public:
     // An array as pointer of linked lists storing T*'s
     int size;
     int length;
-    LL<T>* allLLs;
+    LL<T> *allLLs;
 
     ChainedHash(int sizeIn = DefaultSize){
         size = sizeIn;
         allLLs = new LL<T>[sizeIn]; // New mem alloc of size DefaultSize of LL<T*>'s
-        for(int i = 0; i < size; i++)
-            (allLLs + i) = nullptr;
-        
         // cout << "basic hash created" << endl;
     }
     ~ChainedHash(){
         delete[] allLLs; // Delete the memory that was allocated
-        cout << "Destroyed!" << endl;
     }
 
     int Hash(string in){

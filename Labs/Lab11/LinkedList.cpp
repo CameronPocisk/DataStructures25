@@ -72,6 +72,22 @@ void LL<T>::RemoveItem(T* toRemove){
 
     temp->next = temp->next->next; // Replace items ptr with its next
 }
+template <typename T>
+T* LL<T>::GetValue(T* toFind){
+    if(head == nullptr){ return nullptr; }// Head case
+
+    Node<T>* cur = head;
+    while(cur != nullptr && *(cur->data) != *toFind){
+        cout << *(cur->data) << ", ";
+        cur = cur->next; // go to the next!
+    }
+
+    if(cur == nullptr){ // Reached end of list
+        return nullptr;
+    }
+    // not at end case so found case
+    return cur->data;
+}
 
 template <typename T>
 void LL<T>::MakeEmpty(){

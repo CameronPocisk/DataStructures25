@@ -39,6 +39,7 @@ public:
     void RemoveEnd();
     void RemoveFront();
     void RemoveItem(T* toRemove);
+    T* GetValue(T* toFind);
 
     int Length(){ return length; }
 
@@ -58,7 +59,6 @@ public:
             cout << *(temp->data) << ", ";
             temp = temp->next;
         }
-        cout << endl;
     }
 };
 
