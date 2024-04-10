@@ -78,7 +78,6 @@ T* LL<T>::GetValue(T* toFind){
 
     Node<T>* cur = head;
     while(cur != nullptr && *(cur->data) != *toFind){
-        cout << *(cur->data) << ", ";
         cur = cur->next; // go to the next!
     }
 

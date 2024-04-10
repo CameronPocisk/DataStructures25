@@ -15,8 +15,10 @@ void HashTable<T>::Insert(T* in){
     // cout << "space: " << index << endl;
     
     length++;
+    numComps++;
     while(*(hashStorage + index) != nullptr){
         index = (index + 1) % size;
+        numComps++;
     }
     *(hashStorage + index) = in;
     // cout << "Inserted" << endl;
@@ -33,6 +35,7 @@ T* HashTable<T>::Remove(T *in){
     
     int notFoundCount = 0;
     // itterate while there is nothing or you didnt find it
+    numComps++;
     while(*(hashStorage + index) == nullptr || **(hashStorage + index) != *in){
         index = (index + 1) % size;
         
@@ -40,6 +43,7 @@ T* HashTable<T>::Remove(T *in){
             throw NotFound(); // Was not in the whole list
         }
         notFoundCount++;
+        numComps++;
     }
 
     T* temp = *(hashStorage + index);
@@ -56,6 +60,7 @@ T* HashTable<T>::GetItem(T* toFind){
     int index = Hash(hashIn);
 
     int notFoundCount = 0;
+    numComps++;
     while(*(hashStorage + index) == nullptr || **(hashStorage + index) != *toFind){
         index = (index + 1) % size;
 
@@ -63,8 +68,8 @@ T* HashTable<T>::GetItem(T* toFind){
             throw NotFound(); // Was not in the whole list
         }
         notFoundCount++;
+        numComps++;
     }
-
     // Got to the value
     return *(hashStorage + index);
 }

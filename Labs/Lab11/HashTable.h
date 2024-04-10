@@ -15,6 +15,7 @@ class HashTable{
     T** hashStorage; // Pointer to (Array) of T pointers
     int size = 100;
     int length = 0;
+    int numComps= 0;
     
     int Hash(string in){
         int hashSum = 0;
@@ -65,6 +66,7 @@ class HashTable{
     T* GetItem(T* toFind);
     int GetLength(){return length;}
     bool IsEmpty();
+    int GetNumComps(){ return numComps; }
 
 };
 

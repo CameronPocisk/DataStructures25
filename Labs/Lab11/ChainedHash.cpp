@@ -8,6 +8,7 @@ void ChainedHash<T>::Insert(T* toInsert){
     int index = Hash(toString);
 
     // cout << "inserted at " << index << endl;
+    numComps++;
     (allLLs + index)->InsertEnd(toInsert);
     // *(allLLs + index).InsertEnd(toInsert);
 }
@@ -15,7 +16,9 @@ void ChainedHash<T>::Insert(T* toInsert){
 template <typename T>
 T*ChainedHash<T>:: Remove(T* toRemove){
     for(int i = 0; i < size; i++){
+        numComps++;
         if(! (allLLs + i)->IsEmpty()){
+            numComps++;
             (allLLs + i)->RemoveItem(toRemove);
         }
     }
@@ -25,9 +28,12 @@ T*ChainedHash<T>:: Remove(T* toRemove){
 template <typename T>
 T*ChainedHash<T>:: GetItem(T* toFind){
     for(int i = 0; i < size; i++){
+        numComps++;
         if(!(allLLs + i)->IsEmpty()){
+            numComps++;
             T* foundPtr = (allLLs + i)->GetValue(toFind);
             if(foundPtr != nullptr){ // Found it!!
+                numComps++;
                 return foundPtr;
             }
         }

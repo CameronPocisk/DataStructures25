@@ -10,13 +10,14 @@
 // My linker is weird
 
 enum{
-    SKUSize = 50,
+    NumSkus = 200,
+    HashSize = 250,
 };
 
 using namespace std;
 
 void FillSkus(string values[]){
-    for(int i = 0; i < SKUSize; i++){
+    for(int i = 0; i < NumSkus; i++){
 
         // Genearte random string of cap lets and nums
         string sku;
@@ -33,25 +34,29 @@ void FillSkus(string values[]){
 
 int main(){
 
-    string skus[SKUSize];
+    string skus[NumSkus];
     FillSkus(skus);
-    // for(int i = 0; i < SKUSize; i++)
-    //     cout << skus[i] << ", ";
-    // cout << endl;
 
-    HashTable<string> linearProber(100);
-    ChainedHash<string> chainer(100);
+    HashTable<string> linearProber(HashSize);
+    ChainedHash<string> chainer(HashSize);
 
     // Add SKUS to each
-
-    for(int i = 0; i < SKUSize; i++){
-        // cout << skus[i] << ", ";
+    for(int i = 0; i < NumSkus; i++){
         linearProber.Insert(&skus[i]);
         chainer.Insert(&skus[i]);
     }
     // linearProber.printInTable();
     // chainer.PrintItems();
-    
+
+    // Call find on all items
+    for(int i = 0; i < NumSkus; i++){
+        linearProber.GetItem(&skus[i]);
+        chainer.GetItem(&skus[i]);
+    }
+
+    cout << "Linear probling comps: " << linearProber.GetNumComps() << endl;
+    cout << "Chain hash comps: " << chainer.GetNumComps() << endl;
+
 
     cout << "prorgram finished... ";
     return 0;

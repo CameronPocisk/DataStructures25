@@ -14,9 +14,10 @@ template <typename T>
 class ChainedHash{
 public:
     // An array as pointer of linked lists storing T*'s
+    LL<T> *allLLs;
     int size;
     int length;
-    LL<T> *allLLs;
+    int numComps = 0;
 
     ChainedHash(int sizeIn = DefaultSize){
         size = sizeIn;
@@ -43,6 +44,7 @@ public:
     T* GetItem(T* toFind);
     int GetLength(){ return length; }
     void PrintItems();
+    int GetNumComps(){ return numComps; }
 };
 
 #endif
