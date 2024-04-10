@@ -1,7 +1,6 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
-
 #include <iostream>
 #include "Exceptions.h"
 using namespace std;

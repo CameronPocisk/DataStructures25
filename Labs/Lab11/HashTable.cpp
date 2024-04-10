@@ -10,7 +10,7 @@ void HashTable<T>::Insert(T* in){
     // // }
 
     string hashIn = string(*in); // Conversion for expected operator
-    cout << "Stringed to " << hashIn << endl;
+    // cout << "Stringed to " << hashIn << endl;
     int index = Hash(hashIn);
     // cout << "space: " << index << endl;
     
