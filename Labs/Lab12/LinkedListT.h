@@ -135,15 +135,17 @@ public:
 
 
     void PrintList(){
+        
         if(IsEmpty()){
+            cout << "was empty" << endl;
             return;
         }
 
         Node<T>* temp = head;
         while(temp != nullptr){
-            string asData = string(temp->data); // weird here so....
-            cout << asData << ", ";
-            // cout << temp->data << ", ";
+            // string asData = string(temp->data); // weird here so....
+            // cout << asData << ", ";
+            cout << temp->data << ", ";
             temp = temp->next;
         }
     }

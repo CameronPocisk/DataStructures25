@@ -20,6 +20,10 @@ class Vertex{
     operator string() const{
         string asString = string(info);
         return asString; }
+    
+    bool operator !=(const Vertex<T> &right)const { return info != right.info; }
+    bool operator ==(const Vertex<T> &right)const { return info == right.info; }
+
 };
 
 template <typename T>
@@ -27,7 +31,7 @@ class AdjGraph{
     private:
         LL<Vertex<T>> nodes;
     
-        Vertex<T> getToTarget(T toFind){ return nodes.GetValue(&toFind); }
+        Vertex<T> getToTarget(T toFind){ return nodes.GetValue(toFind); }
         
     public:
         AdjGraph(){
@@ -57,10 +61,12 @@ class AdjGraph{
     }
     void addEdge(T target, T edge){
         // Get Vetex that we are adding to
-        Vertex<T> targetNode = nodes.GetValue(target);
+        Vertex<T> targetNode = (nodes.GetValue(target));
+        cout << "found node: " << targetNode.info << endl;
         // Insert edge to LL
         targetNode.edges.InsertEnd(edge);
     }
+    
     void removeEdge(T target, T edge){
         // Get to Vertex that needs removing
         Vertex<T> targetNode = nodes.GetValue(target);
@@ -84,6 +90,7 @@ class AdjGraph{
     LL<T> outEdges(T target){
         LL<T> hold; //Return list of the edges Vertex has (simple one)
         Vertex<T> current = getToTarget(target);
+        cout << current.edges.Length() << endl;
         for(int i = 0; i < current.edges.Length(); i++) {
             hold.InsertEnd(current.edges.GetIndex(i));
         }

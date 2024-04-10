@@ -16,6 +16,12 @@ int main(){
     instance.addVertex(5);
 
     instance.PrintVerticies();
+
+    instance.addEdge(1, 3);
+
+
+    (instance.outEdges(1)).PrintList();
+    cout << "Length of edges " << (instance.outEdges(1)).Length();
     
     // LL<int> tester;
     // tester.InsertEnd(5);
@@ -90,15 +96,15 @@ int main(){
             cout << "Enter the vertex to find the out edges of: ";
             int userVertex;
             cin >> userVertex;
-            LL<T> list = instance.outEdges(userVertex);
-            cout << "Out edges of " << userVertex << ": " << list.PrintList() << endl;
+            cout << "Out edges of " << userVertex << ": " << endl;
+            cout << instance.outEdges(userVertex).PrintList(); << endl;
             break;
         case 7:
             cout << "Enter the vertex to find the in edges of: ";
             int userVertex;
             cin >> userVertex;
-            LL<T> list = instance.inEdges(userVertex);
-            cout << "In edges of " << userVertex << ": " << list.PrintList() << endl;
+            cout << "In edges of " << userVertex << ": " << endl;
+            cout << instance.inEdges(userVertex) << endl;
             break;
         case 8:
             instance.PrintVerticies();
