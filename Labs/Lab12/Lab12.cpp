@@ -14,20 +14,24 @@ int main(){
     instance.addVertex(3);
     instance.addVertex(2);
     instance.addVertex(5);
-
+    instance.addEdge(3, 5);
+    instance.addEdge(1, 2);
+    // Vertex<int> i = instance.nodes.GetIndex(1);
+    // cout << "hi" << endl;
+    // cout << i.info << endl;
     instance.PrintVerticies();
 
-    instance.addEdge(1, 3);
+    // instance.addEdge(1, 3);
 
 
-    (instance.outEdges(1)).PrintList();
-    cout << "Length of edges " << (instance.outEdges(1)).Length();
+    // (instance.outEdges(1)).PrintList();
+    // cout << "Length of edges " << (instance.outEdges(1)).Length();
     
     // LL<int> tester;
     // tester.InsertEnd(5);
     // tester.PrintListr();
     
-    /*
+    
     int userChoice = 0;
     
     while(userChoice != 9){
@@ -41,26 +45,28 @@ int main(){
         cout << "Press 8 to print adjacency list." << endl;
         cout << "Press 9 to quit." << endl;
         cin >> userChoice;
-        while(userChoice < 1 && userChoice > 9){
-            cout << "Please enter a number 1-9: "
+        while(userChoice < 1 || userChoice > 9){
+            cout << "Please enter a number 1-9: ";
             cin >> userChoice;
         }
 
         switch (userChoice)
         {
-        case 1:
+        case 1:{
             cout << "Enter vertex to add: ";
             int vertexAdd;
             cin >> vertexAdd;
             instance.addVertex(vertexAdd);
             break;
-        case 2:
+        }
+        case 2:{
             cout << "Enter vertex to remove: ";
             int vertexRemove;
-            cin >> vertexRem;
-            instance.RemoveVertex(vertexRem);
+            cin >> vertexRemove;
+            instance.RemoveVertex(vertexRemove);
             break;
-        case 3:
+        }
+        case 3:{
             cout << "Enter starting vertex: ";
             int start;
             cin >> start;
@@ -69,7 +75,8 @@ int main(){
             cin >> end;
             instance.addEdge(start, end);
             break;
-        case 4:
+        }
+        case 4:{
             cout << "Enter starting vertex: ";
             int start;
             cin >> start;
@@ -78,7 +85,8 @@ int main(){
             cin >> end;
             instance.removeEdge(start, end);
             break;
-        case 5:
+        }
+        case 5:{
             cout << "Enter starting vertex: ";
             int start;
             cin >> start;
@@ -92,26 +100,30 @@ int main(){
                 cout << "That egde is not in the graph." << endl;
             }
             break;
-        case 6:
+        }
+        case 6:{
             cout << "Enter the vertex to find the out edges of: ";
             int userVertex;
             cin >> userVertex;
             cout << "Out edges of " << userVertex << ": " << endl;
-            cout << instance.outEdges(userVertex).PrintList(); << endl;
+            instance.outEdges(userVertex).PrintList();
             break;
-        case 7:
+        }
+        case 7:{
             cout << "Enter the vertex to find the in edges of: ";
             int userVertex;
             cin >> userVertex;
             cout << "In edges of " << userVertex << ": " << endl;
-            cout << instance.inEdges(userVertex) << endl;
+            instance.inEdges(userVertex).PrintList();
             break;
-        case 8:
+        }
+        case 8:{
             instance.PrintVerticies();
             break;
         }
+        }
     }
-    */
+    
     cout << endl << "Ending program..." << endl;
     return 0;
 }

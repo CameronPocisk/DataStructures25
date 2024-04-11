@@ -28,7 +28,7 @@ class Vertex{
 
 template <typename T>
 class AdjGraph{
-    private:
+    public:
         LL<Vertex<T>> nodes;
     
         Vertex<T> getToTarget(T toFind){ return nodes.GetValue(toFind); }
@@ -52,8 +52,8 @@ class AdjGraph{
         // Make sure to remove all connenctions to this Vertex as wsell
         // Make helper to remove edge from Vertex is present
         for(int i = 0; i < nodes.Length(); i++){
-            int curVertex = nodes.GetIndex(i);
-            removeEdge(curVertex, toRemove);
+            Vertex<int> curVertex = nodes.GetIndex(i);
+            removeEdge(curVertex.info, toRemove);
         }
 
         //Once connections are gone, remove from Vertex LL
@@ -114,12 +114,22 @@ class AdjGraph{
     }
     
     void PrintVerticies(){
-        // nodes.PrintList(); // May not work
+        nodes.PrintList(); // May not work
         for(int i = 0; i < nodes.Length(); i++){
             Vertex<T> hold = nodes.GetIndex(i);
             cout << hold.info << ", ";
         }
         cout << endl;
+
+        // for(int i = 0; i < nodes.Length(); i++){   //For printing it like how they tell us to (dont know if it works)
+        //     Vertex<T> hold = nodes.GetIndex(i);
+        //     cout << hold.info;
+        //     for(int j = 0; j < hold.edges.Length(); j++){
+        //         Vertex<T> holdEdge = hold.edges.GetIndex(j);
+        //         cout << " -> " << holdEdge.info;
+        //     }
+        //     cout << endl;
+        // }
     }
 };
 
