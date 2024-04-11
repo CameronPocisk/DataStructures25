@@ -42,5 +42,12 @@ int HashTwoDim::Remove(int in){
 }
 
 bool HashTwoDim::IsEmpty() {
+    for(int i = 0; i < TwoMaxSize; i ++){
+        for(int j = 0; j < TwoMaxDepth; j++){
+            if(hashStorage[i][j] != 0 ){
+                return false;
+            }
+        }
+    }
     return true;
 }
