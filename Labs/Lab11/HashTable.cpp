@@ -63,7 +63,6 @@ T* HashTable<T>::GetItem(T* toFind){
     numComps++;
     while(*(hashStorage + index) == nullptr || **(hashStorage + index) != *toFind){
         index = (index + 1) % size;
-
         if(notFoundCount > size){
             throw NotFound(); // Was not in the whole list
         }

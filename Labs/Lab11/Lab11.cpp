@@ -35,7 +35,7 @@ int main(){
     curTable.printInTable();
     // curTable.PrintTable(); // Good 4 now
 
-    cout << "Bye bye" << endl;
+    cout << "Ending program..." << endl;
     return 0;
 }
 

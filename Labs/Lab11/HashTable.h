@@ -66,7 +66,7 @@ class HashTable{
     T* GetItem(T* toFind);
     int GetLength(){return length;}
     bool IsEmpty();
-    int GetNumComps(){ return numComps; }
+    int GetNumComps(){return numComps;}
 
 };
 

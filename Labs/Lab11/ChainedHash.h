@@ -16,7 +16,7 @@ public:
     // An array as pointer of linked lists storing T*'s
     LL<T> *allLLs;
     int size;
-    int length;
+    int length = 0;
     int numComps = 0;
 
     ChainedHash(int sizeIn = DefaultSize){

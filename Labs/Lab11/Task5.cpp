@@ -10,7 +10,7 @@
 // My linker is weird
 
 enum{
-    NumSkus = 200,
+    NumSkus = 50,
     HashSize = 250,
 };
 
@@ -40,22 +40,168 @@ int main(){
     HashTable<string> linearProber(HashSize);
     ChainedHash<string> chainer(HashSize);
 
-    // Add SKUS to each
-    for(int i = 0; i < NumSkus; i++){
-        linearProber.Insert(&skus[i]);
-        chainer.Insert(&skus[i]);
-    }
+    
     // linearProber.printInTable();
     // chainer.PrintItems();
 
-    // Call find on all items
-    for(int i = 0; i < NumSkus; i++){
-        linearProber.GetItem(&skus[i]);
-        chainer.GetItem(&skus[i]);
-    }
+    
+    
 
-    cout << "Linear probling comps: " << linearProber.GetNumComps() << endl;
-    cout << "Chain hash comps: " << chainer.GetNumComps() << endl;
+    
+
+    int userChoice;
+    cout << "1. User Test" << endl << "2. Automated Test" << endl << "3. Quit" << endl;
+    cin >> userChoice;
+    cout << endl;
+    while(userChoice < 1 && userChoice > 3){
+        cout << "Please enter 1, 2, or 3: ";
+        cin >> userChoice;
+        cout << endl;
+    }
+    switch (userChoice)
+    {
+    case 1:
+        cout << "1. Linear Probing from Task 1" << endl << "2. Separate Chaining from Task 4" << endl;
+        cout << "3. Quit" << endl;
+        cin >> userChoice;
+        cout << endl;
+        switch (userChoice)
+        {
+        case 1:
+            while(userChoice != 5){
+                cout << "1. Add Item" << endl << "2. Remove Item" << endl << "3. Search for Item" << endl;
+                cout << "4. Display Length" << endl << "5. Quit" << endl;
+                cin >> userChoice;
+                cout << endl;
+                switch (userChoice)
+                {
+                case 1:{
+                    string userItem;
+                    cout << "Enter item to add: ";
+                    cin >> userItem;
+                    linearProber.Insert(&userItem);
+                    cout << "You are at " << linearProber.GetNumComps() << " comparasons." << endl;
+                    break;
+                }
+                case 2:{
+                    string userItem;
+                    cout << "Enter item to remove: ";
+                    cin >> userItem;
+                    try
+                    {
+                        linearProber.Remove(&userItem);
+                    }
+                    catch(NotFound &e)
+                    {
+                        cout << userItem << " is not in" << endl;
+                    }
+                    
+                    cout << "You are at " << linearProber.GetNumComps() << " comparasons." << endl;
+                    break;
+                }
+                case 3:{
+                    string userItem;
+                    cout << "Enter item to search for: ";
+                    cin >> userItem;
+                    try
+                    {
+                        linearProber.GetItem(&userItem);
+                        cout << userItem << " is in! (You are at " << linearProber.GetNumComps() << " comparasons)" << endl;
+                    }
+                    catch(NotFound &e)
+                    {
+                        cout << userItem << " is not in." << endl;
+                        cout << "You are at " << linearProber.GetNumComps() << " comparasons." << endl;
+                    }
+                    break;
+                }
+                case 4:{
+                    cout << "The length is: " << linearProber.GetLength() << endl;
+                    cout << "You are at " << linearProber.GetNumComps() << " comparasons." << endl;
+                }
+                default:
+                    break;
+                }
+            }
+            break;
+        case 2:
+            while(userChoice != 5){
+                cout << "1. Add Item" << endl << "2. Remove Item" << endl << "3. Search for Item" << endl;
+                cout << "4. Display Length" << endl << "5. Quit" << endl;
+                cin >> userChoice;
+                cout << endl;
+                switch (userChoice)
+                {
+                case 1:{
+                    string userItem;
+                    cout << "Enter item to add: ";
+                    cin >> userItem;
+                    chainer.Insert(&userItem);
+                    cout << "You are at " << chainer.GetNumComps() << " comparasons." << endl;
+                    break;
+                }
+                case 2:{
+                    string userItem;
+                    cout << "Enter item to remove: ";
+                    cin >> userItem;
+                    try
+                    {
+                        chainer.Remove(&userItem);
+                    }
+                    catch(NotFound &e)
+                    {
+                        cout << userItem << " is not in" << endl;
+                    }
+                    cout << "You are at " << chainer.GetNumComps() << " comparasons." << endl;
+                    break;
+                }
+                case 3:{
+                    string userItem;
+                    cout << "Enter item to search for: ";
+                    cin >> userItem;
+                    try
+                    {
+                        chainer.GetItem(&userItem);
+                        cout << userItem << " is in! (You are at " << chainer.GetNumComps() << " comparasons)" << endl;
+                    }
+                    catch(NotFound &e)
+                    {
+                        cout << userItem << " is not in." << endl;
+                        cout << "You are at " << chainer.GetNumComps() << " comparasons." << endl;
+                    }
+                    break;
+                }
+                case 4:{
+                    cout << "The length is: " << chainer.GetLength() << endl;
+                    cout << "You are at " << chainer.GetNumComps() << " comparasons." << endl;
+                    chainer.PrintItems();
+                }
+                default:
+                    break;
+                }
+            }
+            break;
+        default:
+            break;
+        }
+        break;
+    case 2:
+        for(int i = 0; i < NumSkus; i++){
+            linearProber.Insert(&skus[i]);
+            chainer.Insert(&skus[i]);
+        }
+        for(int i = 0; i < NumSkus; i++){
+            linearProber.GetItem(&skus[i]);
+            chainer.GetItem(&skus[i]);
+        }
+
+        cout << "Linear probing comps for " << NumSkus << " items: " << linearProber.GetNumComps() << endl;
+        cout << "Chain hash comps for " << NumSkus << " items: " << chainer.GetNumComps() << endl << endl;
+        break;
+    default:
+        break;
+    }
+    
 
 
     cout << "prorgram finished... ";
