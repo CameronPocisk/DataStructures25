@@ -71,15 +71,14 @@ public:
         }
 
         if(temp->next == nullptr){
-            // cout << "not found" << endl;
-            return;
+            throw NotFound();
         }
 
         temp->next = temp->next->next; // Replace items ptr with its next
     }
 
     T* GetValue(T* toFind){
-        if(head == nullptr){ return nullptr; }// Head case
+        if(head == nullptr){throw NotFound(); }// Head case
 
         Node<T>* cur = head;
         while(cur != nullptr && *(cur->data) != *toFind){
@@ -87,7 +86,7 @@ public:
         }
 
         if(cur == nullptr){ // Reached end of list
-            return nullptr;
+            throw NotFound();
         }
         // not at end case so found case
         return cur->data;

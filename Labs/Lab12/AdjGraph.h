@@ -34,50 +34,54 @@ class AdjGraph{
         Vertex<T>* getToTarget(T* toFind){ return nodes.GetValue(toFind); }
         
     public:
-        AdjGraph(){
-            ; //numIn is starting not neded?
-        }
-
+        AdjGraph(){;}//numIn is starting not neded?
 
     void addVertex(T* toAdd){
-        // Node<T>* newNode = new Node<T>(in);
         Vertex<T>* asVertex = new Vertex<T>(toAdd);
-        // cout << "vertex insert info: " << asVertex.info << endl;
         nodes.InsertEnd(asVertex);
-
-        // cout << "reaching end" << end;
     }
 
-    void RemoveVertex(T toRemove){
-        // Make sure to remove all connenctions to this Vertex as wsell
+    void removeVertex(T* toRemove){
+        // Make sure to remove all connenctions to this Vertex as well
         // Make helper to remove edge from Vertex is present
-        for(int i = 0; i < nodes.Length(); i++){
-            Vertex<int> curVertex = nodes.GetIndex(i);
-            removeEdge(curVertex.info, toRemove);
-        }
+        cout << "in function " << endl;
+        // for(int i = 0; i < nodes.Length(); i++){
+        //     Vertex<T>* curVertex = nodes.GetIndex(i);
+        //     try{
+        //         removeEdge(curVertex->info, toRemove);
+        //         cout << "removed" << endl;
+        //     }
+        //     catch(NotFound &e){}// did not find so do nothing 
+        // }
 
         //Once connections are gone, remove from Vertex LL
-        nodes.RemoveItem(toRemove); 
+        Vertex<T>* asVertex = new Vertex<T>(toRemove);
+        nodes.RemoveItem(asVertex);
+        delete asVertex;
+        cout << "done w remove" << endl;
     }
+
     void addEdge(T* target, T* edge){
         // Get Vetex that we are adding to
         Vertex<T>* asVertex = new Vertex<T>(target);
 
         Vertex<T>* targetNode = nodes.GetValue(asVertex);
-        cout << "found node: " << *(targetNode->info) << endl;
-        cout << "Edge:" << *edge << endl;
         // Insert edge to LL
         targetNode->edges.InsertEnd(edge);
         // delete asVertex;
         // cout << "Bruh"<< *targetNode->edges->GetValue(edge) << endl;
     }
     
-    void removeEdge(T target, T edge){
+    void removeEdge(T* target, T* edge){
         // Get to Vertex that needs removing
-        Vertex<T> targetNode = nodes.GetValue(target);
+        Vertex<T>* asVertex = new Vertex<T>(target);
+        Vertex<T>* targetNode = nodes.GetValue(asVertex);
+        
         // Remove the edge from the Vertex
-        targetNode.edges.RemoveItem(edge);
+        targetNode->edges.RemoveItem(edge); //Throws Not Found if not found
+        // Not found falls to main
     }
+
     bool hasEdge(T* target, T* edge){
         // Get to Vertex that needs checking
         Vertex<T>* asVertex = new Vertex<T>(target);
@@ -105,13 +109,13 @@ class AdjGraph{
         // Return Vertex's edges
     }
     
-    LL<T> inEdges(T target){
+    LL<T> inEdges(T* target){
         LL<T> hold; // Create the LL to add to
             for (int i = 0; i < nodes.Length(); i++) {
-                Vertex<T> current = nodes.GetIndex(i);
-                for (int j = 0; j < current.edges.Length(); j++) {
-                    if (current.edges.GetIndex(j) == target) {
-                        hold.InsertEnd(current.edges.GetIndex(i));
+                Vertex<T>* current = nodes.GetIndex(i);
+                for (int j = 0; j < current->edges.Length(); j++) {
+                    if (current->edges.GetIndex(j) == target) {
+                        hold.InsertEnd(current->edges.GetIndex(i));
                         break;
                     }
                 }
@@ -120,7 +124,7 @@ class AdjGraph{
     }
     
     void PrintVerticies(){
-        nodes.PrintList(); // May not work
+        // nodes.PrintList(); // May not work
         for(int i = 0; i < nodes.Length(); i++){
             Vertex<T>* hold = nodes.GetIndex(i);
             cout << *(hold->info) << ", ";
