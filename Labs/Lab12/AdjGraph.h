@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include "LinkedListT.h"
+#include "LinkedList.h"
 
 using namespace std;
 
@@ -11,11 +11,11 @@ using namespace std;
 template <typename T>
 class Vertex{
     public:
-    T info;
-    LL<T> edges; // LL of edges of type T
+    T* info;
+    LL<T> edges; // Pointer to LL of edges of type T
 
     Vertex(){}
-    Vertex(T in){info = in;}
+    Vertex(T* in){info = in;}
 
     operator string() const{
         string asString = string(info);
@@ -28,10 +28,10 @@ class Vertex{
 
 template <typename T>
 class AdjGraph{
-    public:
-        LL<Vertex<T>> nodes;
+    private:
+        LL<Vertex<T> > nodes; //Pointer to the verticies stored as class Vertex
     
-        Vertex<T> getToTarget(T toFind){ return nodes.GetValue(toFind); }
+        Vertex<T>* getToTarget(T* toFind){ return nodes.GetValue(toFind); }
         
     public:
         AdjGraph(){
@@ -39,9 +39,9 @@ class AdjGraph{
         }
 
 
-    void addVertex(T toAdd){
+    void addVertex(T* toAdd){
         // Node<T>* newNode = new Node<T>(in);
-        Vertex<T> asVertex(toAdd);
+        Vertex<T>* asVertex = new Vertex<T>(toAdd);
         // cout << "vertex insert info: " << asVertex.info << endl;
         nodes.InsertEnd(asVertex);
 
@@ -59,12 +59,17 @@ class AdjGraph{
         //Once connections are gone, remove from Vertex LL
         nodes.RemoveItem(toRemove); 
     }
-    void addEdge(T target, T edge){
+    void addEdge(T* target, T* edge){
         // Get Vetex that we are adding to
-        Vertex<T> targetNode = (nodes.GetValue(target));
-        cout << "found node: " << targetNode.info << endl;
+        Vertex<T>* asVertex = new Vertex<T>(target);
+
+        Vertex<T>* targetNode = nodes.GetValue(asVertex);
+        cout << "found node: " << *(targetNode->info) << endl;
+        cout << "Edge:" << *edge << endl;
         // Insert edge to LL
-        targetNode.edges.InsertEnd(edge);
+        targetNode->edges.InsertEnd(edge);
+        // delete asVertex;
+        // cout << "Bruh"<< *targetNode->edges->GetValue(edge) << endl;
     }
     
     void removeEdge(T target, T edge){
@@ -73,12 +78,13 @@ class AdjGraph{
         // Remove the edge from the Vertex
         targetNode.edges.RemoveItem(edge);
     }
-    bool hasEdge(T target, T edge){
+    bool hasEdge(T* target, T* edge){
         // Get to Vertex that needs checking
-        Vertex<T> cur = getToTarget(target);
+        Vertex<T>* asVertex = new Vertex<T>(target);
+        Vertex<T>* cur = nodes.GetValue(asVertex);
 
         try{
-            cur.edges.GetValue(edge);
+            cur->edges.GetValue(edge);
             return true; // If it doesnt throw error, return true
         }
         catch(NotFound &e){
@@ -87,12 +93,12 @@ class AdjGraph{
     }
         
     
-    LL<T> outEdges(T target){
+    LL<T> outEdges(T* target){
         LL<T> hold; //Return list of the edges Vertex has (simple one)
-        Vertex<T> current = getToTarget(target);
-        cout << current.edges.Length() << endl;
-        for(int i = 0; i < current.edges.Length(); i++) {
-            hold.InsertEnd(current.edges.GetIndex(i));
+        Vertex<T>* asVertex = new Vertex<T>(target);
+        Vertex<T>* current = nodes.GetValue(asVertex);
+        for(int i = 0; i < current->edges.Length(); i++) {
+            hold.InsertEnd(current->edges.GetIndex(i));
         }
 
         return hold;
@@ -116,8 +122,8 @@ class AdjGraph{
     void PrintVerticies(){
         nodes.PrintList(); // May not work
         for(int i = 0; i < nodes.Length(); i++){
-            Vertex<T> hold = nodes.GetIndex(i);
-            cout << hold.info << ", ";
+            Vertex<T>* hold = nodes.GetIndex(i);
+            cout << *(hold->info) << ", ";
         }
         cout << endl;
 
