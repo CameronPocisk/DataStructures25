@@ -44,21 +44,22 @@ class AdjGraph{
     void removeVertex(T* toRemove){
         // Make sure to remove all connenctions to this Vertex as well
         // Make helper to remove edge from Vertex is present
-        cout << "in function " << endl;
-        // for(int i = 0; i < nodes.Length(); i++){
-        //     Vertex<T>* curVertex = nodes.GetIndex(i);
-        //     try{
-        //         removeEdge(curVertex->info, toRemove);
-        //         cout << "removed" << endl;
-        //     }
-        //     catch(NotFound &e){}// did not find so do nothing 
-        // }
+
+        for(int i = 0; i < nodes.Length(); i++){
+            Vertex<T>* curVertex = nodes.GetIndex(i); // should be correct syntax
+            try{
+                removeEdge(curVertex->info, toRemove);
+            }
+            catch(NotFound &e){}// did not find so do nothing 
+        }
 
         //Once connections are gone, remove from Vertex LL
         Vertex<T>* asVertex = new Vertex<T>(toRemove);
-        nodes.RemoveItem(asVertex);
-        delete asVertex;
-        cout << "done w remove" << endl;
+        try{
+            nodes.RemoveItem(asVertex);
+        }catch(NotFound &e){
+            cerr << e.what() << endl;
+        }
     }
 
     void addEdge(T* target, T* edge){
@@ -76,10 +77,10 @@ class AdjGraph{
         // Get to Vertex that needs removing
         Vertex<T>* asVertex = new Vertex<T>(target);
         Vertex<T>* targetNode = nodes.GetValue(asVertex);
-        
         // Remove the edge from the Vertex
         targetNode->edges.RemoveItem(edge); //Throws Not Found if not found
-        // Not found falls to main
+
+        delete asVertex;
     }
 
     bool hasEdge(T* target, T* edge){

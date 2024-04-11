@@ -36,11 +36,14 @@ int main(){
     cout << "One has two edge: " << instance.hasEdge(&one, &two) << endl;
     cout << "One has five edge: " << instance.hasEdge(&one, &five) << endl;
 
-    cout << "Removing ones three edge: " << endl; instance.removeEdge(&one, &two);
-    cout << "One has two edge: " << instance.hasEdge(&one, &two) << endl;
-
-    cout << "Removing vertex two: " << endl; 
     instance.removeVertex(&two);
+    cout << endl << "Removed vertex two: " << endl; 
+    cout << "One has two edge: " << instance.hasEdge(&one, &two) << endl;
+    instance.removeVertex(&one);
+    cout << endl << "Removed vertex one: " << endl; 
+
+    instance.removeVertex(&five);
+    cout << endl << "Removed vertex five: " << endl; 
 
     instance.PrintVerticies();
     

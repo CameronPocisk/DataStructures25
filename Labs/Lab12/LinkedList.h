@@ -54,12 +54,15 @@ public:
         if(head == nullptr){
             throw UnderflowError();
         }
-        Node<T> *temp = head;
+        // Node<T> *temp = head;
         head = head->next;
         length--;
     }
 
     void RemoveItem(T* toRemove){
+        
+        if(head == nullptr) { throw NotFound(); }
+        
         if(*(head->data) == *toRemove){
             RemoveFront(); // Can do this that we made!
             return;
@@ -70,11 +73,11 @@ public:
             temp = temp->next;
         }
 
-        if(temp->next == nullptr){
-            throw NotFound();
-        }
+        if(temp->next == nullptr){ throw NotFound(); }
+        // temp next exists and is to remove
 
-        temp->next = temp->next->next; // Replace items ptr with its next
+        temp->next = temp->next->next;
+        length--;
     }
 
     T* GetValue(T* toFind){
