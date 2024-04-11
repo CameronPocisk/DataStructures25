@@ -43,10 +43,6 @@ int main(){
     
     // linearProber.printInTable();
     // chainer.PrintItems();
-
-    
-    
-
     
 
     int userChoice;
@@ -174,7 +170,6 @@ int main(){
                 case 4:{
                     cout << "The length is: " << chainer.GetLength() << endl;
                     cout << "You are at " << chainer.GetNumComps() << " comparasons." << endl;
-                    chainer.PrintItems();
                 }
                 default:
                     break;

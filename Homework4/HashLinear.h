@@ -38,6 +38,15 @@ class HashLinear{
             cout << endl;
         }
     }
+    void PrintItems(){
+        for(int i = 0; i < DefaultMaxSize; i++){
+            cout << i << "th value: ";
+            if(hashStorage[i] != 0){
+                cout << hashStorage[i] << ", ";
+            }
+        }
+        cout << endl;
+    }
     
     int Insert(int in);
     int Find(int toFind);

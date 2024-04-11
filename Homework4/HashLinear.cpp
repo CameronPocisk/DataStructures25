@@ -24,8 +24,8 @@ int HashLinear::Find(int toFind) {
 
     if(hashStorage[hashValue] != toFind){
        for(int i = 0; i < DefaultMaxSize; i++){
-            if(hashStorage[i] == toFind){
-                hashStorage[i] = 0;
+            if(hashStorage[(hashValue + i) % DefaultMaxSize] == toFind){
+                hashStorage[i] = 0; // Removes it from list as well
                 return i + 1;
             }
        }

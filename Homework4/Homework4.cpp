@@ -91,7 +91,6 @@ int main(){
     cout << "Binary Tree Spots Checked: " << treeSum << endl;
 
 
-
     return 0;
 }
 
