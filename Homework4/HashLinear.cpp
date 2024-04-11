@@ -50,5 +50,10 @@ int HashLinear::Remove(int in){
 }
 
 bool HashLinear::IsEmpty() {
+    for(int i = 0; i < DefaultMaxSize; i++){
+        if(hashStorage[i] != 0){
+            return false;
+        }
+    }
     return true;
 }
