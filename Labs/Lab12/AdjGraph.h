@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "LinkedList.h"
+#include "GraphSearch.h"
 
 using namespace std;
 
@@ -30,9 +31,7 @@ template <typename T>
 class AdjGraph{
     private:
         LL<Vertex<T> > nodes; //Pointer to the verticies stored as class Vertex
-    
-        Vertex<T>* getToTarget(T* toFind){ return nodes.GetValue(toFind); }
-        
+            
     public:
         AdjGraph(){;}//numIn is starting not neded?
 
@@ -45,7 +44,7 @@ class AdjGraph{
         // Make sure to remove all connenctions to this Vertex as well
         // Make helper to remove edge from Vertex is present
 
-        for(int i = 0; i < nodes.Length(); i++){
+        for(int i = 0; i < nodes.GetLength(); i++){
             Vertex<T>* curVertex = nodes.GetIndex(i); // should be correct syntax
             try{
                 removeEdge(curVertex->info, toRemove);
@@ -102,7 +101,7 @@ class AdjGraph{
         LL<T> hold; //Return list of the edges Vertex has (simple one)
         Vertex<T>* asVertex = new Vertex<T>(target);
         Vertex<T>* current = nodes.GetValue(asVertex);
-        for(int i = 0; i < current->edges.Length(); i++) {
+        for(int i = 0; i < current->edges.GetLength(); i++) {
             hold.InsertEnd(current->edges.GetIndex(i));
         }
 
@@ -112,9 +111,9 @@ class AdjGraph{
     
     LL<T> inEdges(T* target){
         LL<T> hold; // Create the LL to add to
-            for (int i = 0; i < nodes.Length(); i++) {
+            for (int i = 0; i < nodes.GetLength(); i++) {
                 Vertex<T>* current = nodes.GetIndex(i);
-                for (int j = 0; j < current->edges.Length(); j++) {
+                for (int j = 0; j < current->edges.GetLength(); j++) {
                     if (current->edges.GetIndex(j) == target) {
                         hold.InsertEnd(current->edges.GetIndex(i));
                         break;
@@ -126,25 +125,51 @@ class AdjGraph{
     
     void PrintVerticies(){
         // nodes.PrintList(); // May not work
-        for(int i = 0; i < nodes.Length(); i++){
+        for(int i = 0; i < nodes.GetLength(); i++){
             Vertex<T>* hold = nodes.GetIndex(i);
             cout << *(hold->info) << ", ";
         }
         cout << endl;
 
-        // for(int i = 0; i < nodes.Length(); i++){   //For printing it like how they tell us to (dont know if it works)
+        // for(int i = 0; i < nodes.GetLength(); i++){   //For printing it like how they tell us to (dont know if it works)
         //     Vertex<T> hold = nodes.GetIndex(i);
         //     cout << hold.info;
-        //     for(int j = 0; j < hold.edges.Length(); j++){
+        //     for(int j = 0; j < hold.edges.GetLength(); j++){
         //         Vertex<T> holdEdge = hold.edges.GetIndex(j);
         //         cout << " -> " << holdEdge.info;
         //     }
         //     cout << endl;
         // }
     }
+
+    void DFS(T* startVal, T* targetVal){
+        cout << "Printing DFS order from " << *startVal << " to " << *targetVal << endl;
+
+        // Get to starting Veretx
+        Vertex<T>* asVertex = new Vertex<T>(startVal);
+        Vertex<T>* curNode = nodes.GetValue(asVertex);
+
+        cout << "got starting node: " << *(curNode->info) << endl;
+        cout << "Edges are "; curNode->edges.PrintList(); cout << endl;
+
+        Stack<VisitedVertex<T> > visitedStack; // Create a stack of nodes w/ visited status
+        VisitedVertex<T>* curVisited = new VisitedVertex<T>(startVal);
+        visitedStack.Push(curVisited);
+
+        while(*(curNode->info) != *targetVal && !visitedStack.IsEmpty()){
+            // Mark cur node as visited
+
+            // Push cur node's unvisited children onto stack
+
+            // Make curNode the stack pop
+            break;
+        }
+
+        cout << "Out of while, curnode info: " << *(curNode->info) << endl;
+        
+
+    }
 };
-
-
 
 
 

@@ -32,7 +32,7 @@ int main(){
 
 
     cout << "Ones edges: "; (instance.outEdges(&one)).PrintList(); cout << endl;
-    cout << "Length of edges " << (instance.outEdges(&one)).Length(); cout << endl;
+    cout << "Length of edges " << (instance.outEdges(&one)).GetLength(); cout << endl;
     cout << "One has two edge: " << instance.hasEdge(&one, &two) << endl;
     cout << "One has five edge: " << instance.hasEdge(&one, &five) << endl;
 

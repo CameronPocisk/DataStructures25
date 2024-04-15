@@ -107,7 +107,7 @@ public:
     }
 
 
-    int Length(){ return length; }
+    int GetLength(){ return length; }
 
     bool IsEmpty(){return head == nullptr;}
 
