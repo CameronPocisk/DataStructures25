@@ -13,6 +13,15 @@ class DeadError : public exception
     }
 };
 
+class WinError : public exception
+{
+    public:
+        const char *what()
+    {
+        return "You win!!!";
+    }
+};
+
 
 class OverflowError : public exception
 {

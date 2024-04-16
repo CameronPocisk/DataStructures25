@@ -22,6 +22,13 @@ class Game{
         int arrowPlace[arrowAmount];
 
         void updateArrows(int curPlace, int endPlace){
+            if(endPlace == curPlace){
+                for(int i = 0; i < arrowAmount; i++){
+                    if(arrowPlace[i] == endPlace){
+                        cout << "You picked up an arrow!" << endl;
+                    }
+                }
+            }
             if(playerRoom == curPlace){
                 for(int i = 0; i < arrowAmount; i++) {
                     if(arrowPlace[i] == curPlace){
@@ -49,15 +56,7 @@ class Game{
             throw DeadError();
         }
 
-    public:
-        void printArrows(){
-            for(int i = 0; i < arrowAmount; i++){
-                cout << arrowPlace[i] << ", ";
-            }
-            cout << endl;
-        }
-        Game(){
-            srand(time(0));
+        void populateMapRandom(){
 
             for(int i = 0; i < 20; i++){
                 int count = rand() % 3 + 2;
@@ -69,6 +68,143 @@ class Game{
                 map.AddEdge(i, randNum);
                 }
             }   
+        }
+
+        void populateMap(){
+            //Three connections to
+            //2-4 connections from
+            addEdges(1, 2, 5, 12, 0);
+            addEdges(2, 1, 3, 8, 0);
+            addEdges(3, 2, 7, 15, 0);
+            addEdges(4, 9, 11, 0, 0);
+            addEdges(5, 1, 6, 16, 0);
+            addEdges(6, 5, 9, 18, 0);
+            addEdges(7, 3, 14, 0, 0);
+            addEdges(8, 2, 10, 13, 0);
+            addEdges(9, 4, 6, 17, 0);
+            addEdges(10, 8, 15, 0, 0);
+            addEdges(11, 4, 12, 19, 0);
+            addEdges(12, 1, 11, 20, 0);
+            addEdges(13, 8, 14, 20, 0);
+            addEdges(14, 7, 13, 18, 0);
+            addEdges(15, 3, 10, 0, 0);
+            addEdges(16, 5, 17, 0, 0);
+            addEdges(17, 9, 16, 0, 0);
+            addEdges(18, 6, 14, 0, 0);
+            addEdges(19, 11, 20, 0, 0);
+            addEdges(20, 12, 13, 19, 0);
+        }
+
+        void shuffleVector(int amount, vector<int>& arr){
+                for(int i = 0; i < amount; i++){
+                    int rand1 = rand() % amount;
+                    int rand2 = rand() % amount;
+                    while(rand1 == rand2){
+                        rand2 = rand() % amount;
+                    }
+                    int num1 = arr.at(rand1);
+                    arr.at(rand1) = arr.at(rand2);
+                    arr.at(rand2) = num1;
+                }
+        }
+
+        void populateMapRandomPrototype(){
+            int amount = rand() % 20 + 60; //between 60 (3 connections) and 79 (4 connections)
+            vector<int> arrConnections;
+            int spacesFilled = 0;
+            int curNum = 1;
+            bool topReached = false;
+            while(spacesFilled < amount){
+                int above = rand() % 2 + 2;
+                cout << above << endl;
+                if(curNum > 20){
+                    topReached = true;
+                    curNum -= 20;
+                    above = 1;
+                } else if(topReached == true){
+                    above = 1;
+                }
+                for(int i = 0; i < above; i++){
+                    arrConnections.push_back(curNum);
+                    spacesFilled++;
+                }
+                curNum++;
+            }
+
+            shuffleVector(amount, arrConnections);
+
+            for(int i = 0; i < amount; i++){
+                cout << arrConnections[i] << ",";
+            }
+            cout << endl;
+
+            while(arrConnections.size() > 0){
+                for(int i = 0; i < 20; i++){
+                    int amount = rand() % 2 + 2;
+                    cout << amount;
+                    for(int j = 0; j < amount; j++){
+                        while(map.OutEdges(i).size() > 3){
+                            cout << "too many edges on" << i << endl;
+                            i++;
+                        }
+                        int num = arrConnections.back();
+
+                        if(arrConnections.size() <= 0){
+                            break;
+                        }
+                        
+                        
+                        int n = 2;
+                        while(map.hasEdge(i, num) || num == i){
+                            cout << "shuffled" << endl;
+                            int hold = arrConnections.back();
+                            cout << "NUM!" << arrConnections.at(arrConnections.size() - 1) << endl;
+                            cout << num << endl;
+                            cout << n << endl;
+                            arrConnections.at(arrConnections.size() - 1) = arrConnections.at(arrConnections.size() - n);
+                            arrConnections.at(arrConnections.size() - n) = hold;
+                            num = arrConnections.back();
+                            n++;
+                            if(n > arrConnections.size()){
+                                break;
+                            }
+                        }
+
+                        map.AddEdge(i, num);
+                        
+                        arrConnections.pop_back();
+                    }
+                }
+            }
+        }
+        
+        void addEdges(int row, int con1, int con2, int con3, int con4){
+            if(con1 != 0){
+                map.AddEdge(row, con1);
+            }
+            if(con2 != 0){
+                map.AddEdge(row, con2);
+            }
+            if(con3 != 0){
+                map.AddEdge(row, con3);
+            }
+            if(con4 != 0){
+                map.AddEdge(row, con4);
+            }
+        }
+
+    public:
+        void printArrows(){
+            for(int i = 0; i < arrowAmount; i++){
+                cout << arrowPlace[i] << ", ";
+            }
+            cout << endl;
+        }
+        Game(){
+            srand(time(NULL));
+
+            // populateMapRandom();
+            populateMapRandomPrototype();
             playerRoom = rand() % 20; //Between 0 and 19
             wumpusRoom = rand() % 20;
             batRoom = rand() % 20;
@@ -125,6 +261,8 @@ class Game{
             }
             cout << endl;
 
+            updateArrows(toRoom - 1, toRoom - 1);
+
             MoveHelper(toRoom);
         }
 
@@ -141,16 +279,33 @@ class Game{
                 cin >> curRoom;
             }
             cout << "Shot at room: " << curRoom << endl;
+            Graph roomsPassed;
             for(int i = 0; i < toShoot - 1; i++){
                 //Shoots through x rooms
+                roomsPassed.AddEdge(playerRoom, curRoom);
                 vector<int> edges = map.OutEdges(curRoom);
-
                 curRoom = edges.at(rand() % edges.size());
+
+                while(roomsPassed.hasEdge(playerRoom, curRoom)){
+                    cout << "already went to this room: " << curRoom << endl;
+                    curRoom = edges.at(rand() % edges.size());
+                }
                 cout << "Shot through room: " << curRoom << endl;
+
+                if(curRoom == wumpusRoom){
+                    throw WinError();
+                }else if(curRoom == batRoom){
+
+                }else if(curRoom == holeRoom){
+
+                }
             }
             cout << "Arrow landed in " << curRoom << endl;
             for(int i = 0; i < arrowAmount; i++){
-                
+                if(arrowPlace[i] != -1 && arrowPlace[i] == playerRoom){
+                    arrowPlace[i] = curRoom;
+                    break;
+                }
             }
         }
 

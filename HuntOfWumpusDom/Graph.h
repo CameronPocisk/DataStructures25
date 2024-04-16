@@ -47,6 +47,9 @@ class Graph{
         arr[i][j] = 0;
     }
     bool hasEdge(int i, int j){
+        if(j == -1){
+            return false;
+        }
         return arr[i][j] == 1;
     }
     vector<int> InEdges(int n) {

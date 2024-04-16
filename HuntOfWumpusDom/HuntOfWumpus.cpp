@@ -10,8 +10,8 @@ using namespace std;
 int main() {
     Game main;
     
-    bool notDead = true;
-    while(notDead){
+    bool gameContinue = true;
+    while(gameContinue){
         try{
 
             cout << "You are in room " << main.getPlayerRoom() << endl;
@@ -33,7 +33,11 @@ int main() {
         }
         catch(DeadError &e){
             cerr << e.what() << endl;
-            notDead = false;
+            gameContinue = false;
+        }
+        catch(WinError &e){
+            cerr << e.what() << endl;
+            gameContinue = false;
         }
     }
 
