@@ -151,7 +151,10 @@ class AdjGraph{
 
             // Pop from stack for current node and mark visited
             Vertex<T>* currentVertex = vertexStack.Pop();
+            // Update the visited status
+            if(visitedVerticies.HasNode(currentVertex->info)){ continue; }
             visitedVerticies.InsertEnd(currentVertex->info);
+            // Print Order
             cout << *(currentVertex->info) << ", ";
 
             // Check if at solution

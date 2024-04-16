@@ -47,7 +47,7 @@ int main(){
     addDouble(&four, &six, graphSearch);
 
 
-    graphSearch.DFS(&two, &six);
+    graphSearch.DFS(&four, &six);
     graphSearch.BFS(&two, &six);
 
 
