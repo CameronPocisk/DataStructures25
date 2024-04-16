@@ -149,35 +149,48 @@ class AdjGraph{
         Vertex<T>* asVertex = new Vertex<T>(startVal);
         Vertex<T>* curNode = nodes.GetValue(asVertex);
 
-        cout << "got starting node: " << *(curNode->info) << endl;
-        cout << "Edges are "; curNode->edges.PrintList(); cout << endl;
+        cout << "starting node: " << *(curNode->info) << endl;
+        cout << "Edges are "; curNode->edges.PrintList(); cout << endl << endl;
 
-        // Make a stack of the verticies with data on seen or not
-        Stack< VisitedVertex< Vertex<T> > > visitedStack;
+        // Make a stack of the verticies and a way to keep track of visited verticies
+        Stack< Vertex<T> > vertexStack;
+        LL<T> visitedVerticies; // Hash map is better but I'm lazy
 
+        vertexStack.Push(curNode);
 
-        VisitedVertex<Vertex<T> > curVisited(curNode);
-        curVisited.MarkVisited();
+        while(!vertexStack.IsEmpty()){
 
-        visitedStack.Push(&curVisited);
+            // Pop from stack for current node and mark visited
+            Vertex<T>* currentVertex = vertexStack.Pop();
+            visitedVerticies.InsertEnd(currentVertex->info);
+            cout << "Current vertex " << *(currentVertex->info) << endl;
 
-        cout << "Top of stack: " << *(visitedStack.Top()->itsVertex->info) << endl;
+            // Check if at solution
+            if(*(currentVertex->info) == *targetVal) { cout << "Found node! " << endl; return;}
 
-        while(!visitedStack.IsEmpty() && *(visitedStack.Top()->itsVertex->info) != *targetVal){
+            // Get children / edges
+            LL<T> currentsEdges = outEdges(currentVertex->info);
+            cout << "Currents edges: "; currentsEdges.PrintList(); cout << endl;
 
-            // Pop current node and mark as visited
-            VisitedVertex<Vertex<T> >* loopVisited = visitedStack.Pop();
-            loopVisited->MarkVisited();
+            // Add them to the stack (as verticies) if unvisited
+            while(!currentsEdges.IsEmpty()){
+                T* edgeAsT = currentsEdges.GetIndex(0);
+                currentsEdges.RemoveFront();
+                cout << "grabbed this edge: " << *edgeAsT << endl;
+
+                //If the node has not been visited
+                if(!visitedVerticies.HasNode(edgeAsT)) {
+                    cout << "not yet visited" << endl;
+                    visitedVerticies.InsertEnd(edgeAsT); // Mark visited
+
+                    // Append the unvisited vertex to the stack
+                    Vertex<T>* asVertex = new Vertex<T>(edgeAsT);
+                    vertexStack.Push(asVertex);
+                }
+            }
             
-            // Push all non visited children onto the stack
-            // 
-            break;
         }
-        
-
-        cout << "Out of while, curnode info: " << *(curNode->info) << endl;
-        
-
+        cout << "Out of while (did not find)" << endl;
     }
 };
 

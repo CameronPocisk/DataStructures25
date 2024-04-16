@@ -1,26 +1,6 @@
 #ifndef GRAPHSEARCH_H
 #define GRAPHSEARCH_H
 
-// GRAPH TRAVERSAL ITEMS
-template <typename T>
-class VisitedVertex{
-    public:
-    T* itsVertex;
-    bool visited;
-    // T parent; // Will this be needed for the path???
-    VisitedVertex(T* dataIn = nullptr){
-    // VisitedVertex(T dataIn = nullptr){
-        itsVertex = dataIn;
-        visited = false;
-    }
-
-    bool operator == (VisitedVertex const & RHS){ return *itsVertex == *(RHS.itsVertex); }
-    void MarkVisited(){ visited = true; }
-    bool WasVisited() { return visited; }
-};
-
-
-
 // DEPTH FIRST SEARCH
 template <typename T>
 class Stack{

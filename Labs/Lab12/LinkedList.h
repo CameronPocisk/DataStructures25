@@ -33,23 +33,6 @@ public:
         //Destructor (needed???)
     }
 
-    void InsertEnd(T* in){
-        Node<T>* newNode = new Node<T>(in);
-        length++;
-
-        if(head == nullptr){ // Empty case
-            head = newNode; 
-            return;
-        }
-
-        // Iterate to empty node
-        Node<T>* temp = head;
-        while(temp->next != nullptr){
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
-
     void RemoveFront(){
         if(head == nullptr){ throw UnderflowError(); }
         // Node<T> *temp = head;
@@ -93,6 +76,23 @@ public:
         length--;
     }
 
+    void InsertEnd(T* in){
+        Node<T>* newNode = new Node<T>(in);
+        length++;
+
+        if(head == nullptr){ // Empty case
+            head = newNode; 
+            return;
+        }
+
+        // Iterate to empty node
+        Node<T>* temp = head;
+        while(temp->next != nullptr){
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+
     T* GetValue(T* toFind){
         if(head == nullptr){throw NotFound(); }// Head case
 
@@ -117,6 +117,17 @@ public:
             cur = cur->next;
         }
         return cur->data;
+    }
+
+    bool HasNode(T* toFind){
+        if(head == nullptr) { return false; }
+
+        Node<T>* cur = head;
+        while(cur != nullptr && *cur->data != *toFind){
+            cur = cur->next;
+        }
+
+        return cur != nullptr;
     }
 
 
