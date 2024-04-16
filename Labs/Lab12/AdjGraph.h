@@ -22,8 +22,8 @@ class Vertex{
         string asString = string(info);
         return asString; }
     
-    bool operator !=(const Vertex<T> &right)const { return info != right.info; }
-    bool operator ==(const Vertex<T> &right)const { return info == right.info; }
+    bool operator !=(const Vertex<T> &right)const { return *info != *right.info; }
+    bool operator ==(const Vertex<T> &right)const { return *info == *right.info; }
 
 };
 
@@ -62,7 +62,6 @@ class AdjGraph{
     }
 
     void addEdge(T* target, T* edge){
-        cout << *target << ", " << *edge << endl;
         // Get Vetex that we are adding to
         Vertex<T>* asVertex = new Vertex<T>(target);
 

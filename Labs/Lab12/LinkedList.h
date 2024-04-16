@@ -56,6 +56,7 @@ public:
     }
 
     void RemoveItem(T* toRemove){
+        cout << "Remove item" << endl;
         
         if(head == nullptr) { throw NotFound(); }
         
@@ -67,6 +68,9 @@ public:
         Node<T>* temp = head;
         while(temp->next != nullptr && *(temp->next->data) != *toRemove){
             temp = temp->next;
+            cout << temp->data << endl;
+            cout << toRemove << endl;
+            cout  << endl;
         }
 
         if(temp->next == nullptr){ throw NotFound(); }
@@ -81,7 +85,7 @@ public:
         length++;
 
         if(head == nullptr){ // Empty case
-            head = newNode; 
+            head = newNode;
             return;
         }
 

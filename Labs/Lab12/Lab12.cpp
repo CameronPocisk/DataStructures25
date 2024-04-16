@@ -78,15 +78,16 @@ int main(){
             cout << "Enter vertex to add: ";
             int hold;
             cin >> hold;
-            int* vertexAdd = new int(hold);
-            instance.addVertex(vertexAdd);
+            int* asVertex = new int(hold);
+            instance.addVertex(asVertex);
             break;
         }
         case 2:{
             cout << "Enter vertex to remove: ";
             int vertexRemove;
             cin >> vertexRemove;
-            instance.removeVertex(&vertexRemove);
+            int * asVertex = new int(vertexRemove);
+            instance.removeVertex(asVertex);
             break;
         }
         case 3:{
@@ -130,16 +131,18 @@ int main(){
             cout << "Enter the vertex to find the out edges of: ";
             int userVertex;
             cin >> userVertex;
-            cout << "Out edges of " << userVertex << ": " << endl;
+            cout << "Out edges of " << userVertex << ": ";
             instance.outEdges(&userVertex).PrintList();
+            cout << endl;
             break;
         }
         case 7:{
             cout << "Enter the vertex to find the in edges of: ";
             int userVertex;
             cin >> userVertex;
-            cout << "In edges of " << userVertex << ": " << endl;
+            cout << "In edges of " << userVertex << ":";
             instance.inEdges(&userVertex).PrintList();
+            cout << endl;
             break;
         }
         case 8:{
