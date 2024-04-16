@@ -132,6 +132,16 @@ class AdjGraph{
         cout << endl;
     }
 
+    void PrintAdjList(){
+        for(int i = 0; i < nodes.GetLength(); i++){
+            Vertex<T>* hold = nodes.GetIndex(i);
+            cout << *(hold->info) << ": ";
+            hold->edges.PrintList();
+            cout << endl;
+        }
+        cout << endl;
+    }
+
     void DFS(T* startVal, T* targetVal){
         cout << "Printing DFS order from " << *startVal << " to " << *targetVal << endl;
 

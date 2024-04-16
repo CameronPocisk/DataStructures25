@@ -146,7 +146,7 @@ int main(){
             break;
         }
         case 8:{
-            instance.PrintVerticies();
+            instance.PrintAdjList();
             break;
         }
         case 9:{
