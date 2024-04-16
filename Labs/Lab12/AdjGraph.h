@@ -152,18 +152,28 @@ class AdjGraph{
         cout << "got starting node: " << *(curNode->info) << endl;
         cout << "Edges are "; curNode->edges.PrintList(); cout << endl;
 
-        Stack<VisitedVertex<T> > visitedStack; // Create a stack of nodes w/ visited status
-        VisitedVertex<T>* curVisited = new VisitedVertex<T>(startVal);
-        visitedStack.Push(curVisited);
+        // Make a stack of the verticies with data on seen or not
+        Stack< VisitedVertex< Vertex<T> > > visitedStack;
 
-        while(*(curNode->info) != *targetVal && !visitedStack.IsEmpty()){
-            // Mark cur node as visited
 
-            // Push cur node's unvisited children onto stack
+        VisitedVertex<Vertex<T> > curVisited(curNode);
+        curVisited.MarkVisited();
 
-            // Make curNode the stack pop
+        visitedStack.Push(&curVisited);
+
+        cout << "Top of stack: " << *(visitedStack.Top()->itsVertex->info) << endl;
+
+        while(!visitedStack.IsEmpty() && *(visitedStack.Top()->itsVertex->info) != *targetVal){
+
+            // Pop current node and mark as visited
+            VisitedVertex<Vertex<T> >* loopVisited = visitedStack.Pop();
+            loopVisited->MarkVisited();
+            
+            // Push all non visited children onto the stack
+            // 
             break;
         }
+        
 
         cout << "Out of while, curnode info: " << *(curNode->info) << endl;
         

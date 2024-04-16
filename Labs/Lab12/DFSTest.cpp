@@ -15,7 +15,6 @@ int main(){
     int four = 4;
     int five = 5;
     int six = 6;
-
     
     // Create the following graph (needs direction?)
     //     / 2  --  4

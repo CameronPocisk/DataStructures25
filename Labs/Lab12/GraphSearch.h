@@ -5,16 +5,16 @@
 template <typename T>
 class VisitedVertex{
     public:
-    T* data;
+    T* itsVertex;
     bool visited;
     // T parent; // Will this be needed for the path???
-
     VisitedVertex(T* dataIn = nullptr){
     // VisitedVertex(T dataIn = nullptr){
-        data = dataIn;
+        itsVertex = dataIn;
         visited = false;
     }
-    bool operator == (VisitedVertex const & RHS){ return *data == *(RHS.data); }
+
+    bool operator == (VisitedVertex const & RHS){ return *itsVertex == *(RHS.itsVertex); }
     void MarkVisited(){ visited = true; }
     bool WasVisited() { return visited; }
 };
@@ -25,23 +25,24 @@ class VisitedVertex{
 template <typename T>
 class Stack{
     private: 
-    LL<T> data;
+    LL<T> list;
 
     public:
     void Push(T* in){
-        T* asPtr = new T(in);
-        data.InsertEnd(asPtr); 
+        T* asPtr = new T(*in); // deref in
+        list.InsertEnd(asPtr); 
     }
+
     T* Pop(){
         if(IsEmpty()){ throw NotFound(); }
-        T* hold = data.GetIndex( data.GetLength()-1 );
-        data.RemoveItem(hold);
+        T* hold = list.GetIndex( list.GetLength()-1 );
+        list.RemoveEnd();
         return hold;
     }
 
-    T* Top(){ if(IsEmpty()){throw NotFound();}  return data.GetIndex(data.length()); }
-    bool IsEmpty(){ return data.IsEmpty(); }
-    void PrintStack(){ data.PrintList(); }
+    T* Top(){ if(IsEmpty()){throw NotFound();}  return list.GetIndex( list.GetLength()-1 ); }
+    bool IsEmpty(){ return list.IsEmpty(); }
+    void PrintStack(){ list.PrintList(); }
 };
 
 

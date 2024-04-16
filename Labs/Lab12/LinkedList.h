@@ -51,12 +51,25 @@ public:
     }
 
     void RemoveFront(){
-        if(head == nullptr){
-            throw UnderflowError();
-        }
+        if(head == nullptr){ throw UnderflowError(); }
         // Node<T> *temp = head;
         head = head->next;
         length--;
+    }
+
+    void RemoveEnd(){
+        if(head == nullptr) { throw UnderflowError(); }
+        length--;
+        
+        if(head->next == nullptr){
+            head = nullptr;
+            return;
+        }
+        Node<T>* cur = head;
+        while(cur->next->next != nullptr){
+            cur = cur->next;
+        }
+        cur->next = nullptr; // Remove what points to it
     }
 
     void RemoveItem(T* toRemove){
