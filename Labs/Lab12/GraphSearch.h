@@ -25,5 +25,29 @@ class Stack{
     void PrintStack(){ list.PrintList(); }
 };
 
+// QUEUE FOR BFS
+template <typename T>
+class Queue{
+    private:
+        LL<T> data;
+
+    public:
+        void Enqueue(T* in){
+            data.InsertEnd(in);
+        }
+
+        T* Dequeue(){
+        if(data.IsEmpty()) {
+            throw UnderflowError();
+        }
+        T* hold = data.GetIndex(0);
+        data.RemoveFront();
+        return hold;
+        }
+
+        // bool IsFull(){return index >= 52;}
+        bool IsEmpty(){return data.IsEmpty();}
+        void PrintQueue(){ data.PrintList();}
+};
 
 #endif

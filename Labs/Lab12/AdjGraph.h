@@ -62,6 +62,7 @@ class AdjGraph{
     }
 
     void addEdge(T* target, T* edge){
+        cout << *target << ", " << *edge << endl;
         // Get Vetex that we are adding to
         Vertex<T>* asVertex = new Vertex<T>(target);
 
@@ -130,16 +131,6 @@ class AdjGraph{
             cout << *(hold->info) << ", ";
         }
         cout << endl;
-
-        // for(int i = 0; i < nodes.GetLength(); i++){   //For printing it like how they tell us to (dont know if it works)
-        //     Vertex<T> hold = nodes.GetIndex(i);
-        //     cout << hold.info;
-        //     for(int j = 0; j < hold.edges.GetLength(); j++){
-        //         Vertex<T> holdEdge = hold.edges.GetIndex(j);
-        //         cout << " -> " << holdEdge.info;
-        //     }
-        //     cout << endl;
-        // }
     }
 
     void DFS(T* startVal, T* targetVal){
@@ -148,9 +139,8 @@ class AdjGraph{
         // Get to starting Veretx
         Vertex<T>* asVertex = new Vertex<T>(startVal);
         Vertex<T>* curNode = nodes.GetValue(asVertex);
-
-        cout << "starting node: " << *(curNode->info) << endl;
-        cout << "Edges are "; curNode->edges.PrintList(); cout << endl << endl;
+        // cout << "starting node: " << *(curNode->info) << endl;
+        // cout << "Edges are "; curNode->edges.PrintList(); cout << endl << endl;
 
         // Make a stack of the verticies and a way to keep track of visited verticies
         Stack< Vertex<T> > vertexStack;
@@ -163,34 +153,67 @@ class AdjGraph{
             // Pop from stack for current node and mark visited
             Vertex<T>* currentVertex = vertexStack.Pop();
             visitedVerticies.InsertEnd(currentVertex->info);
-            cout << "Current vertex " << *(currentVertex->info) << endl;
+            cout << *(currentVertex->info) << ", ";
 
             // Check if at solution
             if(*(currentVertex->info) == *targetVal) { cout << "Found node! " << endl; return;}
 
             // Get children / edges
             LL<T> currentsEdges = outEdges(currentVertex->info);
-            cout << "Currents edges: "; currentsEdges.PrintList(); cout << endl;
+            // cout << "Currents edges: "; currentsEdges.PrintList(); cout << endl;
 
             // Add them to the stack (as verticies) if unvisited
             while(!currentsEdges.IsEmpty()){
-                T* edgeAsT = currentsEdges.GetIndex(0);
-                currentsEdges.RemoveFront();
-                cout << "grabbed this edge: " << *edgeAsT << endl;
+                T* edgeAsT = currentsEdges.GetIndex( currentsEdges.GetLength() -1 );
+                currentsEdges.RemoveEnd();
+                // cout << "grabbed this edge: " << *edgeAsT << endl;
 
                 //If the node has not been visited
                 if(!visitedVerticies.HasNode(edgeAsT)) {
-                    cout << "not yet visited" << endl;
-                    visitedVerticies.InsertEnd(edgeAsT); // Mark visited
-
                     // Append the unvisited vertex to the stack
                     Vertex<T>* asVertex = new Vertex<T>(edgeAsT);
                     vertexStack.Push(asVertex);
                 }
             }
-            
         }
-        cout << "Out of while (did not find)" << endl;
+        cout << "Did not find node " << endl;
+    }
+
+    void BFS(T* startVal, T* targetVal){
+
+        Vertex<T>* asVertex = new Vertex<T>(startVal);
+        Vertex<T>* curNode = nodes.GetValue(asVertex);
+
+        Queue< Vertex<T> > vertexQueue;
+        LL<T> visitedVerticies;
+
+        vertexQueue.Enqueue(curNode);
+        visitedVerticies.InsertEnd(startVal);
+
+        while(!vertexQueue.IsEmpty()){
+            Vertex<T>* currentVertex = vertexQueue.Dequeue();
+            cout << *(currentVertex->info) << ", ";
+
+            if(*(currentVertex->info) == *targetVal){
+                cout << "Found Node!" << endl;
+                return;
+            }
+
+            LL<T> currentEdges = outEdges(currentVertex->info);
+
+            for(int i = 0; i < currentEdges.GetLength(); i++){
+                T* edgesAsVal = currentEdges.GetIndex(i);
+
+                if(!visitedVerticies.HasNode(edgesAsVal)){
+                    visitedVerticies.InsertEnd(edgesAsVal);
+
+                    Vertex<T>* asAVertex = new Vertex<T>(edgesAsVal);
+                    Vertex<T>* adjVertex = nodes.GetValue(asAVertex);
+                    vertexQueue.Enqueue(adjVertex);
+                }
+            }
+        }
+        cout << "Not found" << endl;
     }
 };
 
