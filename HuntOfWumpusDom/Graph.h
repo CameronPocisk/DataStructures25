@@ -19,11 +19,11 @@ class Graph{
         void PrintGraph(){
             cout << "   ";
             for(int i = 0; i < colNum; i++){
-                cout << i % 10 << ", ";
+                cout << (i + 1) % 10 << ", ";
             }
             cout << endl;
             for(int i = 0; i < rowNum; i++){
-                cout << i % 10 << ": ";
+                cout << (i + 1) % 10 << ": ";
                 for(int j = 0; j < colNum; j++){
                     cout << arr[i][j] << ", ";
                 }

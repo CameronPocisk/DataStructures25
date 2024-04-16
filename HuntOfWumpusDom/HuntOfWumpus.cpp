@@ -2,6 +2,7 @@
 #include <vector>
 #include "Graph.h"
 #include "Game.h"
+// #include "Exceptions.h"
 
 using namespace std;
 
@@ -11,20 +12,29 @@ int main() {
     
     bool notDead = true;
     while(notDead){
-        cout << "You are in room " << main.getPlayerRoom() << endl;
-        main.displayOutEdges(main.getPlayerRoom() - 1);
-        char userChoice = 'a';
-        while(toupper(userChoice) != 'M' && toupper(userChoice) != 'S'){
-            cout << "Enter 'M' to move, or 'S' to shoot: " << endl;
-            cin >> userChoice;
-        }
-        if(toupper(userChoice) == 'M'){
-            main.Move();
-        } else{
-            main.Shoot();
-        }
+        try{
 
-        main.PrintMap();
+            cout << "You are in room " << main.getPlayerRoom() << endl;
+            main.displayOutEdges(main.getPlayerRoom() - 1);
+            char userChoice = 'a';
+            while(toupper(userChoice) != 'M' && toupper(userChoice) != 'S'){
+                cout << "Enter 'M' to move, or 'S' to shoot: ";
+                cin >> userChoice;
+            }
+            if(toupper(userChoice) == 'M'){
+                main.Move();
+            } else{
+                main.Shoot();
+                main.PrintMap();
+            }
+
+            main.printArrows();
+
+        }
+        catch(DeadError &e){
+            cerr << e.what() << endl;
+            notDead = false;
+        }
     }
 
     return 0;

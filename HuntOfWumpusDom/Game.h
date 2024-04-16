@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "Graph.h"
+#include "Exceptions.h"
 
 enum{
     arrowAmount = 3,
@@ -21,13 +22,40 @@ class Game{
         int arrowPlace[arrowAmount];
 
         void updateArrows(int curPlace, int endPlace){
-            for(int i = 0; i < arrowAmount; i++) {
-                if(arrowPlace[i] == curPlace){
-                    arrowPlace[i] = endPlace;
+            if(playerRoom == curPlace){
+                for(int i = 0; i < arrowAmount; i++) {
+                    if(arrowPlace[i] == curPlace){
+                        arrowPlace[i] = endPlace;
+                    }
+                }
+            } else {
+                for(int i = 0; i < arrowAmount; i++){
+                    if(arrowPlace[i] == curPlace){
+                        arrowPlace[i] = endPlace;
+                        return;
+                    }
                 }
             }
         }
+        
+        void loseArrow(){
+            for(int i = 0; i < arrowAmount; i++) {
+                if(arrowPlace[i] == playerRoom){
+                    arrowPlace[i] = -1;
+                    return;
+                }
+            }
+
+            throw DeadError();
+        }
+
     public:
+        void printArrows(){
+            for(int i = 0; i < arrowAmount; i++){
+                cout << arrowPlace[i] << ", ";
+            }
+            cout << endl;
+        }
         Game(){
             srand(time(0));
 
@@ -66,6 +94,26 @@ class Game{
 
         void PrintMap(){map.PrintGraph();}
 
+        void MoveHelper(int toRoom){
+            updateArrows(playerRoom, toRoom - 1);
+            playerRoom = toRoom - 1;
+
+            if(playerRoom == wumpusRoom){
+                cout << "You lose uno arrow" << endl;
+                loseArrow();
+            }else if(playerRoom == batRoom){
+                cout << "AHHHHH BATS" << endl;
+                toRoom = rand() % 20;
+                while(!map.hasEdge(playerRoom, toRoom)){
+                    toRoom = rand() % 20 + 1;
+                }
+                MoveHelper(toRoom);
+            } else if(playerRoom == holeRoom){
+                cout << "You fell lol" << endl;
+                throw DeadError();
+            }
+        }
+
         void Move(){
             //Add cases for collision
             int toRoom;
@@ -75,8 +123,9 @@ class Game{
                 cout << "Enter the room to move to: ";
                 cin >> toRoom;
             }
-            updateArrows(playerRoom, toRoom - 1);
-            playerRoom = toRoom - 1;
+            cout << endl;
+
+            MoveHelper(toRoom);
         }
 
         void Shoot(){
@@ -107,9 +156,32 @@ class Game{
 
         void displayOutEdges(int n){
             vector<int> edges = map.OutEdges(n);
-            cout << n + 1 << ": ";
+            bool holeNear = false;
+            bool wumpusNear = false;
+            bool batNear = false;
+            //Use booleans so user can't tell which room has what
+            
+            cout<< "Can move to: ";
             for(int i = 0; i < edges.size(); i++){
-                cout << edges.at(i) + 1 << ", ";
+                int curRoom = edges.at(i);
+                cout << curRoom + 1 << ", ";
+                if(curRoom == wumpusRoom){
+                    wumpusNear = true;
+                } else if(curRoom == batRoom){
+                    batNear = true;
+                } else if(curRoom == holeRoom){
+                    holeNear = true;
+                }
+            }
+            cout << endl;
+            if(wumpusNear){
+                cout << "You smell an animal sound" << endl;
+            }
+            if(batNear){
+                cout << "You hear screeching" << endl;
+            }
+            if(holeNear){
+                cout << "You feel a slight breeze" << endl;
             }
             cout << endl;
         }
