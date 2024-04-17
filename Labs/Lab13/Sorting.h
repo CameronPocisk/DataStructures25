@@ -252,15 +252,16 @@ class Sorting{
         }
 
         void CountingSort(int* arr, int size){
-            int* c = new int[2 * size + 1];
+            int n = 2*size + 1;
+            int* c = new int[n]();
+            int* result = new int[size];
             for(int i = 0; i < size; i++){
                 c[arr[i]]++;
             }
-            for(int i = 1; i < 2*size + 1; i++){
+            for(int i = 1; i < n; i++){
                 c[i] += c[i-1];
             }
 
-            int* result = new int[size];
             for(int i = 0; i < size; i++){
                 int index = c[arr[i]];
                 index--;
