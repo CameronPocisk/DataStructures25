@@ -9,14 +9,16 @@ typedef chrono::high_resolution_clock Clock;
 
 int main(){
 
-    auto t1 = Clock::now();
-    //Put the algorithm inbetween
+    // auto t1 = Clock::now();
+    // //Put the algorithm inbetween
+    // auto t2 = Clock::now();
     Sorting arr;
-    auto t2 = Clock::now();
-    arr.CountingAll();
-    arr.RadixAll();
-
-
+    // arr.MergeAll();
+    // cout << endl;
+    // arr.MergeAvg();
+    arr.BubbleAll();
+    // arr.CountingAll();
+    // arr.RadixAll();
 
 
 

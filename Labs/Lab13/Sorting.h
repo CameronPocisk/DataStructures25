@@ -89,9 +89,28 @@ class Sorting{
                 //Put the algorithm inbetween
                 BubbleSort(arr, size);
                 auto t2 = Clock::now();
-                 cout << "Bubble Sorted " << size << " in:" << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
+                 cout << "Bubble Sorted " << size << " in: " << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
             }
  
+        }
+
+        void BubbleAvg(){
+            for(int i = 0; i < 6; i++){
+                int size = sizes[i];
+                int* arr = arrays[i];
+                int avg = 0;
+                for(int j = 0; j < 10; j++){
+                    //Put the algorithm inbetween
+                    int* hold = copiedArr(arr, size);
+                    auto t1 = Clock::now();
+                    BubbleSort(hold, size);
+                    auto t2 = Clock::now();
+
+                    avg += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
+                    // delete hold;
+                }
+                cout << "Average of " << size << " for 10 trials: " << avg / 10 << " nanoseconds" << endl;
+            }
         }
 
         void InsertionSort(int *arr, int size){
@@ -107,11 +126,11 @@ class Sorting{
                 arr[j+1] = hold;
             }
 
-            if(CheckSorting(arr, size)){
-                cout << "Sorted!" << endl;
-            } else {
-                cout << "uhh" << endl;
-            }
+            // if(CheckSorting(arr, size)){
+            //     cout << "Sorted!" << endl;
+            // } else {
+            //     cout << "uhh" << endl;
+            // }
         }
 
         void InsertionAll(){
@@ -124,7 +143,7 @@ class Sorting{
                 //Put the algorithm inbetween
                 InsertionSort(arr, size);
                 auto t2 = Clock::now();
-                 cout << "Insertion Sorted " << size << " in:" << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
+                 cout << "Insertion Sorted " << size << " in: " << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
             }
         }
 
@@ -182,7 +201,6 @@ class Sorting{
                 j++;
                 pos++;
             }
-
             delete[] leftArr;
             delete[] rightArr;
         }
@@ -197,8 +215,38 @@ class Sorting{
                 //Put the algorithm inbetween
                 MergeSort(arr, 0, size - 1);
                 auto t2 = Clock::now();
-                 cout << "Merge Sorted " << size << " in:" << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
+                cout << "Merge Sorted " << size << " in: " << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
             }
+        }
+
+        void MergeAvg(){
+            for(int i = 0; i < 6; i++){
+                int size = sizes[i];
+                int* arr = arrays[i];
+                int avg = 0;
+                for(int j = 0; j < 10; j++){
+                    //Put the algorithm inbetween
+                    int* hold = copiedArr(arr, size);
+                    // cout << "past copied" << endl;
+                    auto t1 = Clock::now();
+                    MergeSort(hold, 0, size - 1);
+                    auto t2 = Clock::now();
+
+                    avg += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
+                    // delete hold;
+                }
+                cout << "Average of 10 trials: " << avg/10 << " nanoseconds" << endl;
+            }
+        }
+
+        int* copiedArr(int* arr, int sizeNew){
+            int* toRet = new int[sizeNew + 1]();
+
+            for(int i = 0; i < sizeNew; i++){
+                toRet[i] = arr[i];
+            }
+        
+            return toRet;
         }
 
         void QuickSort(int* arr, int low, int high){
@@ -247,7 +295,7 @@ class Sorting{
                 //Put the algorithm inbetween
                 QuickSort(arr, 0, size - 1);
                 auto t2 = Clock::now();
-                 cout << "Quick Sorted " << size << " in:" << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
+                 cout << "Quick Sorted " << size << " in: " << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
             }
         }
 
@@ -280,7 +328,6 @@ class Sorting{
                 cout << "uhh" << endl;
             }
 
-
         }
 
         void CountingAll(){
@@ -293,7 +340,7 @@ class Sorting{
                 //Put the algorithm inbetween
                 CountingSort(arr, size);
                 auto t2 = Clock::now();
-                cout << "Counting Sorted " << size << " in:" << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
+                cout << "Counting Sorted " << size << " in: " << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
             }            
         }
 
@@ -347,7 +394,7 @@ class Sorting{
                 //Put the algorithm inbetween
                 RadixSort(arr, size);
                 auto t2 = Clock::now();
-                cout << "Radix Sorted " << size << " in:" << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
+                cout << "Radix Sorted " << size << " in: " << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
             }            
         } 
 
