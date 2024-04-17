@@ -251,17 +251,112 @@ class Sorting{
             }
         }
 
-        void CountingSort(){
+        void CountingSort(int* arr, int size){
+            int* c = new int[2 * size + 1];
+            for(int i = 0; i < size; i++){
+                c[arr[i]]++;
+            }
+            for(int i = 1; i < 2*size + 1; i++){
+                c[i] += c[i-1];
+            }
+
+            int* result = new int[size];
+            for(int i = 0; i < size; i++){
+                int index = c[arr[i]];
+                index--;
+                c[arr[i]] = index;
+                result[index] = arr[i];
+            }
+            for(int i = 0; i < size; i++){
+                arr[i] = result[i];
+            }
+            delete[] c;
+            delete[] result;
+
+            if(CheckSorting(arr, size)){
+                cout << "Sorted!" << endl;
+            } else {
+                cout << "uhh" << endl;
+            }
+
 
         }
 
-        void RadixSort(){
+        void CountingAll(){
+            for(int i = 0; i < 6; i++){
+                int size = sizes[i];
+                int* arr = arrays[i];
+                
+
+                auto t1 = Clock::now();
+                //Put the algorithm inbetween
+                CountingSort(arr, size);
+                auto t2 = Clock::now();
+                cout << "Counting Sorted " << size << " in:" << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
+            }            
+        }
+
+        void CountingRadixSort(int* arr,int size,int exp){
+            int n = 2 * size + 1;
+            int* c = new int[n]();
+            int* result = new int[size];
+
+            for(int i = 0; i < size; i++){
+                int d = (arr[i] / exp) % n;
+                c[d]++;
+            }
+            for(int i = 1; i < n; i++){
+                c[i] += c[i-1];
+            }
+
+            for(int i = size - 1; i >= 0; i--){
+                int d = (arr[i] / exp) % n;
+                result[c[d] - 1] = arr[i];
+                c[d]--;
+            }
+
+            for(int i = 0; i < size; i++){
+                arr[i] = result[i];
+            }
+            delete[] c;
+            delete[] result;
+        }
+
+        void RadixSort(int* arr, int size){
+            int max = arr[0];
+            for(int i = 1; i < size; i++){
+                if(arr[i] > max) {
+                    max = arr[i];
+                }
+            }
+
+            for(int exp = 1; max / exp > 0; exp *= 2 * size){
+                CountingRadixSort(arr, size, exp);
+            } 
 
         }
+
+        void RadixAll(){
+            for(int i = 0; i < 6; i++){
+                int size = sizes[i];
+                int* arr = arrays[i];
+                
+
+                auto t1 = Clock::now();
+                //Put the algorithm inbetween
+                RadixSort(arr, size);
+                auto t2 = Clock::now();
+                cout << "Radix Sorted " << size << " in:" << chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count() << " nanoseconds" << std::endl;
+            }            
+        } 
 
         bool CheckSorting(int* arr, int size){
             for(int i = 0; i < size - 1; i++){
                 if(arr[i] > arr[i+1]){
+                    cout << "Checks" << endl;
+                    cout << arr[i] << endl;
+                    cout << arr[i+1] << endl;
+                    cout << i << endl;
                     return false;
                 }
             }

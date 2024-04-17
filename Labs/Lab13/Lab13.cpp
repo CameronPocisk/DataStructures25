@@ -13,7 +13,7 @@ int main(){
     //Put the algorithm inbetween
     Sorting arr;
     auto t2 = Clock::now();
-    arr.QuickAll();
+    arr.RadixAll();
 
 
 
