@@ -1,4 +1,5 @@
 #include "Sorting.h"
+#include "LinkedList.h"
 
 #include <iostream>
 #include <chrono>
@@ -9,19 +10,20 @@ typedef chrono::high_resolution_clock Clock;
 
 int main(){
 
-    // auto t1 = Clock::now();
-    // //Put the algorithm inbetween
-    // auto t2 = Clock::now();
     Sorting arr;
-    // arr.MergeAll();
-    // cout << endl;
-    // arr.MergeAvg();
-    arr.BubbleAll();
-    // arr.CountingAll();
-    // arr.RadixAll();
 
+    LLSortStudent sortedLL;
 
+    Student studentOne(37, "Cameron", "Pocisk");
+    Student studentTwo(1, "Dom", "Iquina");
+    Student studentThree;
 
+    sortedLL.InsertEnd(&studentOne);
+    sortedLL.InsertEnd(&studentTwo);
+
+    sortedLL.PrintList();
+
+    arr.MergeAvg();
 }
 
 // Linker proof
