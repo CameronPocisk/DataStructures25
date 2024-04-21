@@ -116,7 +116,6 @@ class Game{
             bool topReached = false;
             while(spacesFilled < amount){
                 int above = rand() % 2 + 2;
-                cout << above << endl;
                 if(curNum > 20){
                     topReached = true;
                     curNum -= 20;
@@ -127,24 +126,22 @@ class Game{
                 for(int i = 0; i < above; i++){
                     arrConnections.push_back(curNum);
                     spacesFilled++;
+
+                    if(spacesFilled >= amount){
+                        //Edge case
+                        break;
+                    }
                 }
                 curNum++;
             }
 
             shuffleVector(amount, arrConnections);
 
-            for(int i = 0; i < amount; i++){
-                cout << arrConnections[i] << ",";
-            }
-            cout << endl;
-
             while(arrConnections.size() > 0){
                 for(int i = 0; i < 20; i++){
                     int amount = rand() % 2 + 2;
-                    cout << amount;
                     for(int j = 0; j < amount; j++){
                         while(map.OutEdges(i).size() > 3){
-                            cout << "too many edges on" << i << endl;
                             i++;
                         }
                         int num = arrConnections.back();
@@ -156,21 +153,20 @@ class Game{
                         
                         int n = 2;
                         while(map.hasEdge(i, num) || num == i){
-                            cout << "shuffled" << endl;
                             int hold = arrConnections.back();
-                            cout << "NUM!" << arrConnections.at(arrConnections.size() - 1) << endl;
-                            cout << num << endl;
-                            cout << n << endl;
-                            arrConnections.at(arrConnections.size() - 1) = arrConnections.at(arrConnections.size() - n);
-                            arrConnections.at(arrConnections.size() - n) = hold;
+                            if((arrConnections.size() - n) == 0){
+                                arrConnections.at(arrConnections.size() - 1) = arrConnections.at(arrConnections.size() - n);
+                                arrConnections.at(arrConnections.size() - n) = hold;
+                            }
                             num = arrConnections.back();
                             n++;
-                            if(n > arrConnections.size()){
+                            if(n >= arrConnections.size()){
                                 break;
                             }
                         }
 
                         map.AddEdge(i, num);
+
                         
                         arrConnections.pop_back();
                     }
@@ -190,6 +186,14 @@ class Game{
             }
             if(con4 != 0){
                 map.AddEdge(row, con4);
+            }
+        }
+
+        void moveWumpus(){
+            cout << "Wumpus has moved..." << endl;
+            wumpusRoom = rand() % 20;
+            while(wumpusRoom == playerRoom || wumpusRoom == batRoom || wumpusRoom == holeRoom){
+                wumpusRoom = rand() % 20;
             }
         }
 
@@ -235,6 +239,7 @@ class Game{
             playerRoom = toRoom - 1;
 
             if(playerRoom == wumpusRoom){
+                moveWumpus();
                 cout << "You lose uno arrow" << endl;
                 loseArrow();
             }else if(playerRoom == batRoom){
@@ -287,26 +292,28 @@ class Game{
                 curRoom = edges.at(rand() % edges.size());
 
                 while(roomsPassed.hasEdge(playerRoom, curRoom)){
-                    cout << "already went to this room: " << curRoom << endl;
                     curRoom = edges.at(rand() % edges.size());
                 }
                 cout << "Shot through room: " << curRoom << endl;
 
                 if(curRoom == wumpusRoom){
                     throw WinError();
-                }else if(curRoom == batRoom){
-
-                }else if(curRoom == holeRoom){
-
                 }
             }
+            cout << endl;
             cout << "Arrow landed in " << curRoom << endl;
+            if(curRoom == batRoom || curRoom == holeRoom){
+                cout << "You're arrow got lost :(" << endl;
+                loseArrow();
+            }
             for(int i = 0; i < arrowAmount; i++){
                 if(arrowPlace[i] != -1 && arrowPlace[i] == playerRoom){
                     arrowPlace[i] = curRoom;
                     break;
                 }
             }
+
+            moveWumpus();
         }
 
         void displayOutEdges(int n){
@@ -316,7 +323,7 @@ class Game{
             bool batNear = false;
             //Use booleans so user can't tell which room has what
             
-            cout<< "Can move to: ";
+            cout << endl << "Can move to room: ";
             for(int i = 0; i < edges.size(); i++){
                 int curRoom = edges.at(i);
                 cout << curRoom + 1 << ", ";
