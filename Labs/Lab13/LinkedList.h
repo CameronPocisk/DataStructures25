@@ -3,6 +3,7 @@
 
 
 #include "Exceptions.h"
+#include "RandomInfo.h"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -53,15 +54,91 @@ public:
     Node* head;
     int length; // extra
 
+    Student* ToArray(){
+        Student* asArray = new Student[length];
+        int loopIttrs = length;
+        for(int i = 0; i < loopIttrs; i++){
+            asArray[i] = RemoveEnd();
+        }
+        return asArray;
+    }
+
 public:
 
+    void GenerateStudents(int numToGen){
+        RandomNames randoms;
+        int sudentCount = numToGen; // number from lab
+        srand(time(NULL));
+        for(int i = 0; i < sudentCount; i++){
+            string curFirst = randoms.GetRandomFirst();
+            string curLast  = randoms.GetRandomLast();
+            int curMnum = 100000 + (rand() % 900000) ; // 6 dig num
+
+            Student *asPtr = new Student(curMnum, curFirst, curLast);
+            InsertEnd(asPtr);
+        }
+    }
     // The three sorting methods by 3 properties
     void BubbleLast(bool ascending = true){
         cout << "Bubble sorting by LastName..." << endl;
+        int sizeCopy = length; // Do this before we get the array so we knowledgeable about the size
+        Student* asArr = ToArray();
 
+        // Copied over bubble (Thank you dom <3)
+        for(int i = 0; i < sizeCopy - 1; i++){
+            bool swapped = false;
+            for(int j = 0; j < sizeCopy - i - 1; j++){
+                if(asArr[j].lastName > asArr[j+1].lastName) {
+                    Student hold = asArr[j];
+                    asArr[j] = asArr[j+1];
+                    asArr[j+1] = hold;
+                    swapped = true;
+                }
+            }
+            if(!swapped){ break; }
+        }
+        // Add back from list into the LL
+        for(int i = 0; i < sizeCopy; i++){
+            Student* asNew = new Student;
+            *asNew = asArr[i];
+            InsertEnd(asNew);
+        }
+
+        // PrintList();
+        delete[] asArr; // Must free up the memory!!!
+        cout << "Bubble complete" << endl;
     }
+
+
+
     void InsertionFirst(bool ascending = true){
-        cout << "Insertion sorting by FirstName..." << endl;
+        cout << "Insertion sorting by First name..." << endl;
+        int sizeCopy = length; // Do this before we get the array so we knowledgeable about the size
+        Student* asArr = ToArray();
+
+        // Copied over Insertion (Thank you dom <3)
+        for(int i = 0; i < sizeCopy; i++){
+            Student hold = asArr[i];
+            int j = i-1;
+
+            while(j >= 0 && asArr[j].firstName > hold.firstName) {
+                asArr[j+1] = asArr[j];
+                j--;
+            }
+            asArr[j+1] = hold;
+        }
+
+
+        // Add back from list into the LL
+        for(int i = 0; i < sizeCopy; i++){
+            Student* asNew = new Student;
+            *asNew = asArr[i];
+            InsertEnd(asNew);
+        }
+
+        // PrintList();
+        delete[] asArr; // Must free up the memory!!!
+        cout << "Insertion complete" << endl;
 
     }
     void QuickMnumber(bool ascending = true){
@@ -113,7 +190,7 @@ public:
     }
 
     int GetLength(){ return length; }
-    bool IsEmpty(){return head == nullptr;}
+    bool IsEmpty(){return head == nullptr || length == 0;}
 
     void PrintList(){
         if(IsEmpty()){ return; }
@@ -123,6 +200,7 @@ public:
             cout << *(temp->data) << ", ";
             temp = temp->next;
         }
+    cout << endl;
     }
 };
 

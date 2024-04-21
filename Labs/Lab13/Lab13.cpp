@@ -12,18 +12,25 @@ int main(){
 
     Sorting arr;
 
+
+    // Student studentOne(37, "Cameron", "Pocisk");
+    // Student studentTwo(1, "Dom", "Iquina");
+    // Student studentThree;
+
+    // sortedLL.InsertEnd(&studentOne);
+    // sortedLL.InsertEnd(&studentTwo);
+
     LLSortStudent sortedLL;
-
-    Student studentOne(37, "Cameron", "Pocisk");
-    Student studentTwo(1, "Dom", "Iquina");
-    Student studentThree;
-
-    sortedLL.InsertEnd(&studentOne);
-    sortedLL.InsertEnd(&studentTwo);
+    sortedLL.GenerateStudents(5); // Way to get random names
 
     sortedLL.PrintList();
+    sortedLL.InsertionFirst();
+    sortedLL.PrintList();
+    sortedLL.BubbleLast();
+    sortedLL.PrintList();
+    // sortedLL.PrintList();
 
-    arr.MergeAvg();
+    // arr.MergeAvg();
 }
 
 // Linker proof
