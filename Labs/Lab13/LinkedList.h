@@ -72,7 +72,7 @@ public:
         for(int i = 0; i < sudentCount; i++){
             string curFirst = randoms.GetRandomFirst();
             string curLast  = randoms.GetRandomLast();
-            int curMnum = 100000 + (rand() % 900000) ; // 6 dig num
+            int curMnum = 100000 + (rand()*6767 % 900000) ; // 6 dig num
 
             Student *asPtr = new Student(curMnum, curFirst, curLast);
             InsertEnd(asPtr);
@@ -88,12 +88,23 @@ public:
         for(int i = 0; i < sizeCopy - 1; i++){
             bool swapped = false;
             for(int j = 0; j < sizeCopy - i - 1; j++){
-                if(asArr[j].lastName > asArr[j+1].lastName) {
-                    Student hold = asArr[j];
-                    asArr[j] = asArr[j+1];
-                    asArr[j+1] = hold;
-                    swapped = true;
+                if (ascending){
+                    if(asArr[j].lastName > asArr[j+1].lastName) {
+                        Student hold = asArr[j];
+                        asArr[j] = asArr[j+1];
+                        asArr[j+1] = hold;
+                        swapped = true;
+                    }
                 }
+                else{
+                    if(asArr[j].lastName < asArr[j+1].lastName) {
+                        Student hold = asArr[j];
+                        asArr[j] = asArr[j+1];
+                        asArr[j+1] = hold;
+                        swapped = true;
+                    }
+                }
+                    
             }
             if(!swapped){ break; }
         }
@@ -116,8 +127,10 @@ public:
         int sizeCopy = length; // Do this before we get the array so we knowledgeable about the size
         Student* asArr = ToArray();
 
-        // Copied over Insertion (Thank you dom <3)
+        // Made my own insertion for ascendingvs descening
+        // I think that it can start at one
         for(int i = 0; i < sizeCopy; i++){
+            // i == correct
             Student hold = asArr[i];
             int j = i-1;
 
@@ -127,13 +140,22 @@ public:
             }
             asArr[j+1] = hold;
         }
-
+            
 
         // Add back from list into the LL
-        for(int i = 0; i < sizeCopy; i++){
-            Student* asNew = new Student;
-            *asNew = asArr[i];
-            InsertEnd(asNew);
+        if(ascending){
+            for(int i = 0; i < sizeCopy; i++){
+                Student* asNew = new Student;
+                *asNew = asArr[i];
+                InsertEnd(asNew);
+            }
+        }
+        else{
+            for(int i = sizeCopy-1 ; i >= 0; i--){
+                Student* asNew = new Student;
+                *asNew = asArr[i];
+                InsertEnd(asNew);
+            }
         }
 
         // PrintList();
@@ -142,8 +164,7 @@ public:
 
     }
     void QuickMnumber(bool ascending = true){
-        cout << "Insertion sorting by Mnumber..." << endl;
-
+        cout << "Merge sorting by Mnumber..." << endl;
     }
 
     LLSortStudent(){
