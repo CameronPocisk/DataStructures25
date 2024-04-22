@@ -163,8 +163,85 @@ public:
         cout << "Insertion complete" << endl;
 
     }
-    void QuickMnumber(bool ascending = true){
+
+    void merge(Student* arr, int left, int mid, int right) {
+        int lSize = mid - left + 1;
+        int rSize = right - mid;
+
+        //Create left and right arrays
+        Student* leftArr = new Student[lSize];
+        Student* rightArr = new Student[rSize];
+
+        //add to the arrays
+        for (int i = 0; i < lSize; i++)
+            leftArr[i] = arr[left + i];
+        for (int j = 0; j < rSize; j++)
+            rightArr[j] = arr[mid + 1 + j];
+
+        //add back to origional array in order
+        int i = 0, j = 0, pos = left;
+        while (i < lSize && j < rSize) {
+            if (leftArr[i] < rightArr[j]) {
+                arr[pos] = leftArr[i];
+                i++;
+            }
+            else {
+                arr[pos] = rightArr[j];
+                j++;
+            }
+            pos++;
+        }
+
+        while (i < lSize) {
+            arr[pos] = leftArr[i];
+            i++;
+            pos++;
+        }
+
+        while (j < rSize) {
+            arr[pos] = rightArr[j];
+            j++;
+            pos++;
+        }
+
+        delete[] leftArr;
+        delete[] rightArr;
+    }
+
+    void mergeSort(Student* arr, int left, int right) {
+        if (left >= right)
+            return;
+
+        int mid = left + (right - left) / 2;
+
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+
+    void QuickMnumber(bool ascending = true) {
         cout << "Merge sorting by Mnumber..." << endl;
+        int sizeCopy = length;
+        Student* asArr = ToArray();
+        mergeSort(asArr, 0, sizeCopy - 1);
+        
+        //decide what order to put the numbers in
+        if(ascending){
+            for(int i = 0; i < sizeCopy; i++){
+                Student* asNew = new Student;
+                *asNew = asArr[i];
+                InsertEnd(asNew);
+            }
+        }
+        else{
+            for(int i = sizeCopy - 1; i >= 0; i--){
+                Student* asNew = new Student;
+                *asNew = asArr[i];
+                InsertEnd(asNew);
+            }
+        }
+
+        delete[] asArr;
     }
 
     LLSortStudent(){

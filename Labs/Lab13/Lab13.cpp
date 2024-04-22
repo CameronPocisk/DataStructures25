@@ -20,7 +20,7 @@ int main(){
     cout << "List seeded with " << numStudents <<  " random students" << endl;
     while(userChoice != 5){
         cout << "Enter 1 to Print the list " << endl;
-        cout << "Enter 2 to BubbleSort By nast name " << endl;
+        cout << "Enter 2 to BubbleSort by last name " << endl;
         cout << "Enter 3 to Insertion Sort by first name " << endl;
         cout << "Enter 4 to Merge sort by M Number " << endl;
         cout << "Enter 5 to Quit " << endl;

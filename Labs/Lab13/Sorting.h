@@ -184,7 +184,7 @@ class Sorting{
             // }
         }
 
-        void Merge(int * arr, int left, int mid, int right){
+        void Merge(int* arr, int left, int mid, int right){
             int lSize = mid - left + 1;
             int rSize = right - mid;
 
