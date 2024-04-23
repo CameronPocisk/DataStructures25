@@ -9,6 +9,7 @@ using namespace std;
 
 int main() {
     Game main;
+    // main.PrintMapAdj(); //Prints the adjacency list of the map
     
     bool gameContinue = true;
     char autoObserve;

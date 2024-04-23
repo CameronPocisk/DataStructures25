@@ -144,30 +144,32 @@ class Game{
                         while(map.OutEdges(i).size() > 3){
                             i++;
                         }
-                        int num = arrConnections.back();
 
                         if(arrConnections.size() <= 0){
                             break;
                         }
+                        int num = arrConnections.back();
                         
                         
                         int n = 2;
                         while(map.hasEdge(i, num) || num == i){
-                            int hold = arrConnections.back();
-                            if((arrConnections.size() - n) != 0){
+                            int hold = arrConnections.at(arrConnections.size() - 1);
+                            if((arrConnections.size() - n) > 0){
                                 arrConnections.at(arrConnections.size() - 1) = arrConnections.at(arrConnections.size() - n);
                                 arrConnections.at(arrConnections.size() - n) = hold;
                             }
-                            num = arrConnections.back();
-                            n++;
                             if(n >= arrConnections.size()){
                                 break;
                             }
+                            num = arrConnections.back();
+                            n++;
                         }
 
                         map.AddEdge(i, num);
 
-                        
+                        if(0 >= arrConnections.size()){
+                            break;
+                        }
                         arrConnections.pop_back();
                     }
                 }
@@ -241,6 +243,7 @@ class Game{
         int getPlayerRoom(){return playerRoom + 1;}
 
         void PrintMap(){map.PrintGraph();}
+        void PrintMapAdj(){map.PrintAdjList();}
 
         void MoveHelper(int toRoom){
             updateArrows(playerRoom, toRoom);

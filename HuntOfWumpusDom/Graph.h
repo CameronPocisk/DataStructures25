@@ -16,6 +16,19 @@ class Graph{
         int arr[rowNum][colNum];
     public:
 
+        void PrintAdjList(){
+            cout << "Adjacency List: " << endl;
+            for(int i = 0; i < rowNum; i++){
+                cout << i + 1 << ": ";
+                vector<int> edges = OutEdges(i);
+
+                for(int j = 0; j < edges.size(); j++){
+                        cout << edges.at(j) + 1 << ", ";
+                }
+                cout << endl;
+            }
+        }
+
         void PrintGraph(){
             cout << "   ";
             for(int i = 0; i < colNum; i++){
