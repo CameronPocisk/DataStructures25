@@ -111,13 +111,13 @@ class Game{
         void populateMapRandomPrototype(){
             int amount = rand() % 20 + 60; //between 60 (3 connections) and 79 (4 connections)
             vector<int> arrConnections;
-            int spacesFilled = 0;
-            int curNum = 1;
-            bool topReached = false;
-            while(spacesFilled < amount){
-                int above = rand() % 2 + 2;
-                if(curNum > 20){
-                    topReached = true;
+            int spacesFilled = 0; // Current number of connections made
+            int curNum = 0; //Start with room 1 ( 0 as the number)
+            bool topReached = false; // if it has reached room 20 already marked with this var
+            while(spacesFilled < amount){ // While we don't have the connections filled
+                int above = rand() % 2 + 2; // Between 2 and 3 connections (incase of duplicates after)
+                if(curNum >= 20){
+                    topReached = true; // End reached go back to room 1
                     curNum -= 20;
                     above = 1;
                 } else if(topReached == true){
@@ -154,7 +154,7 @@ class Game{
                         int n = 2;
                         while(map.hasEdge(i, num) || num == i){
                             int hold = arrConnections.back();
-                            if((arrConnections.size() - n) == 0){
+                            if((arrConnections.size() - n) != 0){
                                 arrConnections.at(arrConnections.size() - 1) = arrConnections.at(arrConnections.size() - n);
                                 arrConnections.at(arrConnections.size() - n) = hold;
                             }
@@ -176,16 +176,16 @@ class Game{
         
         void addEdges(int row, int con1, int con2, int con3, int con4){
             if(con1 != 0){
-                map.AddEdge(row, con1);
+                map.AddEdge(row - 1, con1 - 1);
             }
             if(con2 != 0){
-                map.AddEdge(row, con2);
+                map.AddEdge(row - 1, con2 - 1);
             }
             if(con3 != 0){
-                map.AddEdge(row, con3);
+                map.AddEdge(row - 1, con3 - 1);
             }
             if(con4 != 0){
-                map.AddEdge(row, con4);
+                map.AddEdge(row - 1, con4 - 1);
             }
         }
 
@@ -206,9 +206,17 @@ class Game{
         }
         Game(){
             srand(time(NULL));
-
-            // populateMapRandom();
-            populateMapRandomPrototype();
+            int mapChoice;
+            cout << "Would you like to populate the map with 1: Preset Map, or 2: Randomized Map: " << endl;
+            cout << "Choice: ";
+            cin >> mapChoice;
+            if(mapChoice == 2){
+                cout << "Populating the map randomly" << endl;
+                populateMapRandomPrototype();
+            } else {
+                cout << "Populating the map with the preset" << endl;
+                populateMap();
+            }
             playerRoom = rand() % 20; //Between 0 and 19
             wumpusRoom = rand() % 20;
             batRoom = rand() % 20;
@@ -235,15 +243,18 @@ class Game{
         void PrintMap(){map.PrintGraph();}
 
         void MoveHelper(int toRoom){
-            updateArrows(playerRoom, toRoom - 1);
-            playerRoom = toRoom - 1;
+            updateArrows(playerRoom, toRoom);
+            playerRoom = toRoom;
 
             if(playerRoom == wumpusRoom){
-                moveWumpus();
-                cout << "You lose uno arrow" << endl;
+                cout << "You ran into wumpus!!!" << endl;
                 loseArrow();
+                cout << "You lose one arrow" << endl;
+                moveWumpus();
             }else if(playerRoom == batRoom){
                 cout << "AHHHHH BATS" << endl;
+                cout << "Going to a random room nearby..." << endl;
+                cout << endl;
                 toRoom = rand() % 20;
                 while(!map.hasEdge(playerRoom, toRoom)){
                     toRoom = rand() % 20 + 1;
@@ -268,13 +279,13 @@ class Game{
 
             updateArrows(toRoom - 1, toRoom - 1);
 
-            MoveHelper(toRoom);
+            MoveHelper(toRoom - 1);
         }
 
         void Shoot(){
             int toShoot = 0;
             while(toShoot < 2 || toShoot > 4){
-                cout << "Enter the amount of rooms to shoot through: ";
+                cout << "Enter the amount of rooms to shoot through (2-4): ";
                 cin >> toShoot;
             }
 
@@ -284,6 +295,9 @@ class Game{
                 cin >> curRoom;
             }
             cout << "Shot at room: " << curRoom << endl;
+            if(curRoom - 1 == wumpusRoom){
+                throw WinError();
+            }
             Graph roomsPassed;
             for(int i = 0; i < toShoot - 1; i++){
                 //Shoots through x rooms
@@ -294,21 +308,21 @@ class Game{
                 while(roomsPassed.hasEdge(playerRoom, curRoom)){
                     curRoom = edges.at(rand() % edges.size());
                 }
-                cout << "Shot through room: " << curRoom << endl;
+                cout << "Shot through room: " << curRoom + 1 << endl;
 
                 if(curRoom == wumpusRoom){
                     throw WinError();
                 }
             }
             cout << endl;
-            cout << "Arrow landed in " << curRoom << endl;
+            cout << "Arrow landed in " << curRoom + 1 << endl;
             if(curRoom == batRoom || curRoom == holeRoom){
                 cout << "You're arrow got lost :(" << endl;
                 loseArrow();
             }
             for(int i = 0; i < arrowAmount; i++){
                 if(arrowPlace[i] != -1 && arrowPlace[i] == playerRoom){
-                    arrowPlace[i] = curRoom;
+                    arrowPlace[i] = curRoom - 1;
                     break;
                 }
             }
@@ -324,7 +338,7 @@ class Game{
             //Use booleans so user can't tell which room has what
             
             cout << endl << "Can move to room: ";
-            for(int i = 0; i < edges.size(); i++){
+            for(int i = 0; i < edges.size() - 1; i++){
                 int curRoom = edges.at(i);
                 cout << curRoom + 1 << ", ";
                 if(curRoom == wumpusRoom){
@@ -335,17 +349,26 @@ class Game{
                     holeNear = true;
                 }
             }
+            int curRoom = edges.at(edges.size() - 1);
+            cout << "or " << curRoom + 1 << endl;
+            if(curRoom == wumpusRoom){
+                wumpusNear = true;
+            } else if(curRoom == batRoom){
+                batNear = true;
+            } else if(curRoom == holeRoom){
+                holeNear = true;
+            }
+
             cout << endl;
             if(wumpusNear){
-                cout << "You smell an animal sound" << endl;
+                cout << "You smell an animal smell" << endl << endl;
             }
             if(batNear){
-                cout << "You hear screeching" << endl;
+                cout << "You hear screeching" << endl << endl;
             }
             if(holeNear){
-                cout << "You feel a slight breeze" << endl;
+                cout << "You feel a slight breeze" << endl << endl;
             }
-            cout << endl;
         }
 
 
